@@ -1,75 +1,53 @@
 <template>
     <div class="bc" v-if="isShowFunction">
-        <div class="box">
+        <div class="box" v-if="showFunction">
             <div class="head">
                 <div class="title">更多功能</div>
                 <div class="close" @click="closeFunction"><img src="../images/close.png" alt=""></div>
             </div>
             <div class="body">
-                <div class="card">
+                <div class="card" @click="isShowChangeName=true">
                     <div class="img">
                         <img src="../images/修改.png" alt="">
                     </div>
                     <div class="word">修改名称</div>
                 </div>
-                <div class="card">
+                <div class="card" @click="isShowHand=true">
                     <div class="img">
-                        <img src="../images/修改.png" alt="">
+                        <img src="../images/举手.png" alt="">
                     </div>
-                    <div class="word">修改名称</div>
+                    <div class="word">举手弹幕</div>
                 </div>
-                <div class="card">
+                <div class="card" @click="isShowScore=true">
                     <div class="img">
-                        <img src="../images/修改.png" alt="">
+                        
+                        <img src="../images/考核打分.png" alt="">
                     </div>
-                    <div class="word">修改名称</div>
+                    <div class="word">阶段打分</div>
                 </div>
-                <div class="card">
+                <div class="card" @click="isShowAdvice=true">
                     <div class="img">
-                        <img src="../images/修改.png" alt="">
+                        <img src="../images/评价.png" alt="">
                     </div>
-                    <div class="word">修改名称</div>
+                    <div class="word">评价建议</div>
                 </div>
-                <div class="card">
-                    <div class="img">
-                        <img src="../images/修改.png" alt="">
-                    </div>
-                    <div class="word">修改名称</div>
-                </div>
-                <div class="card">
-                    <div class="img">
-                        <img src="../images/修改.png" alt="">
-                    </div>
-                    <div class="word">修改名称</div>
-                </div>
-                <div class="card">
-                    <div class="img">
-                        <img src="../images/修改.png" alt="">
-                    </div>
-                    <div class="word">修改名称</div>
-                </div>
-                <div class="card">
-                    <div class="img">
-                        <img src="../images/修改.png" alt="">
-                    </div>
-                    <div class="word">修改名称</div>
-                </div>
-                <div class="card">
-                    <div class="img">
-                        <img src="../images/修改.png" alt="">
-                    </div>
-                    <div class="word">修改名称</div>
-                </div>
+                
             </div>
         </div>
 
-        <ChangeName :isShowChangeName="isShowChangeName"></ChangeName>
+        <ChangeName :isShowChangeName="isShowChangeName" @getCloseChangeName="getCloseChangeName" @changedNameClose="changedNameClose"></ChangeName>
+        <Hand :isShowHand="isShowHand" @getCloseHand="getCloseHand" @handedMessageClose="handedMessageClose"></Hand>
+        <Score :isShowScore="isShowScore" @getCloseScore="getCloseScore" @scoredClose="scoredClose"></Score>
+        <Advice :isShowAdvice="isShowAdvice" @getCloseAdvice="getCloseAdvice" @advicedClose="advicedClose"></Advice>
 
     </div>
 </template>
 
 <script>
+import Advice from './Advice/Advice.vue'
+import Hand from './Hand/Hand.vue'
 import ChangeName from './ChangeName/ChangeName.vue'
+import Score from './Score/Score.vue'
     export default {
         name: 'Function',
         props: [
@@ -77,15 +55,53 @@ import ChangeName from './ChangeName/ChangeName.vue'
         ],
         data() {
             return {
-                isShowChangeName:true
+                isShowChangeName:false,
+                isShowHand:false,
+                isShowScore:false,
+                isShowAdvice:false
             }
         },
         components:{
-            ChangeName
+            ChangeName,
+            Hand,
+            Score,
+            Advice
         },
         methods: {
             closeFunction() {
                 this.$emit('getCloseFunction', false)
+            },
+            getCloseChangeName(value){
+                this.isShowChangeName=false
+            },
+            changedNameClose(){
+                this.closeFunction()
+            },
+            getCloseHand(value){
+                this.isShowHand=false
+            },
+            handedMessageClose(){
+                this.closeFunction()
+            },
+            getCloseScore(value){
+                this.isShowScore=false
+            },
+            scoredClose(){
+                this.closeFunction()
+            },
+            getCloseAdvice(){
+                this.isShowAdvice=false
+            },
+            advicedClose(){
+                this.closeFunction()
+            }
+        },
+        computed:{
+            showFunction(){
+                if(this.isShowFunction==true){
+                    if(this.isShowChangeName==false&&this.isShowHand==false&&this.isShowScore==false&&this.isShowAdvice==false)return true
+                    else if(this.isShowChangeName==true||this.isShowHand==true||this.isShowScore==true||this.isShowAdvice==true)return false
+                }
             }
         }
     }

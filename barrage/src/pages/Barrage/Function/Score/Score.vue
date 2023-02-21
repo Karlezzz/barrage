@@ -1,48 +1,58 @@
 <template>
-  <div class="bc" v-if="isShowChangeName">
+  <div class="bc" v-if="isShowScore">
     <div class="box">
-      <div class="head">
-        <div class="title">修改名称</div>
-        <div class="close" @click="closeChangeName"><img src="../../images/close.png" alt=""></div>
-      </div>
-      <div class="body">
-        <input type="text" v-model="newName">
-      </div>
-      <div class="foot">
-        <button @click="closeChangeName">返回</button>
-        <button @click="sendNewName">确认</button>
-      </div>
+        <div class="head">
+            <div class="title">阶段打分</div>
+            <div class="close" @click="closeScore"><img src="../../images/close.png" alt=""></div>
+        </div>
+        <div class="body">
+            <div class="star">
+                <ul>
+                    <li v-for="(i,index) in count" :key="index" @click="grade(index)"
+                    :class="index<=choseStar?'maxStar':'noStar'">
+                        
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="foot">
+            <button @click="closeScore">取消</button>
+            <button @click="sendScore">确认</button>
+        </div>
     </div>
-
   </div>
 </template>
 
 <script>
-  export default {
-    name: 'ChangeName',
-    props: [
-      'isShowChangeName'
-    ],
+export default {
+    name:'Score',
+    props:['isShowScore'],
     data() {
-      return {
-        newName: ''
-      }
+        return {
+            count:5,
+            score:null,
+            choseStar:null
+        }
     },
     methods: {
-      closeChangeName() {
-        this.$emit('getCloseChangeName', false)
-      },
-      sendNewName() {
-        this.$bus.$emit('getNewName', this.newName)
-        this.closeChangeName()
-        this.$emit('changedNameClose', false)
-      }
-    }
-  }
+        closeScore(){
+            this.$emit('getCloseScore',false)
+        },
+        grade(index){
+            this.choseStar=index
+            this.score=index+1
+        },
+        sendScore(){
+            this.closeScore()
+            this.$emit('scoredClose',false)
+        }
+        
+    },
+}
 </script>
 
 <style scoped>
-  .bc {
+    .bc {
     position: absolute;
     display: flex;
     height: 100vh;
@@ -147,4 +157,29 @@
   .box .foot button:nth-child(2) {
     background-color: rgb(250, 209, 133);
   }
+
+  .star ul{
+    width: 100%;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content:space-around;
+    margin-left: -2px;
+  }
+  .star ul li{
+    width: 40px;
+    height: 40px;
+    margin-left: 4px;
+    background-size: 40px 40px;
+  }
+
+  .maxStar{
+    background: url(../../images/满星.png) no-repeat;
+    background-size: 40px 40px;
+  }
+  .noStar{
+    background: url(../../images/空星.png) no-repeat;
+    background-size: 40px 40px;
+  }
+  
 </style>

@@ -300,6 +300,27 @@
             // 挂载后定位到最后一条消息的位置
             let div = document.querySelector(".body");
             div.scrollTop = div.scrollHeight;
+
+            //接受新名称
+            this.$bus.$on('getNewName',(value)=>{
+                this.messageContent.forEach((item)=>{
+                    if(item.name==this.name){
+                        item.name=value
+                    }
+                })
+                this.name=value
+            })
+
+            //接收举手弹幕
+            this.$bus.$on('getHandMessage',(value)=>{
+                const handMessage ={
+                    name:this.name,
+                    id:this.myId,
+                    content:value,
+                    type:'strong'
+                }
+                this.messageContent.push(handMessage)
+            })
         },
         beforeDestroy() {
             //动态背景配置

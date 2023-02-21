@@ -1,48 +1,45 @@
 <template>
-  <div class="bc" v-if="isShowChangeName">
+  <div class="bc" v-if="isShowHand">
     <div class="box">
-      <div class="head">
-        <div class="title">修改名称</div>
-        <div class="close" @click="closeChangeName"><img src="../../images/close.png" alt=""></div>
-      </div>
-      <div class="body">
-        <input type="text" v-model="newName">
-      </div>
-      <div class="foot">
-        <button @click="closeChangeName">返回</button>
-        <button @click="sendNewName">确认</button>
-      </div>
+        <div class="head">
+            <div class="title">发送举手弹幕</div>
+            <div class="close" @click="closeHand"><img src="../../images/close.png" alt=""></div>
+        </div>
+        <div class="body">
+            <input type="text" v-model="handMessage">
+        </div>
+        <div class="foot">
+            <button @click="closeHand">取消</button>
+            <button @click="sendHandMessage">确认</button>
+        </div>
     </div>
-
   </div>
 </template>
 
 <script>
-  export default {
-    name: 'ChangeName',
-    props: [
-      'isShowChangeName'
-    ],
+export default {
+    name:'Hand',
+    props:['isShowHand'],
     data() {
-      return {
-        newName: ''
-      }
+        return {
+            handMessage:''
+        }
     },
-    methods: {
-      closeChangeName() {
-        this.$emit('getCloseChangeName', false)
-      },
-      sendNewName() {
-        this.$bus.$emit('getNewName', this.newName)
-        this.closeChangeName()
-        this.$emit('changedNameClose', false)
-      }
+    methods:{
+        closeHand(){
+            this.$emit('getCloseHand',false)
+        },
+        sendHandMessage(){
+            this.$bus.$emit('getHandMessage',this.handMessage)
+            this.closeHand()
+            this.$emit('handedMessageClose',false)
+        }
     }
-  }
+}
 </script>
 
 <style scoped>
-  .bc {
+    .bc {
     position: absolute;
     display: flex;
     height: 100vh;

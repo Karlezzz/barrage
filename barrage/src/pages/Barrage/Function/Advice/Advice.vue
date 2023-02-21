@@ -1,44 +1,41 @@
 <template>
-  <div class="bc" v-if="isShowChangeName">
+  <div class="bc" v-if="isShowAdvice">
     <div class="box">
-      <div class="head">
-        <div class="title">修改名称</div>
-        <div class="close" @click="closeChangeName"><img src="../../images/close.png" alt=""></div>
-      </div>
-      <div class="body">
-        <input type="text" v-model="newName">
-      </div>
-      <div class="foot">
-        <button @click="closeChangeName">返回</button>
-        <button @click="sendNewName">确认</button>
-      </div>
+        <div class="head">
+            <div class="title">评价建议</div>
+            <div class="close" @click="closeAdvice"><img src="../../images/close.png" alt=""></div>
+        </div>
+        <div class="body">
+            <textarea name="" id="" cols="20" rows="3" v-model="advice"></textarea>
+        </div>
+        <div class="foot">
+            <button @click="closeAdvice">取消</button>
+            <button @click="sendAdvice">提交</button>
+        </div>
     </div>
-
   </div>
 </template>
 
 <script>
-  export default {
-    name: 'ChangeName',
-    props: [
-      'isShowChangeName'
-    ],
+export default {
+    name:'Advice',
+    props:['isShowAdvice'],
     data() {
-      return {
-        newName: ''
-      }
+        return {
+            advice:''
+        }
     },
     methods: {
-      closeChangeName() {
-        this.$emit('getCloseChangeName', false)
-      },
-      sendNewName() {
-        this.$bus.$emit('getNewName', this.newName)
-        this.closeChangeName()
-        this.$emit('changedNameClose', false)
-      }
-    }
-  }
+        closeAdvice(){
+            this.$emit('getCloseAdvice',false)
+        },
+        sendAdvice(){
+            this.closeAdvice()
+            //发送数据
+            this.$emit('advicedClose',false)
+        }
+    },
+}
 </script>
 
 <style scoped>
