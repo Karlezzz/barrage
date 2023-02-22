@@ -1,5 +1,5 @@
 <template>
-    <div  ref='vantaRef' class="background">
+    <div ref='vantaRef' class="background">
         <!-- 卡片背景 -->
         <div class="box animate__zoomIn animate__animated"></div>
         <!-- 主要窗口 -->
@@ -12,7 +12,9 @@
                         <img v-if="!isSun" key='2' src="./images/home-night.png" alt="">
                     </transition-group>
                 </div>
-                <div class="cleanBC" @click="cleanBackground" :style="{'color':isSun?'white':'#f4ea2a','border-color':isSun?'white':'#f4ea2a'}">{{ this.isCleanBG==true? '简洁背景':'正常背景' }}</div>
+                <div class="cleanBC" @click="cleanBackground"
+                    :style="{'color':isSun?'white':'#f4ea2a','border-color':isSun?'white':'#f4ea2a'}">
+                    {{ this.isCleanBG==true? '简洁背景':'正常背景' }}</div>
                 <span>弹幕室</span>
                 <div class="backgroundChange" @click="changeBG">
                     <transition-group appear name="animate__animated animate__fadeInDown  animate__delay-2s"
@@ -75,7 +77,7 @@
         },
         data() {
             return {
-                isClass:'',
+                isClass: '',
                 myId: '004',
                 name: 'd',
                 inputContent: '',
@@ -284,10 +286,10 @@
             getCloseVote(value) {
                 this.isShowVote = false
             },
-            
+
 
         },
-        
+
         mounted() {
             //动态背景配置
             this.vantaEffect = Clouds({
@@ -302,22 +304,22 @@
             div.scrollTop = div.scrollHeight;
 
             //接受新名称
-            this.$bus.$on('getNewName',(value)=>{
-                this.messageContent.forEach((item)=>{
-                    if(item.name==this.name){
-                        item.name=value
+            this.$bus.$on('getNewName', (value) => {
+                this.messageContent.forEach((item) => {
+                    if (item.name == this.name) {
+                        item.name = value
                     }
                 })
-                this.name=value
+                this.name = value
             })
 
             //接收举手弹幕
-            this.$bus.$on('getHandMessage',(value)=>{
-                const handMessage ={
-                    name:this.name,
-                    id:this.myId,
-                    content:value,
-                    type:'strong'
+            this.$bus.$on('getHandMessage', (value) => {
+                const handMessage = {
+                    name: this.name,
+                    id: this.myId,
+                    content: value,
+                    type: 'strong'
                 }
                 this.messageContent.push(handMessage)
             })
@@ -353,30 +355,48 @@
     }
 
     @media screen and (min-width:769px) and (max-width:992px) {
+        *{
+            font-size: 110%;
+        }
         .background .box {
-            width: 400px;
-            height: 90%;
+            width: 90%;
+            height: 80%;
         }
 
         .background .bar {
-            width: 400px;
-            height: 90%;
+            width: 90%;
+            height: 80%;
         }
 
+        .bar .foot .chat img {
+
+            width: 50%;
+        }
     }
 
     @media screen and (min-width:993px) {
+        * {
+            font-size: 120%;
+        }
+
         .background .box {
 
-            width: 600px;
-            height: 80%;
+            width: 90%;
+            height: 90%;
         }
 
         .background .bar {
-            width: 600px;
-            height: 80%;
+            width: 90%;
+            height: 90%;
+        }
+        .bar .foot{
+            flex: 0.5;
         }
 
+        .bar .foot .chat img {
+
+            width: 20%;
+        }
     }
 
     .background {
@@ -568,7 +588,6 @@
         text-align: center;
         width: 80%;
         vertical-align: middle;
-
     }
 
     .bar .foot .more {

@@ -33,12 +33,21 @@ const router = new VueRouter({
         },
         {
             name: 'barrage',
-            path: '/barrage',
+            path: '/barrage/:roomId',
             component: Barrage,
             
         },
         
     ]
 })
+router.beforeEach((to,from,next)=>{
+    if(to.path.indexOf('/barrage')!=-1){
+        if(sessionStorage.getItem('TOKEN'))next()
+        else next('/enter')
+    }
+    else if(to.path=='/enter')next()
+    
+})
+
 
 export default router

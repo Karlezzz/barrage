@@ -1,7 +1,7 @@
 <template>
     <div ref='vantaRef' class="background">
         <div class="login animate__backInDown animate__animated">
-            <form action="post">
+            <form action="#">
                 <div class="title">Enter</div>
                 <div class="input">
                     <input type="text" v-model="roomId" placeholder="RoomId">
@@ -9,8 +9,8 @@
                     <input type="password" v-model="password" placeholder="Password" autocomplete="new-password">
                 </div>
                 <div class="button">
-                    <button @click="addRoom">Enter</button>
-                    <button @click="reset">Reset</button>
+                    <button @click.prevent="addRoom">Enter</button>
+                    <button @click.prevent="reset">Reset</button>
                 </div>
             </form>
         </div>
@@ -24,9 +24,10 @@
         name: 'Enter',
         data() {
             return {
-                roomId: '',
+                roomId: '111',
                 username: '',
-                password: ''
+                password: '',
+                ip: ''
             }
         },
         methods: {
@@ -35,13 +36,25 @@
                 this.password = ''
             },
             addRoom() {
-                this.$router.push({
-                    path: '/barrage',
-                    params: {
-                        roomId: this.roomId
-                    }
-                })
+                const data = {
+                    name: this.username,
+                    roomId: this.roomId,
+                    password: this.password
+                }
+                this.$store.dispatch('userLogin', data)
+                    .then(() => {
+                        this.$router.push({
+                            name: 'barrage',
+                            params: {
+                                roomId: this.roomId
+                            }
+                        })
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    })
             },
+
         },
         mounted() {
             //动态背景配置
