@@ -1,64 +1,68 @@
 <template>
     <div ref='vantaRef' class="background">
         <!-- 卡片背景 -->
-        <div class="box animate__zoomIn animate__animated"></div>
-        <!-- 主要窗口 -->
-        <div class="bar animate__zoomIn animate__animated">
-            <div class="title">
-                <div @click="goBackEnter" class="home">
-                    <transition-group appear name="animate__animated animate__fadeInDown  animate__delay-2s"
-                        leave-active-class="animate__animated animate__zoomOut animate__faster">
-                        <img v-if="isSun" key='1' src="./images/home.png" alt="">
-                        <img v-if="!isSun" key='2' src="./images/home-night.png" alt="">
-                    </transition-group>
-                </div>
-                <div class="cleanBC" @click="cleanBackground"
-                    :style="{'color':isSun?'white':'#f4ea2a','border-color':isSun?'white':'#f4ea2a'}">
-                    {{ this.isCleanBG==true? '简洁背景':'正常背景' }}</div>
-                <span>弹幕室</span>
-                <div class="backgroundChange" @click="changeBG">
-                    <transition-group appear name="animate__animated animate__fadeInDown  animate__delay-2s"
-                        leave-active-class="animate__animated animate__zoomOut animate__faster">
-                        <img v-if="isSun" key='1' src="./images/白天模式，明亮模式.png" alt="">
-                        <img v-if="!isSun" key='2' src="./images/夜间模式.png" alt="">
-                    </transition-group>
-                </div>
-            </div>
-            <div class="body">
-                <div v-for="item,index in messageContent" :key="index"
-                    :class="{'rightMessage':item.id==myId,'leftMessage':item.id!=myId}">
-                    <div class="name" v-if="isSameId(item,index)">
-                        {{ item.name}}
-                    </div>
-                    <div class="content">
-                        {{ item.content }}
-                    </div>
-                </div>
-            </div>
-            <div class="foot">
-                <div class="chat" @click="showMoreChat">
-                    <img v-if="isSun" src="./images/chat.png" alt="">
-                    <img v-if="!isSun" src="./images/chat-night.png" alt="">
-                </div>
-                <div class="more" @click="showFunction">
-                    <img v-if="isSun" src="./images/more.png" alt="">
-                    <img v-if="!isSun" src="./images/more-night.png" alt="">
-                </div>
-                <div class="input">
-                    <input type="text" placeholder="快来发言吧..." v-model="inputContent" @keyup.enter="sendNewContent">
-                </div>
-                <div class="send">
-                    <div class="btn" :style="{borderColor:(isSun==false?'#f4ea2a':'#2c2c2c')}" @click="sendNewContent">
-                        发送
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div class="box ">
+            <!-- <div class="box2 animate__zoomIn animate__animated"></div> -->
+            <div class="bar ">
+                <div class="title">
+                    <div @click="goBackEnter" class="home">
+                        <transition-group appear name="animate__animated animate__fadeInDown  animate__delay-2s"
+                            leave-active-class="animate__animated animate__zoomOut animate__faster">
 
-        <More :isShowChat="isShowChat" :name="name" :myId="myId" @closeIsShowChat='closeIsShowChat'
-            @getNewMoreMessage="getNewMoreMessage"></More>
-        <Function :isShowFunction="isShowFunction" @getCloseFunction="getCloseFunction"></Function>
-        <Vote :isShowVote="isShowVote" @getCloseVote="getCloseVote"></Vote>
+                            <img v-if="isSun" key='1' src="./images/home.png" alt="">
+                            <img v-if="!isSun" key='2' src="./images/home-night.png" alt="">
+
+                        </transition-group>
+                    </div>
+                    <div class="cleanBC" @click="cleanBackground"
+                        :style="{'color':isSun?'white':'#f4ea2a','border-color':isSun?'white':'#f4ea2a'}">
+                        {{ this.isCleanBG==true? '简洁背景':'正常背景' }}</div>
+                    <span>弹幕室</span>
+                    <div class="backgroundChange" @click="changeBG">
+                        <transition-group appear name="animate__animated animate__fadeInDown  animate__delay-2s"
+                            leave-active-class="animate__animated animate__zoomOut animate__faster">
+                            <img v-if="isSun" key='1' src="./images/白天模式，明亮模式.png" alt="">
+                            <img v-if="!isSun" key='2' src="./images/夜间模式.png" alt="">
+                        </transition-group>
+                    </div>
+                </div>
+                <div class="body">
+                    <div v-for="item,index in messageContent" :key="index"
+                        :class="{'rightMessage':item.id==myId,'leftMessage':item.id!=myId}">
+                        <div class="name" v-if="isSameId(item,index)">
+                            {{ item.name}}
+                        </div>
+                        <div class="content">
+                            {{ item.content }}
+                        </div>
+                    </div>
+                </div>
+                <div class="foot">
+                    <div class="chat" @click="showMoreChat">
+                        <img v-if="isSun" src="./images/chat.png" alt="">
+                        <img v-if="!isSun" src="./images/chat-night.png" alt="">
+                    </div>
+                    <div class="more" @click="showFunction">
+                        <img v-if="isSun" src="./images/more.png" alt="">
+                        <img v-if="!isSun" src="./images/more-night.png" alt="">
+                    </div>
+                    <div class="input">
+                        <input type="text" placeholder="快来发言吧..." v-model="inputContent" @keyup.enter="sendNewContent">
+                    </div>
+                    <div class="send">
+                        <div class="btn" :style="{borderColor:(isSun==false?'#f4ea2a':'#2c2c2c')}"
+                            @click="sendNewContent">
+                            发送
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <More :isShowChat="isShowChat" :name="name" :myId="myId" @closeIsShowChat='closeIsShowChat'
+                @getNewMoreMessage="getNewMoreMessage"></More>
+            <Function :isShowFunction="isShowFunction" @getCloseFunction="getCloseFunction"></Function>
+            <Vote :isShowVote="isShowVote" @getCloseVote="getCloseVote"></Vote>
+        </div>
     </div>
 </template>
 
@@ -69,6 +73,9 @@
     import 'animate.css';
     import * as THREE from 'three'
     import Clouds from 'vanta/src/vanta.clouds'
+    import {
+        mapState
+    } from 'vuex'
     export default {
         components: {
             More,
@@ -79,7 +86,7 @@
             return {
                 isClass: '',
                 myId: '004',
-                name: 'd',
+                name: 'admin',
                 inputContent: '',
                 messageContent: [{
                         name: 'Alen',
@@ -118,54 +125,29 @@
                     },
 
                 ],
-                isSun: true,
+                isSun: this.global.getIsSun(),
                 isShowChat: false,
                 isShowFunction: false,
                 isShowVote: false,
-                isCleanBG: false,
+                isCleanBG: this.global.getIsCleanBG(),
             }
         },
         methods: {
             //白天模式和黑夜迷哦是
             changeBG() {
-                this.isSun = !this.isSun
+                this.global.setIsSun()
+                this.isSun = this.global.getIsSun()
+
                 //不是简约模式
                 if (this.isCleanBG == false) {
                     setTimeout(() => {
                         //黑天
                         if (this.isSun == false) {
-                            this.vantaEffect.setOptions({
-                                mouseControls: true,
-                                touchControls: true,
-                                gyroControls: false,
-                                minHeight: 200.00,
-                                minWidth: 200.00,
-                                backgroundColor: 0x0,
-                                skyColor: 0x0,
-                                cloudColor: 0x535559,
-                                cloudShadowColor: 0x101111,
-                                sunColor: 0x252424,
-                                sunGlareColor: 0x343332,
-                                sunlightColor: 0x3e3c3a,
-                                speed: 0.40
-                            })
+                            this.setBlackBG()
                         }
                         //白天
                         else if (this.isSun == true) {
-                            this.vantaEffect.setOptions({
-                                mouseControls: true,
-                                touchControls: true,
-                                gyroControls: false,
-                                minHeight: 200.00,
-                                minWidth: 200.00,
-                                skyColor: 0x59a6c8,
-                                cloudColor: 0x9fb2d2,
-                                cloudShadowColor: 0xa2b4a,
-                                sunColor: 0xf09f45,
-                                sunGlareColor: 0xffc230,
-                                sunlightColor: 0xffc230,
-                                speed: 0.70
-                            })
+                            this.setSunBG()
                         }
                     }, 200);
                 }
@@ -173,7 +155,6 @@
                 else if (this.isCleanBG == true) {
                     if (this.vantaEffect) {
                         this.vantaEffect.destroy()
-
                     }
                     //黑天
                     if (this.isSun == false)
@@ -187,7 +168,9 @@
             },
             //简洁模式改变
             cleanBackground() {
-                this.isCleanBG = !this.isCleanBG
+
+                this.global.setIsCleanBG()
+                this.isCleanBG = this.global.getIsCleanBG()
                 //简约模式
                 if (this.isCleanBG == true) {
                     if (this.vantaEffect) {
@@ -215,24 +198,9 @@
                             THREE: THREE,
                             speed: 0.80
                         })
-                        this.vantaEffect.setOptions({
-                            mouseControls: true,
-                            touchControls: true,
-                            gyroControls: false,
-                            minHeight: 200.00,
-                            minWidth: 200.00,
-                            backgroundColor: 0x0,
-                            skyColor: 0x0,
-                            cloudColor: 0x535559,
-                            cloudShadowColor: 0x101111,
-                            sunColor: 0x252424,
-                            sunGlareColor: 0x343332,
-                            sunlightColor: 0x3e3c3a,
-                            speed: 0.40
-                        })
+                        this.setBlackBG()
                     }
                 }
-
             },
             goBackEnter() {
                 this.$router.push('/enter')
@@ -286,7 +254,39 @@
             getCloseVote(value) {
                 this.isShowVote = false
             },
-
+            setSunBG() {
+                this.vantaEffect.setOptions({
+                    mouseControls: true,
+                    touchControls: true,
+                    gyroControls: false,
+                    minHeight: 200.00,
+                    minWidth: 200.00,
+                    skyColor: 0x59a6c8,
+                    cloudColor: 0x9fb2d2,
+                    cloudShadowColor: 0xa2b4a,
+                    sunColor: 0xf09f45,
+                    sunGlareColor: 0xffc230,
+                    sunlightColor: 0xffc230,
+                    speed: 0.70
+                })
+            },
+            setBlackBG() {
+                this.vantaEffect.setOptions({
+                    mouseControls: true,
+                    touchControls: true,
+                    gyroControls: false,
+                    minHeight: 200.00,
+                    minWidth: 200.00,
+                    backgroundColor: 0x0,
+                    skyColor: 0x0,
+                    cloudColor: 0x535559,
+                    cloudShadowColor: 0x101111,
+                    sunColor: 0x252424,
+                    sunGlareColor: 0x343332,
+                    sunlightColor: 0x3e3c3a,
+                    speed: 0.40
+                })
+            }
 
         },
 
@@ -297,7 +297,9 @@
                 THREE: THREE,
                 speed: 0.80
             })
-
+            if (this.isSun === false) {
+                this.setBlackBG()
+            }
 
             // 挂载后定位到最后一条消息的位置
             let div = document.querySelector(".body");
@@ -348,55 +350,28 @@
             width: 96%;
         }
 
-        .background .bar {
-            width: 96%;
-        }
+        
 
     }
 
     @media screen and (min-width:769px) and (max-width:992px) {
-        *{
-            font-size: 110%;
-        }
         .background .box {
-            width: 90%;
-            height: 80%;
-        }
-
-        .background .bar {
-            width: 90%;
-            height: 80%;
-        }
-
-        .bar .foot .chat img {
-
-            width: 50%;
+            width: 600px;
+            height: 500px;
         }
     }
 
     @media screen and (min-width:993px) {
-        * {
-            font-size: 120%;
-        }
-
         .background .box {
-
-            width: 90%;
-            height: 90%;
-        }
-
-        .background .bar {
-            width: 90%;
-            height: 90%;
-        }
-        .bar .foot{
-            flex: 0.5;
-        }
-
-        .bar .foot .chat img {
-
-            width: 20%;
-        }
+            width: 700px;
+            height: 600px;
+        } 
+    }
+    @media screen and (min-width:1360px) {
+        .background .box {
+            width: 1000px;
+            height: 800px;
+        } 
     }
 
     .background {
@@ -409,28 +384,44 @@
     }
 
     .box {
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        margin: auto;
+        width: 98%;
+        height: 98%;
+        overflow: hidden;
+        border-radius: 30px;
+        border: 2px solid rgba(202, 202, 202, 0.164);
+        box-shadow: 0px 30px 30px 0 rgba(0, 0, 0, 0.629);
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* .box2 {
         position: absolute;
         top: 0;
         right: 0;
         bottom: 0;
         left: 0;
         margin: auto;
-        width: 96%;
-        height: 98%;
+        width: 100%;
+        height: 100%;
         text-align: center;
         overflow: hidden;
-        border-radius: 6px;
-        /* background: inherit; */
-        border: 2px solid rgba(202, 202, 202, 0.164);
-        box-shadow: 0px 30px 30px 0 rgba(0, 0, 0, 0.629);
-    }
+        border-radius: 30px;
+        filter: blur(30px);
+    } */
 
     .bar {
-        width: 96%;
-        height: 98%;
-        border-radius: 10px;
+        width: 100%;
+        height: 100%;
         display: flex;
         flex-direction: column;
+        flex-shrink: 0
     }
 
     /* 顶部 */
@@ -444,7 +435,7 @@
         width: 30px;
         height: 30px;
         position: absolute;
-        left: 5px;
+        left: 0px;
         top: 5px;
     }
 
@@ -501,6 +492,7 @@
         flex: 0.85;
         overflow: scroll;
         margin-bottom: 10px;
+        margin-top: 10px;
     }
 
     .bar .body::-webkit-scrollbar {
@@ -512,7 +504,7 @@
         width: 50%;
         /* margin-left: 5px;
         margin-top: 10px; */
-        margin: 5px 0 10px 15px;
+        margin: 5px 0 10px 10px;
         word-break: break-all;
         white-space: pre-line;
 
@@ -541,7 +533,7 @@
     .bar .body .rightMessage {
         width: 50%;
         text-align: right;
-        margin: 0 15px 5px auto;
+        margin: 0 10px 5px auto;
         word-break: break-all;
         white-space: pre-line;
     }
@@ -586,7 +578,7 @@
 
     .bar .foot .chat img {
         text-align: center;
-        width: 80%;
+        width: 35px;
         vertical-align: middle;
     }
 
@@ -599,7 +591,7 @@
 
     .bar .foot .more img {
         text-align: center;
-        width: 80%;
+        width: 35px;
         vertical-align: middle;
     }
 
@@ -656,8 +648,8 @@
     .bar .foot .send .btn {
         background-color: rgba(66, 178, 243, 0);
         border: 1px solid rgb(0, 0, 0);
-        width: 80%;
-        height: 75%;
+        width: 70px;
+        height: 40px;
         border-radius: 10vh;
         display: flex;
         justify-content: center;

@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <router-view></router-view>
+            <router-view></router-view>
     </div>
 </template>
 
@@ -20,5 +20,6 @@
     div {
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     }
+    
     
 </style>

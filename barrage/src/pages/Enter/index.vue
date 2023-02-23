@@ -27,7 +27,6 @@
                 roomId: '111',
                 username: '',
                 password: '',
-                ip: ''
             }
         },
         methods: {
@@ -62,7 +61,26 @@
                 el: this.$refs.vantaRef,
                 THREE: THREE
             })
+            if (this.global.isSun == false&& sessionStorage.getItem("TOKEN")) {
+                this.vantaEffect.setOptions({
+                    mouseControls: true,
+                    touchControls: true,
+                    gyroControls: false,
+                    minHeight: 200.00,
+                    minWidth: 200.00,
+                    backgroundColor: 0x0,
+                    skyColor: 0x0,
+                    cloudColor: 0x535559,
+                    cloudShadowColor: 0x101111,
+                    sunColor: 0x252424,
+                    sunGlareColor: 0x343332,
+                    sunlightColor: 0x3e3c3a,
+                    speed: 0.40
+                })
+            }
         },
+
+
         beforeDestroy() {
             //动态背景配置
             if (this.vantaEffect) {

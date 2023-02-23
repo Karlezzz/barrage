@@ -2,8 +2,9 @@
     <div class="bc" v-if="isShowFunction">
         <div class="box" v-if="showFunction">
             <div class="head">
-                <div class="title">更多功能</div>
-                <div class="close" @click="closeFunction"><img src="../images/close.png" alt=""></div>
+                <div class="close" @click="closeFunction">
+                    <img src="../images/close.png" alt="">
+                </div>
             </div>
             <div class="body">
                 <div class="card" @click="isShowChangeName=true">
@@ -31,11 +32,11 @@
                     </div>
                     <div class="word">评价建议</div>
                 </div>
-                
             </div>
         </div>
 
-        <ChangeName :isShowChangeName="isShowChangeName" @getCloseChangeName="getCloseChangeName" @changedNameClose="changedNameClose"></ChangeName>
+        <ChangeName :isShowChangeName="isShowChangeName" @getCloseChangeName="getCloseChangeName"
+            @changedNameClose="changedNameClose"></ChangeName>
         <Hand :isShowHand="isShowHand" @getCloseHand="getCloseHand" @handedMessageClose="handedMessageClose"></Hand>
         <Score :isShowScore="isShowScore" @getCloseScore="getCloseScore" @scoredClose="scoredClose"></Score>
         <Advice :isShowAdvice="isShowAdvice" @getCloseAdvice="getCloseAdvice" @advicedClose="advicedClose"></Advice>
@@ -44,10 +45,10 @@
 </template>
 
 <script>
-import Advice from './Advice/Advice.vue'
-import Hand from './Hand/Hand.vue'
-import ChangeName from './ChangeName/ChangeName.vue'
-import Score from './Score/Score.vue'
+    import Advice from './Advice/Advice.vue'
+    import Hand from './Hand/Hand.vue'
+    import ChangeName from './ChangeName/ChangeName.vue'
+    import Score from './Score/Score.vue'
     export default {
         name: 'Function',
         props: [
@@ -55,13 +56,13 @@ import Score from './Score/Score.vue'
         ],
         data() {
             return {
-                isShowChangeName:false,
-                isShowHand:false,
-                isShowScore:false,
-                isShowAdvice:false
+                isShowChangeName: false,
+                isShowHand: false,
+                isShowScore: false,
+                isShowAdvice: false
             }
         },
-        components:{
+        components: {
             ChangeName,
             Hand,
             Score,
@@ -71,36 +72,38 @@ import Score from './Score/Score.vue'
             closeFunction() {
                 this.$emit('getCloseFunction', false)
             },
-            getCloseChangeName(value){
-                this.isShowChangeName=false
+            getCloseChangeName(value) {
+                this.isShowChangeName = false
             },
-            changedNameClose(){
+            changedNameClose() {
                 this.closeFunction()
             },
-            getCloseHand(value){
-                this.isShowHand=false
+            getCloseHand(value) {
+                this.isShowHand = false
             },
-            handedMessageClose(){
+            handedMessageClose() {
                 this.closeFunction()
             },
-            getCloseScore(value){
-                this.isShowScore=false
+            getCloseScore(value) {
+                this.isShowScore = false
             },
-            scoredClose(){
+            scoredClose() {
                 this.closeFunction()
             },
-            getCloseAdvice(){
-                this.isShowAdvice=false
+            getCloseAdvice() {
+                this.isShowAdvice = false
             },
-            advicedClose(){
+            advicedClose() {
                 this.closeFunction()
             }
         },
-        computed:{
-            showFunction(){
-                if(this.isShowFunction==true){
-                    if(this.isShowChangeName==false&&this.isShowHand==false&&this.isShowScore==false&&this.isShowAdvice==false)return true
-                    else if(this.isShowChangeName==true||this.isShowHand==true||this.isShowScore==true||this.isShowAdvice==true)return false
+        computed: {
+            showFunction() {
+                if (this.isShowFunction == true) {
+                    if (this.isShowChangeName == false && this.isShowHand == false && this.isShowScore == false && this
+                        .isShowAdvice == false) return true
+                    else if (this.isShowChangeName == true || this.isShowHand == true || this.isShowScore == true ||
+                        this.isShowAdvice == true) return false
                 }
             }
         }
@@ -110,50 +113,42 @@ import Score from './Score/Score.vue'
 <style scoped>
     .bc {
         position: absolute;
-        display: flex;
-        height: 100vh;
-        width: 100%;
+        /* display: flex; */
+        width: 1000px;
+        height: 1000px;
+        /* border-radius: 50%; */
         justify-content: center;
         align-items: center;
+        /* overflow: hidden; */
     }
 
     .box {
-        width: 60%;
-        height: 40%;
-        border-radius: 6px;
-        background: rgba(180, 226, 248, 0.593);
+        position: absolute;
+        width: 2000px;
+        height: 1000px;
+        background: rgba(3, 59, 85, 0.739);
+        top: 40%;
+        left: 10%;
+        border-radius: 1000px 1000px 0 0;
         border: 2px solid rgba(202, 202, 202, 0.164);
         box-shadow: 0px 5px 5px 0 rgba(0, 0, 0, 0.459);
         z-index: 9;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
+        
     }
 
     .box .head {
-        flex: 0.1;
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 10px;
-    }
-
-    .box .head .title {
         display: inline-block;
-        height: 30px;
-        margin-top: 10px;
-        margin-left: 5px;
-        color: grey;
-        font-size: 110%;
-        letter-spacing: 2px;
+        position: fixed;
+        bottom: 5%;
+        right: 7%;
     }
 
     .box .head .close {
-        display: inline-block;
-        width: 25px;
-        height: 25px;
-        margin: 5px 5px 0 0;
+        display: block;
+        width: 35px;
+        height: 35px;
+        border: 1px solid white;
+        border-radius: 50%;
     }
 
     .box .head .close img {
@@ -162,21 +157,36 @@ import Score from './Score/Score.vue'
     }
 
     .box .body {
-        flex: 0.9;
-        width: 100%;
-        display: flex;
-        flex-flow: row wrap;
-        margin-top: 10px;
+        display: inline-block;
+        background-color: #918f8f7f;
+        width: 600px;
+        height: 400px;
+        position: fixed;
+        overflow: hidden;
+        bottom: 0%;
+        right: 0;
     }
 
     .body .card {
-        display: flex;
+        position: absolute;
         width: 28%;
         height: 28%;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        margin-left: 10px;
+    }
+    .body .card:nth-child(1){
+        top: 35%;
+        right: -5%;
+    }
+    .body .card:nth-child(2){
+        bottom: 15%;
+        right: 10%;
+    }
+    .body .card:nth-child(3){
+        bottom: 5%;
+        right: 15%;
+    }
+    .body .card:nth-child(4){
+        bottom: 1%;
+        right: 20%;
     }
 
     .body .card .img {
