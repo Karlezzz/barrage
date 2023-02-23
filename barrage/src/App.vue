@@ -20,6 +20,10 @@
     div {
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     }
+    /* 禁止图片被保存 */
+    img{
+        pointer-events: none;
+    }
     
     
 </style>

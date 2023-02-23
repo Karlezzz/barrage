@@ -1,50 +1,56 @@
 <template>
-    <div class="bc" v-if="isShowFunction">
-        <div class="box" v-if="showFunction">
-            <div class="head">
-                <div class="close" @click="closeFunction">
-                    <img src="../images/close.png" alt="">
-                </div>
-            </div>
-            <div class="body">
-                <div class="card" @click="isShowChangeName=true">
-                    <div class="img">
-                        <img src="../images/修改.png" alt="">
+    <!-- enter-active-class="animate_animated animate__fadeInBottomRight "
+        leave-active-class="animate_animated animate__fadeOutBottomRight" -->
+    <transition name="plus-icon">
+        <div v-show="isShowFunction">
+            <div class="box" v-if="showFunction">
+                <div class="head">
+                    <div class="close" @click="closeFunction">
+                        <img src="../images/close.png" alt="">
                     </div>
-                    <div class="word">修改名称</div>
                 </div>
-                <div class="card" @click="isShowHand=true">
-                    <div class="img">
-                        <img src="../images/举手.png" alt="">
+                <div class="body">
+                    <div class="card" @click="isShowChangeName=true">
+                        <div class="img">
+                            <img src="../images/修改.png" alt="">
+                        </div>
+                        <div class="word">修改名称</div>
                     </div>
-                    <div class="word">举手弹幕</div>
-                </div>
-                <div class="card" @click="isShowScore=true">
-                    <div class="img">
-                        
-                        <img src="../images/考核打分.png" alt="">
+                    <div class="card" @click="isShowHand=true">
+                        <div class="img">
+                            <img src="../images/举手.png" alt="">
+                        </div>
+                        <div class="word">举手弹幕</div>
                     </div>
-                    <div class="word">阶段打分</div>
-                </div>
-                <div class="card" @click="isShowAdvice=true">
-                    <div class="img">
-                        <img src="../images/评价.png" alt="">
-                    </div>
-                    <div class="word">评价建议</div>
-                </div>
-            </div>
-        </div>
+                    <div class="card" @click="isShowScore=true">
+                        <div class="img">
 
-        <ChangeName :isShowChangeName="isShowChangeName" @getCloseChangeName="getCloseChangeName"
+                            <img src="../images/考核打分.png" alt="">
+                        </div>
+                        <div class="word">阶段打分</div>
+                    </div>
+                    <div class="card" @click="isShowAdvice=true">
+                        <div class="img">
+                            <img src="../images/评价.png" alt="">
+                        </div>
+                        <div class="word">评价建议</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <ChangeName :isShowChangeName="isShowChangeName" @getCloseChangeName="getCloseChangeName"
             @changedNameClose="changedNameClose"></ChangeName>
         <Hand :isShowHand="isShowHand" @getCloseHand="getCloseHand" @handedMessageClose="handedMessageClose"></Hand>
         <Score :isShowScore="isShowScore" @getCloseScore="getCloseScore" @scoredClose="scoredClose"></Score>
-        <Advice :isShowAdvice="isShowAdvice" @getCloseAdvice="getCloseAdvice" @advicedClose="advicedClose"></Advice>
+        <Advice :isShowAdvice="isShowAdvice" @getCloseAdvice="getCloseAdvice" @advicedClose="advicedClose"></Advice> -->
 
-    </div>
+        </div>
+    </transition>
+
 </template>
 
 <script>
+    import 'animate.css';
     import Advice from './Advice/Advice.vue'
     import Hand from './Hand/Hand.vue'
     import ChangeName from './ChangeName/ChangeName.vue'
@@ -111,44 +117,51 @@
 </script>
 
 <style scoped>
-    .bc {
-        position: absolute;
-        /* display: flex; */
-        width: 1000px;
-        height: 1000px;
-        /* border-radius: 50%; */
-        justify-content: center;
-        align-items: center;
-        /* overflow: hidden; */
-    }
+
+.plus-icon-enter-active{
+    transition: opacity 1s;
+  }
+  .plus-icon-enter{
+     opacity: 0;
+  }
+  .plus-icon-leave-active{
+    transition: opacity 1s;
+  }
+  .plus-icon-leave-to{
+    opacity: 0;
+  }
+
 
     .box {
         position: absolute;
-        width: 2000px;
-        height: 1000px;
-        background: rgba(3, 59, 85, 0.739);
-        top: 40%;
-        left: 10%;
-        border-radius: 1000px 1000px 0 0;
+        width: 100%;
+        height: 50%;
+        background: rgb(2, 85, 123);
+        bottom: 0;
+        right: 0;
+        /* border-radius: 50%; */
+        border-top-left-radius: 100%;
         border: 2px solid rgba(202, 202, 202, 0.164);
         box-shadow: 0px 5px 5px 0 rgba(0, 0, 0, 0.459);
         z-index: 9;
-        
+
     }
 
     .box .head {
         display: inline-block;
-        position: fixed;
-        bottom: 5%;
-        right: 7%;
+        position: absolute;
+        bottom: 7%;
+        right: 5%;
+        z-index: 999;
     }
 
     .box .head .close {
         display: block;
         width: 35px;
         height: 35px;
-        border: 1px solid white;
+        border: 1px solid rgba(255, 255, 255, 0.453);
         border-radius: 50%;
+        z-index: 999;
     }
 
     .box .head .close img {
@@ -157,40 +170,63 @@
     }
 
     .box .body {
-        display: inline-block;
         background-color: #918f8f7f;
-        width: 600px;
-        height: 400px;
-        position: fixed;
+        width: 100%;
+        height: 100%;
+        position: absolute;
         overflow: hidden;
-        bottom: 0%;
+        bottom: 0;
         right: 0;
+        border-top-left-radius: 100%;
+        z-index: 8;
     }
 
     .body .card {
         position: absolute;
-        width: 28%;
-        height: 28%;
+        width: 50px;
+        height: 50px;
     }
-    .body .card:nth-child(1){
-        top: 35%;
-        right: -5%;
-    }
-    .body .card:nth-child(2){
-        bottom: 15%;
+
+    .body .card:nth-child(1) {
+        bottom: 75%;
         right: 10%;
+
     }
-    .body .card:nth-child(3){
-        bottom: 5%;
-        right: 15%;
+
+    .body .card:nth-child(1) .img {
+        bottom: 75%;
+        right: 10%;
+        background-color: rgba(240, 128, 128, 0.792);
     }
-    .body .card:nth-child(4){
-        bottom: 1%;
-        right: 20%;
+
+    .body .card:nth-child(2) {
+        bottom: 60%;
+        right: 35%;
+    }
+
+    .body .card:nth-child(2) .img {
+        background-color: rgba(173, 216, 230, 0.792);
+    }
+
+    .body .card:nth-child(3) {
+        bottom: 40%;
+        right: 55%;
+    }
+
+    .body .card:nth-child(3) .img {
+        background-color: rgba(255, 160, 122, 0.792);
+    }
+
+    .body .card:nth-child(4) {
+        bottom: 10%;
+        right: 70%;
+    }
+
+    .body .card:nth-child(4) .img {
+        background-color: rgba(144, 238, 144, 0.792);
     }
 
     .body .card .img {
-        background-color: #fff;
         width: 50px;
         height: 50px;
         border-radius: 40%;
@@ -204,5 +240,7 @@
     .body .card .word {
         font-size: 70%;
         margin-top: 5px;
+        text-align: center;
+        color: white;
     }
 </style>

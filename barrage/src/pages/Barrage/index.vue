@@ -1,9 +1,9 @@
 <template>
     <div ref='vantaRef' class="background">
         <!-- 卡片背景 -->
-        <div class="box ">
+        <div class="box animate__zoomIn animate__animated">
             <!-- <div class="box2 animate__zoomIn animate__animated"></div> -->
-            <div class="bar ">
+            <div class="bar animate__zoomIn animate__animated">
                 <div class="title">
                     <div @click="goBackEnter" class="home">
                         <transition-group appear name="animate__animated animate__fadeInDown  animate__delay-2s"
@@ -349,28 +349,25 @@
         .background .box {
             width: 96%;
         }
-
-        
-
     }
 
     @media screen and (min-width:769px) and (max-width:992px) {
         .background .box {
             width: 600px;
-            height: 500px;
+            height: 800px;
         }
     }
 
     @media screen and (min-width:993px) {
         .background .box {
             width: 700px;
-            height: 600px;
+            height: 550px;
         } 
     }
     @media screen and (min-width:1360px) {
         .background .box {
             width: 1000px;
-            height: 800px;
+            height: 700px;
         } 
     }
 
