@@ -1,35 +1,35 @@
 <template>
-    <!-- enter-active-class="animate_animated animate__fadeInBottomRight "
-        leave-active-class="animate_animated animate__fadeOutBottomRight" -->
-    <transition name="plus-icon">
-        <div v-show="isShowFunction">
-            <div class="box" v-if="showFunction">
+    <div>
+        <transition enter-active-class="animate__animated animate__fadeInBottomRight animate_slow"
+            leave-active-class="animate__animated animate__fadeOutBottomRight">
+            <div class="box" v-if="isShowFunction"
+                :style="{'background':this.global.getIsSun()?'rgba(0, 0, 0, 0.478)':'linear-gradient(to right, #62605d 0%, #304352 100%)'}">
                 <div class="head">
                     <div class="close" @click="closeFunction">
                         <img src="../images/close.png" alt="">
                     </div>
                 </div>
                 <div class="body">
-                    <div class="card" @click="isShowChangeName=true">
+                    <div class="card" @click="showSonFunction(1)">
                         <div class="img">
                             <img src="../images/修改.png" alt="">
                         </div>
                         <div class="word">修改名称</div>
                     </div>
-                    <div class="card" @click="isShowHand=true">
+                    <div class="card" @click="showSonFunction(2)">
                         <div class="img">
                             <img src="../images/举手.png" alt="">
                         </div>
                         <div class="word">举手弹幕</div>
                     </div>
-                    <div class="card" @click="isShowScore=true">
+                    <div class="card" @click="showSonFunction(3)">
                         <div class="img">
 
                             <img src="../images/考核打分.png" alt="">
                         </div>
                         <div class="word">阶段打分</div>
                     </div>
-                    <div class="card" @click="isShowAdvice=true">
+                    <div class="card" @click="showSonFunction(4)">
                         <div class="img">
                             <img src="../images/评价.png" alt="">
                         </div>
@@ -37,16 +37,14 @@
                     </div>
                 </div>
             </div>
-
-            <!-- <ChangeName :isShowChangeName="isShowChangeName" @getCloseChangeName="getCloseChangeName"
+        </transition>
+        <ChangeName :isShowChangeName="sonFunctionState.isShowChangeName" @getCloseChangeName="getCloseChangeName"
             @changedNameClose="changedNameClose"></ChangeName>
-        <Hand :isShowHand="isShowHand" @getCloseHand="getCloseHand" @handedMessageClose="handedMessageClose"></Hand>
-        <Score :isShowScore="isShowScore" @getCloseScore="getCloseScore" @scoredClose="scoredClose"></Score>
-        <Advice :isShowAdvice="isShowAdvice" @getCloseAdvice="getCloseAdvice" @advicedClose="advicedClose"></Advice> -->
+        <Hand :isShowHand="sonFunctionState.isShowHand" @getCloseHand="getCloseHand" @handedMessageClose="handedMessageClose"></Hand>
+        <Score :isShowScore="sonFunctionState.isShowScore" @getCloseScore="getCloseScore" @scoredClose="scoredClose"></Score>
+        <Advice :isShowAdvice="sonFunctionState.isShowAdvice" @getCloseAdvice="getCloseAdvice" @advicedClose="advicedClose"></Advice>
 
-        </div>
-    </transition>
-
+    </div>
 </template>
 
 <script>
@@ -65,7 +63,14 @@
                 isShowChangeName: false,
                 isShowHand: false,
                 isShowScore: false,
-                isShowAdvice: false
+                isShowAdvice: false,
+                sonFunctionState: {
+                    isShowChangeName: false,//1
+                    isShowHand: false,//2
+                    isShowScore: false,//3
+                    isShowAdvice: false,//4
+                }
+
             }
         },
         components: {
@@ -75,82 +80,69 @@
             Advice
         },
         methods: {
+            showSonFunction(fun) {
+                //排他，防止多个子功能界面同时出现
+                //1==changeName 2==hand 3==score 4==advice
+                for(let i in this.sonFunctionState){
+                    this.sonFunctionState[i] = false
+                }
+                if(fun==1)this.sonFunctionState.isShowChangeName=true
+                if(fun==2)this.sonFunctionState.isShowHand=true
+                if(fun==3)this.sonFunctionState.isShowScore=true
+                if(fun==4)this.sonFunctionState.isShowAdvice=true  
+            },
             closeFunction() {
+                //关闭Function组件界面
                 this.$emit('getCloseFunction', false)
+                this.sonFunctionState.isShowChangeName = false
+                this.sonFunctionState.isShowHand = false
+                this.sonFunctionState.isShowScore = false
+                this.sonFunctionState.isShowAdvice = false
             },
             getCloseChangeName(value) {
-                this.isShowChangeName = false
+                this.sonFunctionState.isShowChangeName = false
             },
             changedNameClose() {
                 this.closeFunction()
             },
             getCloseHand(value) {
-                this.isShowHand = false
+                this.sonFunctionState.isShowHand = false
             },
             handedMessageClose() {
                 this.closeFunction()
             },
             getCloseScore(value) {
-                this.isShowScore = false
+                this.sonFunctionState.isShowScore = false
             },
             scoredClose() {
                 this.closeFunction()
             },
             getCloseAdvice() {
-                this.isShowAdvice = false
+                this.sonFunctionState.isShowAdvice = false
             },
             advicedClose() {
                 this.closeFunction()
-            }
+            },
+            
         },
-        computed: {
-            showFunction() {
-                if (this.isShowFunction == true) {
-                    if (this.isShowChangeName == false && this.isShowHand == false && this.isShowScore == false && this
-                        .isShowAdvice == false) return true
-                    else if (this.isShowChangeName == true || this.isShowHand == true || this.isShowScore == true ||
-                        this.isShowAdvice == true) return false
-                }
-            }
-        }
     }
 </script>
 
 <style scoped>
-
-.plus-icon-enter-active{
-    transition: opacity 1s;
-  }
-  .plus-icon-enter{
-     opacity: 0;
-  }
-  .plus-icon-leave-active{
-    transition: opacity 1s;
-  }
-  .plus-icon-leave-to{
-    opacity: 0;
-  }
-
-
     .box {
         position: absolute;
         width: 100%;
         height: 50%;
-        background: rgb(2, 85, 123);
         bottom: 0;
         right: 0;
-        /* border-radius: 50%; */
         border-top-left-radius: 100%;
-        border: 2px solid rgba(202, 202, 202, 0.164);
-        box-shadow: 0px 5px 5px 0 rgba(0, 0, 0, 0.459);
         z-index: 9;
-
     }
 
     .box .head {
         display: inline-block;
         position: absolute;
-        bottom: 7%;
+        bottom: 5%;
         right: 5%;
         z-index: 999;
     }
@@ -170,7 +162,6 @@
     }
 
     .box .body {
-        background-color: #918f8f7f;
         width: 100%;
         height: 100%;
         position: absolute;

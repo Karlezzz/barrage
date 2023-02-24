@@ -15,6 +15,7 @@
         box-sizing: border-box;
         margin: 0;
         padding: 0;
+        user-select: none;
     }
     /* ios端点击div出现阴影 */
     div {
@@ -24,6 +25,27 @@
     img{
         pointer-events: none;
     }
-    
+    input:focus {
+        outline: none;
+    }
+
+    input::-webkit-input-placeholder {
+        color: #ffffff;
+    }
+
+    input::-moz-placeholder {
+        /* Mozilla Firefox 19+ */
+        color: #ffffff;
+    }
+
+    input:-moz-placeholder {
+        /* Mozilla Firefox 4 to 18 */
+        color: #ffffff;
+    }
+
+    input:-ms-input-placeholder {
+        /* Internet Explorer 10-11 */
+        color: #ffffff;
+    }
     
 </style>

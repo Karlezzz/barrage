@@ -8,10 +8,8 @@
                     <div @click="goBackEnter" class="home">
                         <transition-group appear name="animate__animated animate__fadeInDown  animate__delay-2s"
                             leave-active-class="animate__animated animate__zoomOut animate__faster">
-
                             <img v-if="isSun" key='1' src="./images/home.png" alt="">
                             <img v-if="!isSun" key='2' src="./images/home-night.png" alt="">
-
                         </transition-group>
                     </div>
                     <div class="cleanBC" @click="cleanBackground"
@@ -50,10 +48,11 @@
                         <input type="text" placeholder="快来发言吧..." v-model="inputContent" @keyup.enter="sendNewContent">
                     </div>
                     <div class="send">
-                        <div class="btn" :style="{borderColor:(isSun==false?'#f4ea2a':'#2c2c2c')}"
-                            @click="sendNewContent">
-                            发送
-                        </div>
+                        <!-- <div class="btn" @click="sendNewContent">
+                            <img v-if="isSun" src="./images/发送.png" alt="">
+                            <img v-if="!isSun" src="./images/发送-night.png" alt="">
+                        </div> -->
+                        <div class="btn" @click="isShowVote=!isShowVote">test vote</div>
                     </div>
                 </div>
             </div>
@@ -73,9 +72,7 @@
     import 'animate.css';
     import * as THREE from 'three'
     import Clouds from 'vanta/src/vanta.clouds'
-    import {
-        mapState
-    } from 'vuex'
+    
     export default {
         components: {
             More,
@@ -86,7 +83,7 @@
             return {
                 isClass: '',
                 myId: '004',
-                name: 'admin',
+                name: 'd',
                 inputContent: '',
                 messageContent: [{
                         name: 'Alen',
@@ -126,10 +123,11 @@
 
                 ],
                 isSun: this.global.getIsSun(),
+                isCleanBG: this.global.getIsCleanBG(),
                 isShowChat: false,
                 isShowFunction: false,
                 isShowVote: false,
-                isCleanBG: this.global.getIsCleanBG(),
+                
             }
         },
         methods: {
@@ -362,13 +360,14 @@
         .background .box {
             width: 700px;
             height: 550px;
-        } 
+        }
     }
+
     @media screen and (min-width:1360px) {
         .background .box {
             width: 1000px;
             height: 700px;
-        } 
+        }
     }
 
     .background {
@@ -397,21 +396,6 @@
         justify-content: center;
         align-items: center;
     }
-
-    /* .box2 {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        margin: auto;
-        width: 100%;
-        height: 100%;
-        text-align: center;
-        overflow: hidden;
-        border-radius: 30px;
-        filter: blur(30px);
-    } */
 
     .bar {
         width: 100%;
@@ -584,6 +568,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        margin: 10px;
     }
 
     .bar .foot .more img {
@@ -597,6 +582,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        margin-left: 10px;
     }
 
     .bar .foot .input input {
@@ -612,28 +598,7 @@
         letter-spacing: 2px;
     }
 
-    .bar .foot .input input:focus {
-        outline: none;
-    }
-
-    .bar .foot .input input::-webkit-input-placeholder {
-        color: #ffffff;
-    }
-
-    .bar .foot .input input::-moz-placeholder {
-        /* Mozilla Firefox 19+ */
-        color: #ffffff;
-    }
-
-    .bar .foot .input input:-moz-placeholder {
-        /* Mozilla Firefox 4 to 18 */
-        color: #ffffff;
-    }
-
-    .bar .foot .input input:-ms-input-placeholder {
-        /* Internet Explorer 10-11 */
-        color: #ffffff;
-    }
+    
 
     .bar .foot .send {
         flex: 0.2;
@@ -643,14 +608,15 @@
     }
 
     .bar .foot .send .btn {
-        background-color: rgba(66, 178, 243, 0);
-        border: 1px solid rgb(0, 0, 0);
         width: 70px;
         height: 40px;
-        border-radius: 10vh;
         display: flex;
         justify-content: center;
         align-items: center;
-        color: rgb(255, 255, 255);
+    }
+
+    .bar .foot .send .btn img {
+        width: 32px;
+        height: 32px;
     }
 </style>

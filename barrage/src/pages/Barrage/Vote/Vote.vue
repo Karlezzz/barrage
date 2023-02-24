@@ -1,44 +1,48 @@
 <template>
-    <div class="bc" v-if="isShowVote">
-        <div class="box">
-            <div class="head">
-                <div class="title">投票</div>
-                <div class="close" @click="closeVote">
-                    <img src="../images/close.png" alt="">
-                </div>
-            </div>
+    <transition enter-active-class="animate__animated animate__slideInDown animate__faster"
+        leave-active-class="animate__animated animate__slideOutUp animate__faster">
+        <div class="box_son" v-if="isShowVote">
             <div class="body">
-                <div class="voteTopic">投票的主题</div>
+                <div class="back" @click="closeVote">
+                    <img src="../images/back.png" alt="">
+                </div>
+                <div class="voteTopic">今天几点下课</div>
                 <div class="voteSelectArea">
-                    <div class="voteSelect" v-if="!isVoted">
-                        <div class="voteSelectItem" @click="selectThisVote">选项一</div>
+                        <div class="voteSelect" v-if="!isVoted" @click="selectThisVote">
+                        <div class="voteSelectItem">选项一</div>
                         <div class="voteSelectItem">选项二</div>
                         <div class="voteSelectItem">选项三</div>
                         <div class="voteSelectItem">选项四</div>
                     </div>
-                    <div class="voteResult" v-if="isVoted">
-                        <div class="voteSelected">
-                            <div class="voteSelectedItem">选项一</div>
-                            <span class="resultNumber">10%</span>
+                    <transition enter-active-class="animate__animated animate__flipInX "
+                        leave-active-class="animate__animated animate__fadeOut animate__faster">
+                        <div class="voteResult" v-if="isVoted">
+                            <div class="voteSelected">
+                                <div class="voteSelectedItem">选项一</div>
+                                <span class="resultNumber">10%</span>
+                            </div>
+                            <div class="voteSelected">
+                                <div class="voteSelectedItem">选项二</div>
+                                <span class="resultNumber">30%</span>
+                            </div>
+                            <div class="voteSelected">
+                                <div class="voteSelectedItem">选项三</div>
+                                <span class="resultNumber">40%</span>
+                            </div>
+                            <div class="voteSelected">
+                                <div class="voteSelectedItem">选项四</div>
+                                <span class="resultNumber">20%</span>
+                            </div>
                         </div>
-                        <div class="voteSelected">
-                            <div class="voteSelectedItem">选项二</div>
-                            <span class="resultNumber">30%</span>
-                        </div>
-                        <div class="voteSelected">
-                            <div class="voteSelectedItem">选项三</div>
-                            <span class="resultNumber">40%</span>
-                        </div>
-                        <div class="voteSelected">
-                            <div class="voteSelectedItem">选项四</div>
-                            <span class="resultNumber">20%</span>
-                        </div>
+                    </transition>
 
-                    </div>
+
                 </div>
             </div>
         </div>
-    </div>
+    </transition>
+
+
 </template>
 
 <script>
@@ -53,133 +57,124 @@
             closeVote() {
                 this.$emit('getCloseVote', false)
             },
-            selectThisVote(){
+            selectThisVote() {
                 this.isVoted = true
+            },
+            recallVote(){
+                this.isVoted=false
             }
+
         },
     }
 </script>
 
 <style scoped>
-    .bc {
+    .box_son {
         position: absolute;
-        display: flex;
-        height: 100vh;
+        top: 0;
+        left: 5%;
+        background-color: rgba(0, 0, 0, 0.478);
+        width: 90%;
+        min-height: 20%;
+        border-radius: 30px;
+    }
+
+
+
+    .box_son .body {
         width: 100%;
-        justify-content: center;
-        align-items: center;
+        margin-bottom: 5%;
     }
 
-    .box {
-        width: 60%;
-        height: 40%;
-        border-radius: 6px;
-        background: rgba(180, 226, 248, 0.593);
-        border: 2px solid rgba(202, 202, 202, 0.164);
-        box-shadow: 0px 5px 5px 0 rgba(0, 0, 0, 0.459);
-        z-index: 9;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-    }
-
-    .box .head {
-        flex: 0.1;
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 10px;
-    }
-
-    .box .head .title {
+    .box_son .body .back {
         display: inline-block;
+        position: absolute;
+        top: 5%;
+        left: 10%;
+        width: 30px;
         height: 30px;
-        margin-top: 10px;
-        margin-left: 5px;
-        color: grey;
-        font-size: 110%;
-        letter-spacing: 2px;
+        border-radius: 50%;
+        background-color: #ffffff;
     }
 
-    .box .head .close {
-        display: inline-block;
-        width: 25px;
-        height: 25px;
-        margin: 5px 5px 0 0;
-    }
-
-    .box .head .close img {
+    .box_son .body .back img {
         width: 100%;
         height: 100%;
     }
 
-    .box .body {
-        flex: 0.9;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-    }
-    .box .body .voteTopic{
+    .box_son .body .voteTopic {
+        margin-top: 5%;
         width: 100%;
         text-align: center;
-        font-size: 15px;
-        flex: 0.2;
+        font-size: 100%;
+        letter-spacing: 2px;
+        color: white;
         display: flex;
         justify-content: center;
         align-items: center;
     }
-    .voteSelectArea{
-        flex: 0.8;
+
+    .voteSelectArea {
+        margin-top: 2%;
         display: flex;
-        margin: 5px 0 5px 0;
+        justify-content: center;
+        align-items: center;
         width: 100%;
     }
-    .voteSelect{
+
+    .voteSelect {
         display: flex;
         justify-content: space-between;
-        align-items:center;
+        align-items: center;
         flex-direction: column;
         width: 100%;
-
+        margin: 2% 0 5% 0;
     }
-    .voteSelectItem{
+
+    .voteSelectItem {
         width: 80%;
         height: 20%;
         display: flex;
-        align-items:center;
-        padding-left: 5px;
-        border:1px solid #8686866b ;
+        align-items: center;
+        margin-top: 4%;
+        border: 1px solid #8686866b;
         border-radius: 10px;
         box-shadow: 0px 3px 3px 0 rgba(0, 0, 0, 0.4);
-        background-color: #ffffff00;
+        background-color: #00000059;
+
+        padding: 2% 0 2% 5%;
+        color: white;
     }
 
-    .voteResult{
+    .voteResult {
         display: flex;
         justify-content: space-between;
-        align-items:center;
+        align-items: center;
         flex-direction: column;
         width: 100%;
+        margin: 2% 0 5% 10%;
     }
-    .voteSelected{
-        width: 100%;
-    }
-    .voteSelectedItem{
-        display: inline-block;
-        width: 80%;
 
-        padding-left: 5px;
-        border:1px solid #8686866b ;
+    .voteSelected {
+        width: 90%;
+    }
+
+    .voteSelectedItem {
+        display: inline-block;
+        width: 70%;
+        height: 20%;
+        margin-top: 4%;
+        border: 1px solid #8686866b;
         border-radius: 10px;
         box-shadow: 0px 3px 3px 0 rgba(0, 0, 0, 0.4);
-        background-color: #ffffff00;
+        background-color: #00000059;
+        padding: 2% 0 2% 5%;
+        color: white;
     }
 
-    .voteSelected span{
+    .voteSelected span {
         display: inline-block;
-        margin-left: 5px;
-}
+        margin-left: 10px;
+        color: white;
+    }
 </style>

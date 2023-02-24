@@ -1,20 +1,16 @@
 <template>
-  <div class="bc" v-if="isShowChangeName">
-    <div class="box">
-      <div class="head">
-        <div class="title">修改名称</div>
-        <div class="close" @click="closeChangeName"><img src="../../images/close.png" alt=""></div>
-      </div>
+  <transition enter-active-class="animate__animated animate__fadeInDown animate__faster"
+            leave-active-class="animate__animated animate__fadeOutUp animate__faster">
+    <div class="box_son" v-if="isShowChangeName">
       <div class="body">
-        <input type="text" v-model="newName">
+        <input type="text" placeholder="换个名称..." v-model="newName">
       </div>
       <div class="foot">
         <button @click="closeChangeName">返回</button>
         <button @click="sendNewName">确认</button>
       </div>
     </div>
-
-  </div>
+  </transition>
 </template>
 
 <script>
@@ -36,68 +32,30 @@
         this.$bus.$emit('getNewName', this.newName)
         this.closeChangeName()
         this.$emit('changedNameClose', false)
+        this.newName = ''
       }
     }
   }
 </script>
 
 <style scoped>
-  .bc {
+  .box_son {
     position: absolute;
-    display: flex;
-    height: 100vh;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
-  }
-
-  .box {
-    width: 60%;
+    top: 0;
+    left: 5%;
+    background-color: rgba(0, 0, 0, 0.478);
+    width: 90%;
     height: 20%;
-    border-radius: 6px;
-    background: rgba(180, 226, 248, 0.593);
-    border: 2px solid rgba(202, 202, 202, 0.164);
-    box-shadow: 0px 5px 5px 0 rgba(0, 0, 0, 0.459);
-    z-index: 9;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+    border-radius: 30px;
   }
 
-  .box .head {
-    flex: 0.1;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .box .head .title {
-    display: inline-block;
-    height: 30px;
-    margin-top: 10px;
-    margin-left: 5px;
-    color: grey;
-    font-size: 110%;
-    letter-spacing: 2px;
-  }
-
-  .box .head .close {
-    display: inline-block;
-    width: 25px;
-    height: 25px;
-    margin: 5px 5px 0 0;
-  }
-
-  .box .head .close img {
-    width: 100%;
-    height: 100%;
-  }
 
   .box .body {
-    flex: 0.5;
+    position: absolute;
+    top: 10%;
     width: 100%;
+    height: 50%;
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -107,7 +65,7 @@
     border: none;
     width: 90%;
     height: 60%;
-    border-bottom: 2px solid rgba(70, 70, 70, 0.637);
+    border-bottom: 2px solid rgb(255, 255, 255);
     font-size: 90%;
     font-weight: 700;
     padding-left: 10px;
@@ -121,30 +79,34 @@
   }
 
   .box .foot {
-    flex: 0.4;
-    width: 80%;
+    position: absolute;
+    bottom: 10%;
+    left: 0;
+    width: 100%;
+    height: 30%;
     display: flex;
-    align-items: center;
     justify-content: space-around;
+    align-items: center;
   }
 
   .box .foot button {
     width: 30%;
     height: 70%;
+    border-radius: 20px;
     border: none;
-    margin-left: 10px;
-    border-radius: 20%;
     color: white;
-    letter-spacing: 2px;
-    font-size: 50%;
-    font-weight: 700;
+    font-size: 100%;
+    letter-spacing: 5px;
+    text-align: center;
   }
 
   .box .foot button:nth-child(1) {
-    background-color: rgb(124, 223, 248);
+    /* background-color: rgb(124, 223, 248); */
+    background-color: lightcoral;
   }
 
   .box .foot button:nth-child(2) {
-    background-color: rgb(250, 209, 133);
+    /* background-color: rgb(250, 209, 133); */
+    background-color: lightblue;
   }
 </style>

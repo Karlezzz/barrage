@@ -1,26 +1,31 @@
 <template>
-    <div class="bc" v-if="isShowChat">
-        <div class="box" v-if="showChat">
-            <div class="head">
-                <div class="title">常用语</div>
-                <div class="close" @click="closeIsShowChat">
-                    <img src="../images/close.png" alt="">
+    <div>
+        <transition enter-active-class="animate__animated animate__slideInUp"
+            leave-active-class="animate__animated animate__slideOutDown animate__faster">
+            <div class="box" v-show="isShowChat"
+                :style="{'background':this.global.getIsSun()?'rgba(0, 0, 0, 0.478)':'linear-gradient(to right, #868f96 0%, #596164 100%)'}">
+                <div class="close" @click="closeIsShowChat()">
+                    <transition appear name="animate__animated animate__fadeInUp  animate__delay-10s"
+                        leave-active-class="animate__animated animate__fadeInDown ">
+                        <img v-if="isShowChat" src="../images/下拉.png" alt="">
+                    </transition>
                 </div>
-            </div>
-            <div class="body">
-                <div class="content" v-for="item in moreContent" :key="item.id" @click="sentMessage(item)">
-                    <div class="contentBox">
+                <div class="body" v-show="!isShowAddMoreChat">
+                    <div class="content" v-for="(item,index) in moreContent" :key="index" @click="sentMessage(item)"
+                        >
                         <div class="word">{{item.content}}</div>
                     </div>
-                </div>
-                <div class="content" @click="addMoreChat">
-                    <div class="contentBox">
+                    <div class="content" @click="addMoreChat">
                         <div class="word">&nbsp;&nbsp;+&nbsp;&nbsp;</div>
                     </div>
                 </div>
             </div>
-        </div>
-        <AddMoreChat v-if="isShowAddMoreChat" @closeAddMoreChat="closeAddMoreChat" @getNewChat="getNewChat"></AddMoreChat>
+        </transition>
+
+
+
+        <AddMoreChat  @closeAddMoreChat="closeAddMoreChat" @getNewChat="getNewChat" :isShowAddMoreChat="isShowAddMoreChat">
+        </AddMoreChat>
     </div>
 </template>
 
@@ -31,7 +36,7 @@
     import AddMoreChat from './AddMoreChat/AddMoreChat.vue';
     export default {
         name: 'More',
-        components:{
+        components: {
             AddMoreChat
         },
         props: [
@@ -57,17 +62,20 @@
                         id: '004',
                         content: '不知道'
                     },
+
                     {
                         id: '005',
                         content: '下课了老师'
                     },
+
                 ],
-                isShowAddMoreChat:false
+                isShowAddMoreChat: false
             }
         },
         methods: {
             closeIsShowChat() {
                 this.$emit('closeIsShowChat', false)
+                this.isShowAddMoreChat= false
             },
             sentMessage(item) {
                 const newMessage = {
@@ -77,110 +85,90 @@
                 }
                 this.$emit('getNewMoreMessage', newMessage)
             },
-            addMoreChat(){
-                this.isShowAddMoreChat= true
+            addMoreChat() {
+                this.isShowAddMoreChat = true
+                
             },
-            closeAddMoreChat(value){
-                this.isShowAddMoreChat=false
+            closeAddMoreChat(value) {
+                this.isShowAddMoreChat = false
             },
-            getNewChat(value){
-                this.isShowAddMoreChat=false
+            getNewChat(value) {
+                this.isShowAddMoreChat = false
                 this.moreContent.push(value)
-            }
+            },
         },
-        computed:{
-            showChat(){
-                if(this.isShowChat==true){
-                    if(this.isShowAddMoreChat==false)return true
-                    else if(this.isShowAddMoreChat == true) return false
+        computed: {
+            showChat() {
+                if (this.isShowChat == true) {
+                    if (this.isShowAddMoreChat == false) return true
+                    else if (this.isShowAddMoreChat == true) return false
                 }
             }
-        }
-
+        },
     }
 </script>
 
 <style scoped>
-    .bc {
-        position: absolute;
-        display: flex;
-        height: 100vh;
-        width: 100%;
-        justify-content: center;
-        align-items: center;
-    }
-
     .box {
-        width: 60%;
+        position: absolute;
+        width: 100%;
         height: 40%;
-        border-radius: 6px;
-        background: rgba(180, 226, 248, 0.593);
-        border: 2px solid rgba(202, 202, 202, 0.164);
-        box-shadow: 0px 5px 5px 0 rgba(0, 0, 0, 0.459);
+        bottom: 0;
+        left: 0;
+        z-index: 999;
+        border-top-right-radius: 100%;
+        border-top-left-radius: 100%;
         z-index: 9;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
+
     }
 
-    .box .head {
-        flex: 0.1;
+    .box .close {
+        position: absolute;
         width: 100%;
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 10px;
+        height: 15%;
+        top: -5%;
+        text-align: center;
     }
 
-    .box .head .title {
-        display: inline-block;
-        height: 30px;
-        margin-top: 10px;
-        margin-left: 5px;
-        color: grey;
-        font-size: 110%;
-        letter-spacing: 2px;
-    }
-
-    .box .head .close {
-        display: inline-block;
-        width: 25px;
-        height: 25px;
-        margin: 5px 5px 0 0;
-    }
-
-    .box .head .close img {
-        width: 100%;
+    .box .close img {
+        position: absolute;
+        background-color: rgb(255, 255, 255);
         height: 100%;
+        border-radius: 50%;
+        left: 45%;
     }
 
     .box .body {
-        flex: 0.9;
-        width: 100%;
+        width: 90%;
+        height: 77%;
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        margin-top: 20%;
+        margin-left: 5%;
+        overflow: scroll;
+    }
+
+    .box .body::-webkit-scrollbar {
+        display: none;
     }
 
     .box .body .content {
-        display: inline-block;
-        height: 13%;
-        margin: 5px 10px 0 5px;
-        max-width: 90%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 20%;
+        max-width: 60%;
+        padding: 0 15px 0 15px;
         overflow: hidden;
         text-overflow: ellipsis;
-        border: 1px solid black;
-        border-radius: 20px;
+        border: 1.5px solid;
+        border-radius: 30px;
+        margin-top: 10px;
+        color: white;
     }
 
-    .box .body .content .contentBox {
-        display: flex;
-        /* justify-content: center; */
-        align-items: center;
-        width: 100%;
-        height: 100%;
-        padding: 0 5px 0 5px;
-
-    }
-
-    .box .body .content .contentBox .word {
+    .box .body .content .word {
         font-size: 90%;
         font-weight: 600;
         letter-spacing: 2px;
