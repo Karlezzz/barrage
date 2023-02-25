@@ -35,14 +35,24 @@
                         </div>
                         <div class="word">评价建议</div>
                     </div>
+                    <div class="card" @click="showSonFunction(5)">
+                        <div class="img">
+                            <img src="../images/投票.png" alt="">
+                        </div>
+                        <div class="word">历史投票</div>
+                    </div>
                 </div>
             </div>
         </transition>
         <ChangeName :isShowChangeName="sonFunctionState.isShowChangeName" @getCloseChangeName="getCloseChangeName"
             @changedNameClose="changedNameClose"></ChangeName>
-        <Hand :isShowHand="sonFunctionState.isShowHand" @getCloseHand="getCloseHand" @handedMessageClose="handedMessageClose"></Hand>
-        <Score :isShowScore="sonFunctionState.isShowScore" @getCloseScore="getCloseScore" @scoredClose="scoredClose"></Score>
-        <Advice :isShowAdvice="sonFunctionState.isShowAdvice" @getCloseAdvice="getCloseAdvice" @advicedClose="advicedClose"></Advice>
+        <Hand :isShowHand="sonFunctionState.isShowHand" @getCloseHand="getCloseHand"
+            @handedMessageClose="handedMessageClose"></Hand>
+        <Score :isShowScore="sonFunctionState.isShowScore" @getCloseScore="getCloseScore" @scoredClose="scoredClose">
+        </Score>
+        <Advice :isShowAdvice="sonFunctionState.isShowAdvice" @getCloseAdvice="getCloseAdvice"
+            @advicedClose="advicedClose"></Advice>
+        <Vote :isShowVote="sonFunctionState.isShowVote" @getCloseVote="getCloseVote"></Vote>
 
     </div>
 </template>
@@ -53,6 +63,7 @@
     import Hand from './Hand/Hand.vue'
     import ChangeName from './ChangeName/ChangeName.vue'
     import Score from './Score/Score.vue'
+    import Vote from './Vote/Vote.vue'
     export default {
         name: 'Function',
         props: [
@@ -60,15 +71,12 @@
         ],
         data() {
             return {
-                isShowChangeName: false,
-                isShowHand: false,
-                isShowScore: false,
-                isShowAdvice: false,
                 sonFunctionState: {
-                    isShowChangeName: false,//1
-                    isShowHand: false,//2
-                    isShowScore: false,//3
-                    isShowAdvice: false,//4
+                    isShowChangeName: false, //1
+                    isShowHand: false, //2
+                    isShowScore: false, //3
+                    isShowAdvice: false, //4
+                    isShowVote: false, //5
                 }
 
             }
@@ -77,27 +85,28 @@
             ChangeName,
             Hand,
             Score,
-            Advice
+            Advice,
+            Vote
         },
         methods: {
             showSonFunction(fun) {
                 //排他，防止多个子功能界面同时出现
                 //1==changeName 2==hand 3==score 4==advice
-                for(let i in this.sonFunctionState){
+                for (let i in this.sonFunctionState) {
                     this.sonFunctionState[i] = false
                 }
-                if(fun==1)this.sonFunctionState.isShowChangeName=true
-                if(fun==2)this.sonFunctionState.isShowHand=true
-                if(fun==3)this.sonFunctionState.isShowScore=true
-                if(fun==4)this.sonFunctionState.isShowAdvice=true  
+                if (fun == 1) this.sonFunctionState.isShowChangeName = true
+                if (fun == 2) this.sonFunctionState.isShowHand = true
+                if (fun == 3) this.sonFunctionState.isShowScore = true
+                if (fun == 4) this.sonFunctionState.isShowAdvice = true
+                if (fun == 5) this.sonFunctionState.isShowVote = true
             },
             closeFunction() {
                 //关闭Function组件界面
                 this.$emit('getCloseFunction', false)
-                this.sonFunctionState.isShowChangeName = false
-                this.sonFunctionState.isShowHand = false
-                this.sonFunctionState.isShowScore = false
-                this.sonFunctionState.isShowAdvice = false
+                for (let i in this.sonFunctionState) {
+                    this.sonFunctionState[i] = false
+                }
             },
             getCloseChangeName(value) {
                 this.sonFunctionState.isShowChangeName = false
@@ -123,7 +132,10 @@
             advicedClose() {
                 this.closeFunction()
             },
-            
+            getCloseVote() {
+                this.sonFunctionState.isShowVote = false
+            }
+
         },
     }
 </script>
@@ -185,8 +197,6 @@
     }
 
     .body .card:nth-child(1) .img {
-        bottom: 75%;
-        right: 10%;
         background-color: rgba(240, 128, 128, 0.792);
     }
 
@@ -215,6 +225,15 @@
 
     .body .card:nth-child(4) .img {
         background-color: rgba(144, 238, 144, 0.792);
+    }
+
+    .body .card:nth-child(5) {
+        bottom: 45%;
+        right: 15%;
+    }
+
+    .body .card:nth-child(5) .img {
+        background-color: rgba(32, 178, 171, 0.792);
     }
 
     .body .card .img {

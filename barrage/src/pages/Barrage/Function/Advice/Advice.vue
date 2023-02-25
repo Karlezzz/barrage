@@ -1,7 +1,8 @@
 <template>
   <transition enter-active-class="animate__animated animate__fadeInDown animate__faster"
     leave-active-class="animate__animated animate__fadeOutUp animate__faster">
-    <div class="box_son" v-show="isShowAdvice">
+    <div class="box_son" v-show="isShowAdvice"
+      :style="{'background':this.global.getIsSun()?'rgba(0, 0, 0, 0.478)':'linear-gradient(to right, #62605d 0%, #304352 100%)'}">
       <div class="body">
         <textarea name="" id="" cols="20" rows="3" v-model="advice" placeholder="留下宝贵建议..."></textarea>
       </div>
@@ -75,7 +76,7 @@
     outline: none;
   }
 
-  .box_son .body textarea::placeholder{
+  .box_son .body textarea::placeholder {
     color: white;
   }
 

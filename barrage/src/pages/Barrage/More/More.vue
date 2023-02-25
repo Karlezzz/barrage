@@ -1,6 +1,6 @@
 <template>
     <div>
-        <transition enter-active-class="animate__animated animate__slideInUp"
+        <transition enter-active-class="animate__animated animate__slideInUp animate__faster"
             leave-active-class="animate__animated animate__slideOutDown animate__faster">
             <div class="box" v-show="isShowChat"
                 :style="{'background':this.global.getIsSun()?'rgba(0, 0, 0, 0.478)':'linear-gradient(to right, #868f96 0%, #596164 100%)'}">
@@ -11,8 +11,7 @@
                     </transition>
                 </div>
                 <div class="body" v-show="!isShowAddMoreChat">
-                    <div class="content" v-for="(item,index) in moreContent" :key="index" @click="sentMessage(item)"
-                        >
+                    <div class="content" v-for="(item,index) in moreContent" :key="index" @click="sentMessage(item)">
                         <div class="word">{{item.content}}</div>
                     </div>
                     <div class="content" @click="addMoreChat">
@@ -24,7 +23,8 @@
 
 
 
-        <AddMoreChat  @closeAddMoreChat="closeAddMoreChat" @getNewChat="getNewChat" :isShowAddMoreChat="isShowAddMoreChat">
+        <AddMoreChat @closeAddMoreChat="closeAddMoreChat" @getNewChat="getNewChat"
+            :isShowAddMoreChat="isShowAddMoreChat">
         </AddMoreChat>
     </div>
 </template>
@@ -75,7 +75,7 @@
         methods: {
             closeIsShowChat() {
                 this.$emit('closeIsShowChat', false)
-                this.isShowAddMoreChat= false
+                this.isShowAddMoreChat = false
             },
             sentMessage(item) {
                 const newMessage = {
@@ -87,7 +87,7 @@
             },
             addMoreChat() {
                 this.isShowAddMoreChat = true
-                
+
             },
             closeAddMoreChat(value) {
                 this.isShowAddMoreChat = false
@@ -149,9 +149,7 @@
         overflow: scroll;
     }
 
-    .box .body::-webkit-scrollbar {
-        display: none;
-    }
+
 
     .box .body .content {
         display: flex;

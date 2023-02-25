@@ -1,40 +1,41 @@
 <template>
-<transition enter-active-class="animate__animated animate__fadeInDown animate__faster"
-            leave-active-class="animate__animated animate__fadeOutUp animate__faster">
-  <div class="box_son" v-if="isShowHand">
-        <div class="body">
-            <input type="text" v-model="handMessage" placeholder="快点发言吧...">
-        </div>
-        <div class="foot">
-            <button @click="closeHand">取消</button>
-            <button @click="sendHandMessage">确认</button>
-        </div>
+  <transition enter-active-class="animate__animated animate__fadeInDown animate__faster"
+    leave-active-class="animate__animated animate__fadeOutUp animate__faster">
+    <div class="box_son" v-if="isShowHand"
+      :style="{'background':this.global.getIsSun()?'rgba(0, 0, 0, 0.478)':'linear-gradient(to right, #62605d 0%, #304352 100%)'}">
+      <div class="body">
+        <input type="text" v-model="handMessage" placeholder="快点发言吧...">
+      </div>
+      <div class="foot">
+        <button @click="closeHand">取消</button>
+        <button @click="sendHandMessage">确认</button>
+      </div>
     </div>
-</transition>
-    
+  </transition>
+
 
 </template>
 
 <script>
-export default {
-    name:'Hand',
-    props:['isShowHand'],
+  export default {
+    name: 'Hand',
+    props: ['isShowHand'],
     data() {
-        return {
-            handMessage:''
-        }
+      return {
+        handMessage: ''
+      }
     },
-    methods:{
-        closeHand(){
-            this.$emit('getCloseHand',false)
-        },
-        sendHandMessage(){
-            this.$bus.$emit('getHandMessage',this.handMessage)
-            this.closeHand()
-            this.$emit('handedMessageClose',false)
-        }
+    methods: {
+      closeHand() {
+        this.$emit('getCloseHand', false)
+      },
+      sendHandMessage() {
+        this.$bus.$emit('getHandMessage', this.handMessage)
+        this.closeHand()
+        this.$emit('handedMessageClose', false)
+      }
     }
-}
+  }
 </script>
 
 <style scoped>
@@ -107,4 +108,3 @@ export default {
     background-color: lightblue;
   }
 </style>
-    

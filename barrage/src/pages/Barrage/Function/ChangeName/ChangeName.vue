@@ -1,7 +1,8 @@
 <template>
   <transition enter-active-class="animate__animated animate__fadeInDown animate__faster"
-            leave-active-class="animate__animated animate__fadeOutUp animate__faster">
-    <div class="box_son" v-if="isShowChangeName">
+    leave-active-class="animate__animated animate__fadeOutUp animate__faster">
+    <div class="box_son" v-if="isShowChangeName"
+      :style="{'background':this.global.getIsSun()?'rgba(0, 0, 0, 0.478)':'linear-gradient(to right, #62605d 0%, #304352 100%)'}">
       <div class="body">
         <input type="text" placeholder="换个名称..." v-model="newName">
       </div>

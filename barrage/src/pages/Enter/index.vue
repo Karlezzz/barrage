@@ -61,7 +61,7 @@
                 el: this.$refs.vantaRef,
                 THREE: THREE
             })
-            if (this.global.isSun == false&& sessionStorage.getItem("TOKEN")) {
+            if (this.global.isSun == false && sessionStorage.getItem("TOKEN")) {
                 this.vantaEffect.setOptions({
                     mouseControls: true,
                     touchControls: true,

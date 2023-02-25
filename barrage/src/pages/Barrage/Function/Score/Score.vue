@@ -1,56 +1,56 @@
 <template>
-<transition enter-active-class="animate__animated animate__fadeInDown animate__faster"
-            leave-active-class="animate__animated animate__fadeOutUp animate__faster">
-    <div class="box_son" v-show="isShowScore">
-        <div class="body">
-            <div class="star">
-                <ul>
-                    <li v-for="(i,index) in count" :key="index" @click="grade(index)"
-                    :class="index<=choseStar?'maxStar':'noStar'">
-                        
-                    </li>
-                </ul>
-            </div>
+  <transition enter-active-class="animate__animated animate__fadeInDown animate__faster"
+    leave-active-class="animate__animated animate__fadeOutUp animate__faster">
+    <div class="box_son" v-show="isShowScore"
+      :style="{'background':this.global.getIsSun()?'rgba(0, 0, 0, 0.478)':'linear-gradient(to right, #62605d 0%, #304352 100%)'}">
+      <div class="body">
+        <div class="star">
+          <ul>
+            <li v-for="(i,index) in count" :key="index" @click="grade(index)"
+              :class="index<=choseStar?'maxStar':'noStar'">
+
+            </li>
+          </ul>
         </div>
-        <div class="foot">
-            <button @click="closeScore">取消</button>
-            <button @click="sendScore">确认</button>
-        </div>
+      </div>
+      <div class="foot">
+        <button @click="closeScore">取消</button>
+        <button @click="sendScore">确认</button>
+      </div>
     </div>
   </transition>
 </template>
 
 <script>
-export default {
-    name:'Score',
-    props:['isShowScore'],
+  export default {
+    name: 'Score',
+    props: ['isShowScore'],
     data() {
-        return {
-            count:5,
-            score:null,
-            choseStar:null
-        }
+      return {
+        count: 5,
+        score: null,
+        choseStar: null
+      }
     },
     methods: {
-        closeScore(){
-            this.$emit('getCloseScore',false)
-        },
-        grade(index){
-            this.choseStar=index
-            this.score=index+1
-        },
-        sendScore(){
-            this.closeScore()
-            this.$emit('scoredClose',false)
-        }
-        
+      closeScore() {
+        this.$emit('getCloseScore', false)
+      },
+      grade(index) {
+        this.choseStar = index
+        this.score = index + 1
+      },
+      sendScore() {
+        this.closeScore()
+        this.$emit('scoredClose', false)
+      }
+
     },
-}
+  }
 </script>
 
 <style scoped>
-
-.box_son {
+  .box_son {
     position: absolute;
     top: 0;
     left: 5%;
@@ -102,28 +102,29 @@ export default {
     background-color: lightblue;
   }
 
-  .star ul{
+  .star ul {
     width: 100%;
     list-style: none;
     display: flex;
     align-items: center;
-    justify-content:space-around;
+    justify-content: space-around;
     margin-left: -2px;
   }
-  .star ul li{
+
+  .star ul li {
     width: 40px;
     height: 40px;
     margin-left: 4px;
     background-size: 35px 35px;
   }
 
-  .maxStar{
+  .maxStar {
     background: url(../../images/满星.png) no-repeat;
     background-size: 35px 35px;
   }
-  .noStar{
+
+  .noStar {
     background: url(../../images/空星.png) no-repeat;
     background-size: 35px 35px;
   }
-  
 </style>

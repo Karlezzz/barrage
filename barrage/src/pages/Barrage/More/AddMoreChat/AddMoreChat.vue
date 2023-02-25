@@ -1,6 +1,6 @@
 <template>
-    <transition enter-active-class="animate__animated animate__slideInUp"
-            leave-active-class="animate__animated animate__slideOutDown animate__faster">
+    <transition enter-active-class="animate__animated animate__slideInUp animate__faster"
+        leave-active-class="animate__animated animate__slideOutDown animate__faster">
         <div class="box_son" v-if="isShowAddMoreChat">
             <div class="body">
                 <input type="text" v-model="newChat" placeholder="添加新的常用语...">
@@ -11,7 +11,7 @@
             </div>
         </div>
     </transition>
-    
+
 </template>
 
 <script>

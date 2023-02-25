@@ -2,7 +2,6 @@
     <div ref='vantaRef' class="background">
         <!-- 卡片背景 -->
         <div class="box animate__zoomIn animate__animated">
-            <!-- <div class="box2 animate__zoomIn animate__animated"></div> -->
             <div class="bar animate__zoomIn animate__animated">
                 <div class="title">
                     <div @click="goBackEnter" class="home">
@@ -48,11 +47,11 @@
                         <input type="text" placeholder="快来发言吧..." v-model="inputContent" @keyup.enter="sendNewContent">
                     </div>
                     <div class="send">
-                        <!-- <div class="btn" @click="sendNewContent">
+                        <div class="btn" @click="sendNewContent">
                             <img v-if="isSun" src="./images/发送.png" alt="">
                             <img v-if="!isSun" src="./images/发送-night.png" alt="">
-                        </div> -->
-                        <div class="btn" @click="isShowVote=!isShowVote">test vote</div>
+                        </div>
+                        <!-- <div class="btn" @click="isShowVoteInform=!isShowVoteInform">test vote</div> -->
                     </div>
                 </div>
             </div>
@@ -60,13 +59,13 @@
             <More :isShowChat="isShowChat" :name="name" :myId="myId" @closeIsShowChat='closeIsShowChat'
                 @getNewMoreMessage="getNewMoreMessage"></More>
             <Function :isShowFunction="isShowFunction" @getCloseFunction="getCloseFunction"></Function>
-            <Vote :isShowVote="isShowVote" @getCloseVote="getCloseVote"></Vote>
+            <VoteInform :isShowVoteInform="isShowVoteInform" @getCloseVote="getCloseVote"></VoteInform>
         </div>
     </div>
 </template>
 
 <script>
-    import Vote from './Vote/Vote.vue'
+    import VoteInform from './VoteInform/VoteInform.vue'
     import Function from './Function/Function.vue'
     import More from './More/More.vue'
     import 'animate.css';
@@ -77,7 +76,7 @@
         components: {
             More,
             Function,
-            Vote
+            VoteInform
         },
         data() {
             return {
@@ -126,7 +125,7 @@
                 isCleanBG: this.global.getIsCleanBG(),
                 isShowChat: false,
                 isShowFunction: false,
-                isShowVote: false,
+                isShowVoteInform: true,
                 
             }
         },
@@ -250,7 +249,7 @@
                 this.isShowFunction = value
             },
             getCloseVote(value) {
-                this.isShowVote = false
+                this.isShowVoteInform = false
             },
             setSunBG() {
                 this.vantaEffect.setOptions({
@@ -265,7 +264,7 @@
                     sunColor: 0xf09f45,
                     sunGlareColor: 0xffc230,
                     sunlightColor: 0xffc230,
-                    speed: 0.70
+                    speed: 0.50,
                 })
             },
             setBlackBG() {
@@ -411,6 +410,7 @@
         text-align: center;
     }
 
+
     .bar .title .home {
         display: inline-block;
         width: 30px;
@@ -443,9 +443,9 @@
 
     .bar .title span {
         display: inline-block;
-        font-size: 100%;
+        font-size: 110%;
         letter-spacing: 2px;
-        color: rgba(248, 248, 248, 0.791);
+        color: rgb(248, 248, 248);
         font-weight: 500;
         padding-top: 10px;
     }

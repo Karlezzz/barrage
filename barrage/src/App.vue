@@ -17,6 +17,9 @@
         padding: 0;
         user-select: none;
     }
+    *::-webkit-scrollbar {
+        display: none;
+    }
     /* ios端点击div出现阴影 */
     div {
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
