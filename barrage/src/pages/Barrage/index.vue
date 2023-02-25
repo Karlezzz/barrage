@@ -11,9 +11,17 @@
                             <img v-if="!isSun" key='2' src="./images/home-night.png" alt="">
                         </transition-group>
                     </div>
-                    <div class="cleanBC" @click="cleanBackground"
+                    <div class="cleanBC" 
                         :style="{'color':isSun?'white':'#f4ea2a','border-color':isSun?'white':'#f4ea2a'}">
-                        {{ this.isCleanBG==true? '简洁背景':'正常背景' }}</div>
+                        <div class="cleanBC_son" @click="cleanBackground">
+                            {{ this.isCleanBG==true? '简洁背景':'正常背景' }}
+                        </div>
+                        
+                        <div class="changeBG" v-if="this.isCleanBG">
+                            <img src="./images/颜色.png" alt="">
+                        </div>
+                    </div>
+
                     <span>弹幕室</span>
                     <div class="backgroundChange" @click="changeBG">
                         <transition-group appear name="animate__animated animate__fadeInDown  animate__delay-2s"
@@ -71,7 +79,7 @@
     import 'animate.css';
     import * as THREE from 'three'
     import Clouds from 'vanta/src/vanta.clouds'
-    
+
     export default {
         components: {
             More,
@@ -125,8 +133,8 @@
                 isCleanBG: this.global.getIsCleanBG(),
                 isShowChat: false,
                 isShowFunction: false,
-                isShowVoteInform: true,
-                
+                isShowVoteInform: false,
+
             }
         },
         methods: {
@@ -416,8 +424,8 @@
         width: 30px;
         height: 30px;
         position: absolute;
-        left: 0px;
-        top: 5px;
+        left: 0;
+        top: 1%;
     }
 
     .bar .title .home img {
@@ -428,17 +436,33 @@
         top: 5px;
     }
 
+
+
     .bar .title .cleanBC {
         display: inline-block;
         position: absolute;
-        left: 50px;
-        top: 17px;
+        top: 20px;
+        left: 15%;
         font-size: 12px;
         border: 1px solid white;
         width: 60px;
         height: 20px;
         border-radius: 10px;
         color: white;
+    }
+
+    .bar .title .cleanBC .changeBG {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        top: 2%;
+        left: 110%;
+    }
+
+    .bar .title .cleanBC .changeBG img {
+        width: 100%;
+        height: 100%;
     }
 
     .bar .title span {
@@ -598,7 +622,7 @@
         letter-spacing: 2px;
     }
 
-    
+
 
     .bar .foot .send {
         flex: 0.2;
