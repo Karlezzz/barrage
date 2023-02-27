@@ -1,5 +1,5 @@
 <template>
-    <div ref='vantaRef' class="background">
+    <div ref='vantaRef' class="background" :style="{'background':isCleanBG?this.global.staticBG:'#626262'}">
         <!-- 卡片背景 -->
         <div class="box animate__zoomIn animate__animated">
             <div class="bar animate__zoomIn animate__animated">
@@ -11,14 +11,15 @@
                             <img v-if="!isSun" key='2' src="./images/home-night.png" alt="">
                         </transition-group>
                     </div>
-                    <div class="cleanBC" 
+                    <div class="cleanBC"
                         :style="{'color':isSun?'white':'#f4ea2a','border-color':isSun?'white':'#f4ea2a'}">
                         <div class="cleanBC_son" @click="cleanBackground">
                             {{ this.isCleanBG==true? '简洁背景':'正常背景' }}
                         </div>
-                        
-                        <div class="changeBG" v-if="this.isCleanBG">
-                            <img src="./images/颜色.png" alt="">
+
+                        <div class="changeBG" v-if="this.isCleanBG" @click="isShowColor=true">
+                            <img v-if="isSun" src="./images/调节.png" alt="">
+                            <img v-if="!isSun" src="./images/调节-night.png" alt="">
                         </div>
                     </div>
 
@@ -68,6 +69,7 @@
                 @getNewMoreMessage="getNewMoreMessage"></More>
             <Function :isShowFunction="isShowFunction" @getCloseFunction="getCloseFunction"></Function>
             <VoteInform :isShowVoteInform="isShowVoteInform" @getCloseVote="getCloseVote"></VoteInform>
+            <BGSelect :isShowColor="isShowColor" @getCloseColor="getCloseColor"></BGSelect>
         </div>
     </div>
 </template>
@@ -76,6 +78,7 @@
     import VoteInform from './VoteInform/VoteInform.vue'
     import Function from './Function/Function.vue'
     import More from './More/More.vue'
+    import BGSelect from './BackgroundSelect/BGSelect.vue'
     import 'animate.css';
     import * as THREE from 'three'
     import Clouds from 'vanta/src/vanta.clouds'
@@ -84,7 +87,8 @@
         components: {
             More,
             Function,
-            VoteInform
+            VoteInform,
+            BGSelect
         },
         data() {
             return {
@@ -134,6 +138,7 @@
                 isShowChat: false,
                 isShowFunction: false,
                 isShowVoteInform: false,
+                isShowColor: false
 
             }
         },
@@ -142,6 +147,7 @@
             changeBG() {
                 this.global.setIsSun()
                 this.isSun = this.global.getIsSun()
+                localStorage.setItem("ISSUN", this.isSun)
 
                 //不是简约模式
                 if (this.isCleanBG == false) {
@@ -167,22 +173,22 @@
                         'background-image: linear-gradient(to right, #434343 0%, black 100%);'
                     //白天
                     else if (this.isSun == true)
-                        this.$refs.vantaRef.style = 'background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%)'
+                        this.$refs.vantaRef.style = `background: ${this.global.staticBG}`
 
                 }
             },
             //简洁模式改变
             cleanBackground() {
-
                 this.global.setIsCleanBG()
                 this.isCleanBG = this.global.getIsCleanBG()
+                localStorage.setItem('ISCLEANBG', this.isCleanBG)
                 //简约模式
                 if (this.isCleanBG == true) {
                     if (this.vantaEffect) {
                         this.vantaEffect.destroy()
                     }
                     if (this.isSun == true)
-                        this.$refs.vantaRef.style = 'background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%)'
+                        this.$refs.vantaRef.style = `background: ${this.global.staticBG}`
                     else if (this.isSun == false)
                         this.$refs.vantaRef.style = 'background: linear-gradient(to right, #434343 0%, black 100%);'
                 }
@@ -291,19 +297,34 @@
                     sunlightColor: 0x3e3c3a,
                     speed: 0.40
                 })
+            },
+            getCloseColor(value) {
+                this.isShowColor = false
+            },
+            //让子组件调用，实时改变静态背景
+            changeSelectBG() {
+                this.$refs.vantaRef.style = `background: ${this.global.staticBG}`
             }
 
         },
 
         mounted() {
-            //动态背景配置
-            this.vantaEffect = Clouds({
-                el: this.$refs.vantaRef,
-                THREE: THREE,
-                speed: 0.80
-            })
-            if (this.isSun === false) {
-                this.setBlackBG()
+            //背景配置
+            if (this.isCleanBG == true) {
+                if (this.isSun == false) {
+                    this.$refs.vantaRef.style =
+                        'background-image: linear-gradient(to right, #434343 0%, black 100%);'
+                } else if (this.isSun == true)
+                    this.changeSelectBG()
+            } else if (this.isCleanBG == false) {
+                this.vantaEffect = Clouds({
+                    el: this.$refs.vantaRef,
+                    THREE: THREE,
+                    speed: 0.80
+                })
+                if (this.isSun == false) {
+                    this.setBlackBG()
+                }
             }
 
             // 挂载后定位到最后一条消息的位置
@@ -331,11 +352,14 @@
                 this.messageContent.push(handMessage)
             })
         },
+
         beforeDestroy() {
             //动态背景配置
             if (this.vantaEffect) {
                 this.vantaEffect.destroy()
             }
+
+
         },
         watch: {
             // 屏幕滚动始终在最后一条
@@ -345,41 +369,50 @@
                     div.scrollTop = div.scrollHeight;
                 });
             },
+
+
         },
     }
 </script>
 
 <style scoped>
-    @media screen and (min-width:0px) and (max-width:768px) {
+    @media screen and (min-width:0px) and (max-width:480px) {
         .background .box {
             width: 96%;
         }
     }
 
-    @media screen and (min-width:769px) and (max-width:992px) {
+    @media screen and (min-width:481px) and (max-width:768px) {
         .background .box {
-            width: 600px;
-            height: 800px;
+            width: 96%;
         }
     }
 
-    @media screen and (min-width:993px) {
+    @media screen and (min-width:769px) and (max-width:1024px) {
+        .background .box {
+            width: 650px;
+            height: 750px;
+        }
+    }
+
+    @media screen and (min-width:1025px) and (min-width:1200px) {
         .background .box {
             width: 700px;
             height: 550px;
         }
     }
 
-    @media screen and (min-width:1360px) {
+    @media screen and (min-width:1201px) {
         .background .box {
-            width: 1000px;
-            height: 700px;
+            width: 1200px;
+            height: 750px;
         }
     }
 
     .background {
         display: flex;
         height: 100vh;
+        height: calc(var(--vh, 1vh)*100);
         width: 100%;
         justify-content: center;
         align-items: center;
@@ -456,8 +489,8 @@
         width: 20px;
         height: 20px;
         position: absolute;
-        top: 2%;
-        left: 110%;
+        top: -1%;
+        left: 105%;
     }
 
     .bar .title .cleanBC .changeBG img {

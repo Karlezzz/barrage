@@ -19,7 +19,7 @@
 
 <script>
     import * as THREE from 'three'
-    import BIRDS from 'vanta/src/vanta.clouds'
+    import Clouds from 'vanta/src/vanta.clouds'
     export default {
         name: 'Enter',
         data() {
@@ -27,6 +27,8 @@
                 roomId: '111',
                 username: '',
                 password: '',
+                isSun: this.global.getIsSun(),
+                isCleanBG: this.global.getIsCleanBG()
             }
         },
         methods: {
@@ -35,6 +37,14 @@
                 this.password = ''
             },
             addRoom() {
+                // this.$router.push({
+                //             name: 'barrage',
+                //             params: {
+                //                 roomId: this.roomId
+                //             }
+                //         })
+
+
                 const data = {
                     name: this.username,
                     roomId: this.roomId,
@@ -53,15 +63,7 @@
                         console.log(err);
                     })
             },
-
-        },
-        mounted() {
-            //动态背景配置
-            this.vantaEffect = BIRDS({
-                el: this.$refs.vantaRef,
-                THREE: THREE
-            })
-            if (this.global.isSun == false && sessionStorage.getItem("TOKEN")) {
+            setBlackBG() {
                 this.vantaEffect.setOptions({
                     mouseControls: true,
                     touchControls: true,
@@ -77,6 +79,25 @@
                     sunlightColor: 0x3e3c3a,
                     speed: 0.40
                 })
+            },
+
+        },
+        mounted() {
+            if (this.isCleanBG == true) {
+                if (this.isSun == false) {
+                    this.$refs.vantaRef.style =
+                        'background-image: linear-gradient(to right, #434343 0%, black 100%);'
+                } else if (this.isSun == true)
+                    this.changeSelectBG()
+            } else if (this.isCleanBG == false) {
+                this.vantaEffect = Clouds({
+                    el: this.$refs.vantaRef,
+                    THREE: THREE,
+                    speed: 0.80
+                })
+                if (this.isSun == false) {
+                    this.setBlackBG()
+                }
             }
         },
 
@@ -98,6 +119,7 @@
         width: 100%;
         justify-content: center;
         align-items: center;
+        /* background-color: red; */
     }
 
     .login {

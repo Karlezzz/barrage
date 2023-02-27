@@ -5,7 +5,8 @@ const state={
 const mutations={
     USERLOGIN(state,data){
         state.userLogin = data
-        sessionStorage.setItem("TOKEN",data.token)
+        localStorage.setItem("TOKEN",data.token)
+        localStorage.setItem('ID',data.id)
     }
 }
 const actions={

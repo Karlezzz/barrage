@@ -42,7 +42,7 @@ const router = new VueRouter({
 })
 router.beforeEach((to,from,next)=>{
     if(to.path.indexOf('/barrage')!=-1){
-        if(sessionStorage.getItem('TOKEN'))next()
+        if(localStorage.getItem('TOKEN'))next()
         else next('/enter')
     }
     else if(to.path=='/enter')next()

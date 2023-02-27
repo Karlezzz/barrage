@@ -6,7 +6,7 @@ module.exports = defineConfig({
   lintOnSave: false,
   devServer:{
     host:'192.168.137.1',
-    port:8888,
+    port:8889,
     
   },
   

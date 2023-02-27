@@ -100,3 +100,21 @@
 3.使用ecaht完成展示投票结果demo
 
 4.各个子功能的背景与isSun适配
+
+
+
+### 2023.2.27
+
+> 新增内容
+
+1.统一icon图标
+
+2.静态背景选择，将被选择的背景放入localStorage
+
+3.将isSun、isCleanBG设为全局变量，每个组件的背景都去查询这两个全局变量。将isSun isCleanBG放入localStorage，下次登录直接使用历史设置
+
+4.将登陆的Token和id放入localStorage
+
+5.更新自适应布局断点
+
+6.解决safari工具栏挡住页面问题

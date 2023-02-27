@@ -12,13 +12,13 @@
                 <div class="body">
                     <div class="card" @click="showSonFunction(1)">
                         <div class="img">
-                            <img src="../images/修改.png" alt="">
+                            <img src="../images/修改 (1).png" alt="">
                         </div>
                         <div class="word">修改名称</div>
                     </div>
                     <div class="card" @click="showSonFunction(2)">
                         <div class="img">
-                            <img src="../images/举手.png" alt="">
+                            <img src="../images/举手（1）.png" alt="">
                         </div>
                         <div class="word">举手弹幕</div>
                     </div>
@@ -31,7 +31,7 @@
                     </div>
                     <div class="card" @click="showSonFunction(4)">
                         <div class="img">
-                            <img src="../images/评价.png" alt="">
+                            <img src="../images/评价 (1).png" alt="">
                         </div>
                         <div class="word">评价建议</div>
                     </div>

@@ -7,6 +7,15 @@
 <script>
     export default {
         name: 'App',
+        mounted(){
+            //解决safari工具栏挡页面
+            let vh = window.innerHeight*0.01
+            document.documentElement.style.setProperty('--vh',`${vh}px`)
+            window.addEventListener('resize',()=>{
+                let vh = window.innerHeight*0.01
+                document.documentElement.style.setProperty('--vh',`${vh}px`)
+            })
+        }
     }
 </script>
 
