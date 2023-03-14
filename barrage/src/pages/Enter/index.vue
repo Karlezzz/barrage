@@ -80,6 +80,9 @@
                     speed: 0.40
                 })
             },
+            changeSelectBG() {
+                this.$refs.vantaRef.style = `background: ${this.global.staticBG}`
+            },
 
         },
         mounted() {

@@ -96,49 +96,14 @@
                 myId: '004',
                 name: 'd',
                 inputContent: '',
-                messageContent: [{
-                        name: 'Alen',
-                        id: '001',
-                        content: 'hello'
-                    },
-                    {
-                        name: 'b',
-                        id: '002',
-                        content: 'hi'
-                    },
-                    {
-                        name: 'b',
-                        id: '002',
-                        content: 'hi'
-                    },
-                    {
-                        name: 'c',
-                        id: '003',
-                        content: 'how are you?'
-                    },
-                    {
-                        name: 'd',
-                        id: '004',
-                        content: 'i am fine!'
-                    },
-                    {
-                        name: 'd',
-                        id: '004',
-                        content: 'i am fine!'
-                    },
-                    {
-                        name: 'd',
-                        id: '004',
-                        content: 'i am fine!'
-                    },
-
-                ],
+                messageContent: [],
                 isSun: this.global.getIsSun(),
                 isCleanBG: this.global.getIsCleanBG(),
                 isShowChat: false,
                 isShowFunction: false,
                 isShowVoteInform: false,
-                isShowColor: false
+                isShowColor: false,
+                ws: null
 
             }
         },
@@ -217,15 +182,29 @@
                 this.$router.push('/enter')
             },
             sendNewContent() {
-                if (this.inputContent != '') {
-                    const content = {
-                        id: '004',
-                        name: this.name,
-                        content: this.inputContent
-                    }
-                    this.messageContent.push(content)
-                    this.inputContent = ''
+                // if (this.inputContent != '') {
+                //     const content = {
+                //         id: '004',
+                //         name: this.name,
+                //         content: this.inputContent
+                //     }
+                //     this.messageContent.push(content)
+                //     this.inputContent = ''
+                // }
+
+                const newMsg = {
+                    id: '004',
+                    name: this.name,
+                    content: this.inputContent,
+                    type:1
                 }
+                try {
+                    this.ws.send(JSON.stringify(newMsg))
+                } catch (error) {
+                    console.log(error);
+                }
+                this.inputContent = ''
+                
 
             },
             // 判断上一条内容和当前内容作者是否为同一个人
@@ -304,6 +283,31 @@
             //让子组件调用，实时改变静态背景
             changeSelectBG() {
                 this.$refs.vantaRef.style = `background: ${this.global.staticBG}`
+            },
+            initWS() {
+                this.ws = new WebSocket('ws://localhost:3000/');
+                this.ws.onopen = () => {
+                    this.ws.send('connect success')
+                }
+                console.log(this.ws);
+                // this.heartBeat()
+            },
+            heartBeat() {
+                this.heartBeatTimer = setInterval(() => {
+                    const hb = {
+                        type: 0,
+                        content: 'heartbeat'
+                    }
+                    try {
+                        this.ws.send(JSON.stringify(hb))
+                    } catch (error) {
+                        console.log(error);
+                    }
+                }, 10000);
+            },
+            onMessageHandler(value) {
+                if (value.type == 0) return false
+                else return true
             }
 
         },
@@ -314,8 +318,10 @@
                 if (this.isSun == false) {
                     this.$refs.vantaRef.style =
                         'background-image: linear-gradient(to right, #434343 0%, black 100%);'
-                } else if (this.isSun == true)
+                } else if (this.isSun == true){
                     this.changeSelectBG()
+                }
+                    
             } else if (this.isCleanBG == false) {
                 this.vantaEffect = Clouds({
                     el: this.$refs.vantaRef,
@@ -351,6 +357,19 @@
                 }
                 this.messageContent.push(handMessage)
             })
+
+            this.initWS()
+            this.ws.onmessage = (e) => {
+                if(e.data=='connect success')return false
+                else{
+                    let data  = JSON.parse(e.data)
+                if (this.onMessageHandler(data)) {
+                    this.messageContent.push(data)
+                }
+                }
+                
+            }
+                
         },
 
         beforeDestroy() {
@@ -358,6 +377,8 @@
             if (this.vantaEffect) {
                 this.vantaEffect.destroy()
             }
+
+            this.ws.close()
 
 
         },
