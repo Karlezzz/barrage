@@ -133,7 +133,7 @@ import * as THREE from "three";
 import Clouds from "vanta/src/vanta.clouds";
 
 import io from 'socket.io-client';
-const socket = io('http://127.0.0.1:3001');
+const socket = io('http://192.168.1.15:3001');
 
 export default {
   components: {
@@ -332,28 +332,22 @@ export default {
     changeSelectBG() {
       this.$refs.vantaRef.style = `background: ${this.global.staticBG}`;
     },
-    initWS() {
-      this.$socket.open()
-      this.$socket.emit('login',{
-        username: 'username',
-        password: 'password'
-      });
-    },
     onMessageHandler(value) {
       if (value.type == 0) return false;
       else return true;
     },
+    initSocket() {
+      //一定要移除旧的message监听，否则会出现重复监听的状况
+      // socket.removeListener('message');
+      //这是移除所有监听
+      socket.removeAllListeners();
+      socket.on('broadcast',(data) =>{
+        this.messageContent.push(JSON.parse(data))
+      })
+    }
   },
   mounted() {
-
-    //一定要移除旧的message监听，否则会出现重复监听的状况
-    socket.removeListener('message');
-    //这是移除所有监听
-    // socket.removeAllListeners();
-    socket.on('broadcast',(data) =>{
-      this.messageContent.push(JSON.parse(data))
-    })
-
+    this.initSocket()
     //背景配置
     if (this.isCleanBG == true) {
       if (this.isSun == false) {
@@ -466,7 +460,7 @@ export default {
 
 .background {
   display: flex;
-  height: 100vh;
+  height: 100%;
   height: calc(var(--vh, 1vh) * 100);
   width: 100%;
   justify-content: center;
