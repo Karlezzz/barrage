@@ -155,7 +155,6 @@ export default {
       isShowFunction: false,
       isShowVoteInform: false,
       isShowColor: false,
-      ws: null,
     };
   },
   methods: {
@@ -251,7 +250,7 @@ export default {
       };
       try {
         // this.ws.send(JSON.stringify(newMsg));
-        socket.emit('hello',JSON.stringify(newMsg));
+        socket.emit('sendMsg',JSON.stringify(newMsg));
       } catch (error) {
         console.log(error);
       }
@@ -336,9 +335,9 @@ export default {
     initWS() {
       this.$socket.open()
       this.$socket.emit('login',{
-  username: 'username',
-  password: 'password'
-});
+        username: 'username',
+        password: 'password'
+      });
     },
     onMessageHandler(value) {
       if (value.type == 0) return false;
@@ -351,10 +350,9 @@ export default {
     socket.removeListener('message');
     //这是移除所有监听
     // socket.removeAllListeners();
-    socket.on('message',(data) =>{
-      console.log(data)
+    socket.on('broadcast',(data) =>{
+      this.messageContent.push(JSON.parse(data))
     })
-    socket.emit('hello','111');
 
     //背景配置
     if (this.isCleanBG == true) {
