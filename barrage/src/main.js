@@ -5,7 +5,6 @@ import router from './router/index.js'
 import store from './store/index'
 import global_ from './static/global'
 import echarts_ from './echats/index'
-import VueSocketIO from 'vue-socket.io'
 
 import SocketIO from 'socket.io-client'
 
