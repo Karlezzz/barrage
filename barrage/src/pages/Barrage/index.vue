@@ -133,7 +133,7 @@ import * as THREE from "three";
 import Clouds from "vanta/src/vanta.clouds";
 
 import io from 'socket.io-client';
-const socket = io('http://192.168.1.15:3001');
+const socket = io('http://localhost:3001');
 
 export default {
   components: {
