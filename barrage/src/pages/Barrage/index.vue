@@ -93,18 +93,18 @@
 						v-for="(item, index) in messageContent"
 						:key="index"
 						:class="{
-							rightMessage: item.id == myId,
-							leftMessage: item.id != myId,
+							rightMessage: getOwnerId(item) == myId,
+							leftMessage: getOwnerId(item) != myId,
 						}"
 					>
 						<div
 							class="name"
 							v-if="isSameId(item, index)"
 						>
-							{{ item.name }}
+							{{ getOwnerName(item) }}
 						</div>
 						<div class="content">
-							{{ item.msg }}
+							{{ getContent(item) }}
 						</div>
 					</div>
 				</div>
@@ -163,7 +163,6 @@
 								alt=""
 							/>
 						</div>
-						<!-- <div class="btn" @click="isShowVoteInform=!isShowVoteInform">test vote</div> -->
 					</div>
 				</div>
 			</div>
@@ -196,10 +195,15 @@ import VoteInform from './VoteInform/VoteInform.vue'
 import Function from './Function/Function.vue'
 import More from './More/More.vue'
 import BGSelect from './BackgroundSelect/BGSelect.vue'
+
 import 'animate.css'
 import * as THREE from 'three'
 import Clouds from 'vanta/src/vanta.clouds'
+import requests from '@/api/index'
+
 import { io } from 'socket.io-client'
+import { Message } from '../../../lib/models'
+import { nanoid } from 'nanoid'
 
 export default {
 	components: {
@@ -211,7 +215,7 @@ export default {
 	data() {
 		return {
 			isClass: '',
-			myId: '004',
+			myId: nanoid(),
 			name: 'd',
 			inputContent: '',
 			messageContent: [],
@@ -225,6 +229,18 @@ export default {
 		}
 	},
 	methods: {
+		getOwner(item) {
+			return item.owner
+		},
+		getContent(item) {
+			return item.content
+		},
+		getOwnerId(item) {
+			return this.getOwner(item).id
+		},
+		getOwnerName(item) {
+			return this.getOwner(item).name
+		},
 		//白天模式和黑夜迷哦是
 		changeBG() {
 			this.global.setIsSun()
@@ -299,12 +315,14 @@ export default {
 			this.$router.push('/enter')
 		},
 		sendNewContent() {
-			const newMsg = {
-				id: '004',
-				name: this.name,
-				msg: this.inputContent,
-				type: 1,
-			}
+			const newMsg = Message.init({
+				owner: {
+					name: this.name,
+					id: this.myId,
+				},
+				content: this.inputContent,
+				type: 'chat',
+			})
 			try {
 				this.socket.emit('sendMsg', JSON.stringify(newMsg))
 			} catch (error) {
@@ -315,10 +333,12 @@ export default {
 		// 判断上一条内容和当前内容作者是否为同一个人
 		isSameId(item, index) {
 			if (index == 0) return true
-			else {
-				if (item.id == this.messageContent[index - 1].id) return false
-				else return true
-			}
+			const lastMessage = this.messageContent[index - 1]
+			const {
+				owner: { id },
+			} = lastMessage
+			if (this.getOwnerId(item) === id) return false
+			return true
 		},
 		// 打开更多常用语言
 		showMoreChat() {
@@ -388,19 +408,25 @@ export default {
 		changeSelectBG() {
 			this.$refs.vantaRef.style = `background: ${this.global.staticBG}`
 		},
-		initSocket() {
-			const ip = document.location.hostname
-			const port = Number(document.location.port) + 1
-
-			this.socket = io(`ws://${ip}:${port}`, {
-        transports: ['websocket']
-      })
-
-			this.socket.removeAllListeners()
-			this.socket.on('broadcast', data => {
-				console.log(data)
-				this.messageContent.push(JSON.parse(data))
-			})
+		async initSocket() {
+			try {
+				const socketUrl = await this.getSocketUrl()
+				this.socket = io(socketUrl, {
+					transports: ['websocket'],
+				})
+				this.socket.removeAllListeners()
+				this.socket.on('broadcast', data => {
+					console.log(data)
+					const replyMessage = Message.init(JSON.parse(data))
+					this.messageContent.push(replyMessage)
+				})
+			} catch (error) {
+				console.log(error)
+			}
+		},
+		async getSocketUrl() {
+			const result = await requests.get('/socket/url')
+			return result.data.data
 		},
 		initBackground() {
 			if (this.isCleanBG == true) {
