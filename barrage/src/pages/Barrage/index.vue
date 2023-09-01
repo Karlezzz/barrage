@@ -93,8 +93,8 @@
 						v-for="(item, index) in messageContent"
 						:key="index"
 						:class="{
-							rightMessage: getOwnerId(item) == myId,
-							leftMessage: getOwnerId(item) != myId,
+							rightMessage: getOwnerId(item) == ownerId,
+							leftMessage: getOwnerId(item) != ownerId,
 						}"
 					>
 						<div
@@ -169,8 +169,8 @@
 
 			<More
 				:isShowChat="isShowChat"
-				:name="name"
-				:myId="myId"
+				:name="ownerName"
+				:myId="ownerId"
 				@closeIsShowChat="closeIsShowChat"
 				@getNewMoreMessage="getNewMoreMessage"
 			></More>
@@ -202,7 +202,7 @@ import Clouds from 'vanta/src/vanta.clouds'
 import requests from '@/api/index'
 
 import { io } from 'socket.io-client'
-import { Message } from '../../../lib/models'
+import { Message, Owner } from '../../../lib/models'
 import { nanoid } from 'nanoid'
 
 export default {
@@ -215,8 +215,8 @@ export default {
 	data() {
 		return {
 			isClass: '',
-			myId: nanoid(),
-			name: 'd',
+			// myId: nanoid(),
+			// name: 'd',
 			inputContent: '',
 			messageContent: [],
 			isSun: this.global.getIsSun(),
@@ -226,8 +226,17 @@ export default {
 			isShowVoteInform: false,
 			isShowColor: false,
 			socket: null,
+			owner: null,
 		}
 	},
+  computed:{
+    ownerId() {
+      return this.owner ? this.owner.id : ''
+    },
+    ownerName() {
+      return this.owner ? this.owner.name : ''
+    }
+  },
 	methods: {
 		getOwner(item) {
 			return item.owner
@@ -316,10 +325,7 @@ export default {
 		},
 		sendNewContent() {
 			const newMsg = Message.init({
-				owner: {
-					name: this.name,
-					id: this.myId,
-				},
+				owner: this.owner,
 				content: this.inputContent,
 				type: 'chat',
 			})
@@ -416,7 +422,6 @@ export default {
 				})
 				this.socket.removeAllListeners()
 				this.socket.on('broadcast', data => {
-					console.log(data)
 					const replyMessage = Message.init(JSON.parse(data))
 					this.messageContent.push(replyMessage)
 				})
@@ -451,36 +456,44 @@ export default {
 			let div = document.querySelector('.body')
 			div.scrollTop = div.scrollHeight
 		},
+		getRouterValue() {
+			return this.$route.params
+		},
+		initOwner() {
+			const { name } = this.getRouterValue()
+			this.owner = Owner.init({
+				name,
+				id: nanoid(),
+			})
+		},
+		async init() {
+			await this.initSocket()
+			this.initOwner()
+			this.initBackground()
+			this.toLastLocation()
+		},
 	},
 	mounted() {
-		this.initSocket()
-
-		//背景配置
-		this.initBackground()
-
-		// 挂载后定位到最后一条消息的位置
-		this.toLastLocation()
-
-		//接受新名称
-		this.$bus.$on('getNewName', value => {
-			this.messageContent.forEach(item => {
-				if (item.name == this.name) {
-					item.name = value
-				}
-			})
-			this.name = value
-		})
-
-		//接收举手弹幕
-		this.$bus.$on('getHandMessage', value => {
-			const handMessage = {
-				name: this.name,
-				id: this.myId,
-				msg: value,
-				type: 'strong',
-			}
-			this.messageContent.push(handMessage)
-		})
+		this.init()
+		// //接受新名称
+		// this.$bus.$on('getNewName', value => {
+		// 	this.messageContent.forEach(item => {
+		// 		if (item.name == this.name) {
+		// 			item.name = value
+		// 		}
+		// 	})
+		// 	this.name = value
+		// })
+		// //接收举手弹幕
+		// this.$bus.$on('getHandMessage', value => {
+		// 	const handMessage = {
+		// 		name: this.name,
+		// 		id: this.myId,
+		// 		msg: value,
+		// 		type: 'strong',
+		// 	}
+		// 	this.messageContent.push(handMessage)
+		// })
 	},
 	beforeDestroy() {
 		//动态背景配置

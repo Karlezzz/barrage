@@ -55,7 +55,8 @@
                         this.$router.push({
                             name: 'barrage',
                             params: {
-                                roomId: this.roomId
+                                roomId: this.roomId,
+                                name: this.username
                             }
                         })
                     })
