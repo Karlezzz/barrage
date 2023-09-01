@@ -1,7 +1,7 @@
 const { Owner } = require('../Owner')
 class Message {
   constructor(options) {
-    this.options = options || {}
+    options = options || {}
     this.content = options.content || ''
     this.owner = Owner.init(options.owner)
     this.created = new Date().getTime()
