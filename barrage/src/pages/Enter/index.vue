@@ -1,244 +1,248 @@
 <template>
-    <div ref='vantaRef' class="background">
-        <div class="login animate__backInDown animate__animated">
-            <form action="#">
-                <div class="title">Enter</div>
-                <div class="input">
-                    <input type="text" v-model="roomId" placeholder="RoomId">
-                    <input type="text" v-model="username" placeholder="Username" autocomplete="false">
-                    <input type="password" v-model="password" placeholder="Password" autocomplete="new-password">
-                </div>
-                <div class="button">
-                    <button @click.prevent="addRoom">Enter</button>
-                    <button @click.prevent="reset">Reset</button>
-                </div>
-            </form>
-        </div>
-    </div>
+	<div
+		ref="vantaRef"
+		class="background"
+	>
+		<div class="login animate__backInDown animate__animated">
+			<form action="#">
+				<div class="title">Enter</div>
+				<div class="input">
+					<input
+						type="text"
+						v-model="roomId"
+						placeholder="RoomId"
+					/>
+					<input
+						type="text"
+						v-model="username"
+						placeholder="Username"
+						autocomplete="false"
+					/>
+					<input
+						type="password"
+						v-model="password"
+						placeholder="Password"
+						autocomplete="new-password"
+					/>
+				</div>
+				<div class="button">
+					<button @click.prevent="addRoom">Enter</button>
+					<button @click.prevent="reset">Reset</button>
+				</div>
+			</form>
+		</div>
+	</div>
 </template>
 
 <script>
-    import * as THREE from 'three'
-    import Clouds from 'vanta/src/vanta.clouds'
-    export default {
-        name: 'Enter',
-        data() {
-            return {
-                roomId: '111',
-                username: '',
-                password: '',
-                isSun: this.global.getIsSun(),
-                isCleanBG: this.global.getIsCleanBG()
-            }
-        },
-        methods: {
-            reset() {
-                this.username = ''
-                this.password = ''
-            },
-            addRoom() {
-                // this.$router.push({
-                //             name: 'barrage',
-                //             params: {
-                //                 roomId: this.roomId
-                //             }
-                //         })
+import * as THREE from 'three'
+import Clouds from 'vanta/src/vanta.clouds'
+export default {
+	name: 'Enter',
+	data() {
+		return {
+			roomId: '111',
+			username: '',
+			password: '',
+			isSun: this.global.getIsSun(),
+			isCleanBG: this.global.getIsCleanBG(),
+		}
+	},
+	methods: {
+		reset() {
+			this.username = ''
+			this.password = ''
+		},
+		addRoom() {
+			const data = {
+				name: this.username,
+				roomId: this.roomId,
+				password: this.password,
+			}
+			this.$store
+				.dispatch('userLogin', data)
+				.then(() => {
+					this.$router.push({
+						name: 'barrage',
+						params: {
+							roomId: this.roomId,
+							name: this.username,
+						},
+					})
+				})
+				.catch(err => {
+					console.log(err)
+				})
+		},
+		setBlackBG() {
+			this.vantaEffect.setOptions({
+				mouseControls: true,
+				touchControls: true,
+				gyroControls: false,
+				minHeight: 200.0,
+				minWidth: 200.0,
+				backgroundColor: 0x0,
+				skyColor: 0x0,
+				cloudColor: 0x535559,
+				cloudShadowColor: 0x101111,
+				sunColor: 0x252424,
+				sunGlareColor: 0x343332,
+				sunlightColor: 0x3e3c3a,
+				speed: 0.4,
+			})
+		},
+		changeSelectBG() {
+			this.$refs.vantaRef.style = `background: ${this.global.staticBG}`
+		},
+	},
+	mounted() {
+		if (this.isCleanBG == true) {
+			if (this.isSun == false) {
+				this.$refs.vantaRef.style =
+					'background-image: linear-gradient(to right, #434343 0%, black 100%);'
+			} else if (this.isSun == true) this.changeSelectBG()
+		} else if (this.isCleanBG == false) {
+			this.vantaEffect = Clouds({
+				el: this.$refs.vantaRef,
+				THREE: THREE,
+				speed: 0.8,
+			})
+			if (this.isSun == false) {
+				this.setBlackBG()
+			}
+		}
+	},
 
-
-                const data = {
-                    name: this.username,
-                    roomId: this.roomId,
-                    password: this.password
-                }
-                this.$store.dispatch('userLogin', data)
-                    .then(() => {
-                        this.$router.push({
-                            name: 'barrage',
-                            params: {
-                                roomId: this.roomId,
-                                name: this.username
-                            }
-                        })
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    })
-            },
-            setBlackBG() {
-                this.vantaEffect.setOptions({
-                    mouseControls: true,
-                    touchControls: true,
-                    gyroControls: false,
-                    minHeight: 200.00,
-                    minWidth: 200.00,
-                    backgroundColor: 0x0,
-                    skyColor: 0x0,
-                    cloudColor: 0x535559,
-                    cloudShadowColor: 0x101111,
-                    sunColor: 0x252424,
-                    sunGlareColor: 0x343332,
-                    sunlightColor: 0x3e3c3a,
-                    speed: 0.40
-                })
-            },
-            changeSelectBG() {
-                this.$refs.vantaRef.style = `background: ${this.global.staticBG}`
-            },
-
-        },
-        mounted() {
-            if (this.isCleanBG == true) {
-                if (this.isSun == false) {
-                    this.$refs.vantaRef.style =
-                        'background-image: linear-gradient(to right, #434343 0%, black 100%);'
-                } else if (this.isSun == true)
-                    this.changeSelectBG()
-            } else if (this.isCleanBG == false) {
-                this.vantaEffect = Clouds({
-                    el: this.$refs.vantaRef,
-                    THREE: THREE,
-                    speed: 0.80
-                })
-                if (this.isSun == false) {
-                    this.setBlackBG()
-                }
-            }
-        },
-
-
-        beforeDestroy() {
-            //动态背景配置
-            if (this.vantaEffect) {
-                this.vantaEffect.destroy()
-            }
-        }
-
-    }
+	beforeDestroy() {
+		//动态背景配置
+		if (this.vantaEffect) {
+			this.vantaEffect.destroy()
+		}
+	},
+}
 </script>
 
 <style scoped>
-    .background {
-        display: flex;
-        height: 100vh;
-        width: 100%;
-        justify-content: center;
-        align-items: center;
-        /* background-color: red; */
-    }
+.background {
+	display: flex;
+	height: 100vh;
+	width: 100%;
+	justify-content: center;
+	align-items: center;
+	/* background-color: red; */
+}
 
-    .login {
-        position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+.login {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
 
+@media screen and (min-width: 200px) and (max-width: 320px) {
+	.login form {
+		width: 250px;
+	}
+}
 
-    }
+@media screen and (min-width: 320px) and (max-width: 700px) {
+	.login form {
+		width: 300px;
+	}
+}
 
-    @media screen and (min-width:200px) and (max-width:320px) {
-        .login form {
-            width: 250px;
-        }
-    }
+@media screen and (min-width: 700px) {
+	.login form {
+		width: 400px;
+	}
+}
 
-    @media screen and (min-width:320px) and (max-width:700px) {
-        .login form {
-            width: 300px;
-        }
-    }
+.login form {
+	position: relative;
+	height: 300px;
+	border-radius: 10px;
+	box-shadow: 0 20px 20px 0 rgb(0, 0, 0, 0.3);
+	background: rgba(140, 127, 127, 0.1);
+}
 
-    @media screen and (min-width:700px) {
-        .login form {
-            width: 400px;
-        }
-    }
+.login form .title {
+	position: relative;
+	margin: 20px 0 20px 30px;
+	font-size: 20px;
+	font-weight: 600;
+	color: #ffffff;
+	letter-spacing: 1px;
+}
 
-    .login form {
-        position: relative;
-        height: 300px;
-        border-radius: 10px;
-        box-shadow: 0 20px 20px 0 rgb(0, 0, 0, 0.3);
-        background: rgba(140, 127, 127, 0.1);
-    }
+.login form .title::before {
+	position: absolute;
+	content: '';
+	width: 100px;
+	height: 3px;
+	background-color: #fff;
+	bottom: -10px;
+}
 
-    .login form .title {
-        position: relative;
-        margin: 20px 0 20px 30px;
-        font-size: 20px;
-        font-weight: 600;
-        color: #ffffff;
-        letter-spacing: 1px;
-    }
+.login form .input {
+	margin: 10px 0 0 20px;
+	height: 170px;
+	width: 85%;
+}
 
-    .login form .title::before {
-        position: absolute;
-        content: '';
-        width: 100px;
-        height: 3px;
-        background-color: #fff;
-        bottom: -10px;
-    }
+.login form .input input {
+	padding-left: 20px;
+	margin-top: 15px;
+	outline: none;
+	border: none;
+	width: 100%;
+	height: 35px;
+	border-radius: 35px;
+	box-shadow: 0 10px 5px 0 rgb(0, 0, 0, 0.2);
+	background: rgba(255, 255, 255, 0.168);
+	color: rgba(255, 255, 255, 0.911);
+}
 
-    .login form .input {
-        margin: 10px 0 0 20px;
-        height: 170px;
-        width: 85%;
-    }
+.login form .input input:focus {
+	animation: input-large 0.1s ease-in;
+	animation-fill-mode: forwards;
+}
 
-    .login form .input input {
-        padding-left: 20px;
-        margin-top: 15px;
-        outline: none;
-        border: none;
-        width: 100%;
-        height: 35px;
-        border-radius: 35px;
-        box-shadow: 0 10px 5px 0 rgb(0, 0, 0, 0.2);
-        background: rgba(255, 255, 255, 0.168);
-        color: rgba(255, 255, 255, 0.911);
-    }
+@keyframes input-large {
+	100% {
+		transform: scale(1.1) translateX(4px);
+	}
+}
 
-    .login form .input input:focus {
-        animation: input-large 0.1s ease-in;
-        animation-fill-mode: forwards;
-    }
+.login form input::placeholder {
+	padding-left: 5px;
+	font-weight: 600px;
+	font-size: 14px;
+	letter-spacing: 1px;
+	color: rgba(255, 255, 255, 0.781);
+}
 
-    @keyframes input-large {
-        100% {
-            transform: scale(1.1) translateX(4px);
-        }
-    }
+.login form button {
+	margin: 0px 0 0 20px;
+	width: 100px;
+	height: 35px;
+	border: none;
+	border-radius: 35px;
+	box-shadow: 0 10px 5px 0 rgb(0, 0, 0, 0.2);
+	background: rgba(253, 253, 253, 0.214);
+	color: rgb(255, 255, 255);
+	font-size: 13px;
+	font-weight: 700;
+	letter-spacing: 1px;
+}
 
-    .login form input::placeholder {
-        padding-left: 5px;
-        font-weight: 600px;
-        font-size: 14px;
-        letter-spacing: 1px;
-        color: rgba(255, 255, 255, 0.781);
-    }
+.login form button:hover {
+	animation: button-large 0.3s;
+	animation-fill-mode: forwards;
+}
 
-    .login form button {
-        margin: 0px 0 0 20px;
-        width: 100px;
-        height: 35px;
-        border: none;
-        border-radius: 35px;
-        box-shadow: 0 10px 5px 0 rgb(0, 0, 0, 0.2);
-        background: rgba(253, 253, 253, 0.214);
-        color: rgb(255, 255, 255);
-        font-size: 13px;
-        font-weight: 700;
-        letter-spacing: 1px;
-    }
-
-    .login form button:hover {
-        animation: button-large 0.3s;
-        animation-fill-mode: forwards;
-    }
-
-    @keyframes button-large {
-        100% {
-            transform: scale(1.05);
-        }
-    }
+@keyframes button-large {
+	100% {
+		transform: scale(1.05);
+	}
+}
 </style>
