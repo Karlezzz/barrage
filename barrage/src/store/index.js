@@ -7,6 +7,5 @@ import enter from './Enter/Enter'
 export default new Vuex.Store({
     modules:{
         enter,
-
     }
 })
