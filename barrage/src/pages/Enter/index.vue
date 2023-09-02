@@ -37,12 +37,13 @@
 <script>
 import * as THREE from 'three'
 import Clouds from 'vanta/src/vanta.clouds'
+import { nanoid } from 'nanoid'
 export default {
 	name: 'Enter',
 	data() {
 		return {
 			roomId: '111',
-			username: '',
+			username: new Date().getTime(),
 			password: '',
 			isSun: this.global.getIsSun(),
 			isCleanBG: this.global.getIsCleanBG(),
@@ -58,6 +59,7 @@ export default {
 				name: this.username,
 				roomId: this.roomId,
 				password: this.password,
+        id: nanoid()
 			}
 			this.$store
 				.dispatch('userLogin', data)
@@ -67,6 +69,8 @@ export default {
 						params: {
 							roomId: this.roomId,
 							name: this.username,
+              id: localStorage.getItem('ID'),
+              token: localStorage.getItem('TOKEN') || '',
 						},
 					})
 				})
