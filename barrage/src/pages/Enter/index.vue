@@ -59,7 +59,9 @@ export default {
 				name: this.username,
 				roomId: this.roomId,
 				password: this.password,
-        id: nanoid()
+        // id: nanoid(),
+        id: localStorage.getItem('ID') ? localStorage.getItem('ID') : nanoid(),
+        token: localStorage.getItem('TOKEN') || '',
 			}
 			this.$store
 				.dispatch('userLogin', data)
@@ -67,10 +69,7 @@ export default {
 					this.$router.push({
 						name: 'barrage',
 						params: {
-							roomId: this.roomId,
-							name: this.username,
-              id: localStorage.getItem('ID'),
-              token: localStorage.getItem('TOKEN') || '',
+							roomId: this.roomId
 						},
 					})
 				})
