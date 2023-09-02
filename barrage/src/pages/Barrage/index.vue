@@ -93,15 +93,15 @@
 						v-for="(item, index) in messageContent"
 						:key="index"
 						:class="{
-							rightMessage: getOwnerId(item) == ownerId,
-							leftMessage: getOwnerId(item) != ownerId,
+							rightMessage: getUserId(item) == userId,
+							leftMessage: getUserId(item) != userId,
 						}"
 					>
 						<div
 							class="name"
 							v-if="isSameId(item, index)"
 						>
-							{{ getOwnerName(item) }}
+							{{ getUserName(item) }}
 						</div>
 						<div class="content">
 							{{ getContent(item) }}
@@ -169,8 +169,8 @@
 
 			<More
 				:isShowChat="isShowChat"
-				:name="ownerName"
-				:myId="ownerId"
+				:name="userName"
+				:myId="userId"
 				@closeIsShowChat="closeIsShowChat"
 				@getNewMoreMessage="getNewMoreMessage"
 			></More>
@@ -202,8 +202,7 @@ import Clouds from 'vanta/src/vanta.clouds'
 import requests from '@/api/index'
 
 import { io } from 'socket.io-client'
-import { Message, Owner } from '../../../lib/models'
-import { nanoid } from 'nanoid'
+import { Message, User } from '../../../lib/models'
 
 export default {
 	components: {
@@ -215,8 +214,6 @@ export default {
 	data() {
 		return {
 			isClass: '',
-			// myId: nanoid(),
-			// name: 'd',
 			inputContent: '',
 			messageContent: [],
 			isSun: this.global.getIsSun(),
@@ -226,31 +223,32 @@ export default {
 			isShowVoteInform: false,
 			isShowColor: false,
 			socket: null,
-			owner: null,
 		}
 	},
   computed:{
-    ownerId() {
-      return this.owner ? this.owner.id : ''
+    userId() {
+      return this.user ? this.user.id : ''
     },
-    ownerName() {
-      return this.owner ? this.owner.name : ''
+    userName() {
+      return this.user ? this.user.name : ''
+    },
+    user() {
+      return User.init(this.$store.state.enter.userLogin)
     }
   },
 	methods: {
-		getOwner(item) {
-			return item.owner
+		getUser(item) {
+			return item.user
 		},
 		getContent(item) {
 			return item.content
 		},
-		getOwnerId(item) {
-			return this.getOwner(item).id
+		getUserId(item) {
+			return this.getUser(item).id
 		},
-		getOwnerName(item) {
-			return this.getOwner(item).name
+		getUserName(item) {
+			return this.getUser(item).name
 		},
-		//白天模式和黑夜迷哦是
 		changeBG() {
 			this.global.setIsSun()
 			this.isSun = this.global.getIsSun()
@@ -283,7 +281,6 @@ export default {
 					this.$refs.vantaRef.style = `background: ${this.global.staticBG}`
 			}
 		},
-		//简洁模式改变
 		cleanBackground() {
 			this.global.setIsCleanBG()
 			this.isCleanBG = this.global.getIsCleanBG()
@@ -325,7 +322,7 @@ export default {
 		},
 		sendNewContent() {
 			const newMsg = Message.init({
-				owner: this.owner,
+				user: this.user,
 				content: this.inputContent,
 				type: 'chat',
 			})
@@ -336,17 +333,15 @@ export default {
 			}
 			this.inputContent = ''
 		},
-		// 判断上一条内容和当前内容作者是否为同一个人
 		isSameId(item, index) {
 			if (index == 0) return true
 			const lastMessage = this.messageContent[index - 1]
 			const {
-				owner: { id },
+				user: { id },
 			} = lastMessage
-			if (this.getOwnerId(item) === id) return false
+			if (this.getUserId(item) === id) return false
 			return true
 		},
-		// 打开更多常用语言
 		showMoreChat() {
 			this.isShowChat = !this.isShowChat
 			this.isShowFunction = false
@@ -354,11 +349,9 @@ export default {
 		closeMoreChat() {
 			this.isShowChat = false
 		},
-		// 子组件用emit修改props数据，关闭常用语窗口
 		closeIsShowChat(value) {
 			this.isShowChat = value
 		},
-		// 发送常用语
 		getNewMoreMessage(item) {
 			this.isShowChat = false
 			this.messageContent.push(item)
@@ -367,7 +360,6 @@ export default {
 			this.isShowFunction = !this.isShowFunction
 			this.isShowChat = false
 		},
-		// 子组件用emit修改props数据，关闭功能窗口
 		getCloseFunction(value) {
 			this.isShowFunction = value
 		},
@@ -410,7 +402,6 @@ export default {
 		getCloseColor(value) {
 			this.isShowColor = false
 		},
-		//让子组件调用，实时改变静态背景
 		changeSelectBG() {
 			this.$refs.vantaRef.style = `background: ${this.global.staticBG}`
 		},
@@ -456,19 +447,9 @@ export default {
 			let div = document.querySelector('.body')
 			div.scrollTop = div.scrollHeight
 		},
-		getRouterValue() {
-			return this.$route.params
-		},
-		initOwner() {
-			const { name } = this.getRouterValue()
-			this.owner = Owner.init({
-				name,
-				id: nanoid(),
-			})
-		},
+
 		async init() {
 			await this.initSocket()
-			this.initOwner()
 			this.initBackground()
 			this.toLastLocation()
 		},
@@ -496,15 +477,11 @@ export default {
 		// })
 	},
 	beforeDestroy() {
-		//动态背景配置
 		if (this.vantaEffect) {
 			this.vantaEffect.destroy()
 		}
-
-		// this.socket.disconnect()
 	},
 	watch: {
-		// 屏幕滚动始终在最后一条
 		messageContent() {
 			this.$nextTick(() => {
 				let div = document.querySelector('.body')
