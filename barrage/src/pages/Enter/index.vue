@@ -38,7 +38,9 @@
 import * as THREE from 'three'
 import Clouds from 'vanta/src/vanta.clouds'
 import { nanoid } from 'nanoid'
+import { _createOne } from '@/api/index'
 export default {
+	// eslint-disable-next-line vue/multi-word-component-names
 	name: 'Enter',
 	data() {
 		return {
@@ -54,28 +56,29 @@ export default {
 			this.username = ''
 			this.password = ''
 		},
-		addRoom() {
-			const data = {
-				name: this.username,
-				roomId: this.roomId,
-				password: this.password,
-        // id: nanoid(),
-        id: localStorage.getItem('ID') ? localStorage.getItem('ID') : nanoid(),
-        token: localStorage.getItem('TOKEN') || '',
-			}
-			this.$store
-				.dispatch('userLogin', data)
-				.then(() => {
+		async addRoom() {
+			try {
+				const result = await _createOne('/user', {
+					name: this.username,
+					roomId: this.roomId,
+					password: this.password,
+					id: localStorage.getItem('ID')
+						? localStorage.getItem('ID')
+						: nanoid(),
+					token: localStorage.getItem('TOKEN') || '',
+				})
+				if (result) {
+					this.$store.commit('enter/USERLOGIN', result)
 					this.$router.push({
 						name: 'barrage',
 						params: {
-							roomId: this.roomId
+							roomId: this.roomId,
 						},
 					})
-				})
-				.catch(err => {
-					console.log(err)
-				})
+				}
+			} catch (error) {
+				console.log(error)
+			}
 		},
 		setBlackBG() {
 			this.vantaEffect.setOptions({
