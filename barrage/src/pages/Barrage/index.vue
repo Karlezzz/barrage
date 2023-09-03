@@ -200,10 +200,10 @@ import BGSelect from './BackgroundSelect/BGSelect.vue'
 import 'animate.css'
 import * as THREE from 'three'
 import Clouds from 'vanta/src/vanta.clouds'
-import requests, { _findOne } from '@/api/index'
 
 import { io } from 'socket.io-client'
 import { Message, User } from '../../../lib/models'
+import { _findOne, _updateOne } from '@/api/index'
 
 export default {
 	components: {
@@ -243,20 +243,17 @@ export default {
 	},
 	methods: {
 		async onSubmitName({ name }) {
-			this.user.setUserName(name)
-			await requests({
-				method: 'put',
-				url: this.endpoint.user,
-				data: this.user,
-			})
-				.then(() => {
-					alert('Change name successfully!')
-				})
-				.catch(() => {
-					alert('Change name failed!')
-				})
-			console.log(this.user)
-			this.isShowFunction = false
+			try {
+				this.user.setUserName(name)
+				const result = await _updateOne(this.endpoint.user, this.user)
+				if (!result) {
+					alert('Fail')
+					return
+				}
+				alert('Successful')
+			} catch (error) {
+				console.log(error)
+			}
 		},
 		getUser(item) {
 			return item.user
@@ -474,18 +471,9 @@ export default {
 			this.toLastLocation()
 		},
 	},
-	mounted() {
+	created() {
 		this.init()
-		console.log(this.user)
-		// //接受新名称
-		// this.$bus.$on('getNewName', value => {
-		// 	this.messageContent.forEach(item => {
-		// 		if (item.name == this.name) {
-		// 			item.name = value
-		// 		}
-		// 	})
-		// 	this.name = value
-		// })
+
 		// //接收举手弹幕
 		// this.$bus.$on('getHandMessage', value => {
 		// 	const handMessage = {

@@ -41,8 +41,8 @@ export default {
 			this.$emit('onCloseChangeName', false)
 		},
 		onSubmitName() {
-      this.newName = ''
 			this.$emit('onSubmitName', { name: this.newName })
+      this.newName = ''
 		},
 	},
 }
