@@ -1,30 +1,58 @@
-import requestMock from './requestMock'
+import store from '@/store/index'
+// console.log(store.dispatch('createOne'));
+
+async function _createOne(url, body) {
+  const result = await store.dispatch('axios/createOne', {
+    url,
+    body,
+  })
+  return result.code === 200 ? result : null
+}
+
+async function _findAll(url, options) {
+  const result = await store.dispatch('axios/findAll', {
+    url,
+    query: {
+      active: true,
+      deleted: false,
+      ...options,
+    },
+  })
+  return result.data || []
+}
+
+async function _updateOne(url, body) {
+  const result = await store.dispatch('axios/updateOne', {
+    url,
+    body,
+  })
+  return result.total === 1 ? result.data[0] : null
+}
+
+export {
+  _findAll,
+  _createOne,
+  _updateOne,
+}
 
 
-// export const reqUserLogin = (data) => requestMock({
-//   url: 'https://www.fastmock.site/mock/6fb036f9a523faa1abf35ad394f8483e/api/userLogin',
+
+// import axios from 'axios';
+
+// const requests = axios.create({
+//   baseURL: "http://localhost:3000",
+//   timeout: 10000
+// })
+// requests.interceptors.response.use(config => {
+//   return config;
+// })
+// requests.interceptors.request.use(config => {
+//   return config;
+// })
+// export default requests;
+
+// export const reqUserLogin = (data) => requests({
+//   url: '/user',
 //   method: 'post',
 //   data
 // })
-
-
-
-import axios from 'axios';
-
-const requests = axios.create({
-  baseURL: "http://localhost:3000",
-  timeout: 10000
-})
-requests.interceptors.response.use(config => {
-  return config;
-})
-requests.interceptors.request.use(config => {
-  return config;
-})
-export default requests;
-
-export const reqUserLogin = (data) => requests({
-  url: '/user',
-  method: 'post',
-  data
-})
