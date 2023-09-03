@@ -24,7 +24,7 @@ requests.interceptors.request.use(config => {
 export default requests;
 
 export const reqUserLogin = (data) => requests({
-  url: '/user/userLogin',
+  url: '/user',
   method: 'post',
   data
 })
