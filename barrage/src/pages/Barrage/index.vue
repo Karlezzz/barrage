@@ -200,7 +200,7 @@ import BGSelect from './BackgroundSelect/BGSelect.vue'
 import 'animate.css'
 import * as THREE from 'three'
 import Clouds from 'vanta/src/vanta.clouds'
-import requests from '@/api/index'
+import requests, { _findOne } from '@/api/index'
 
 import { io } from 'socket.io-client'
 import { Message, User } from '../../../lib/models'
@@ -226,6 +226,7 @@ export default {
 			socket: null,
 			endpoint: {
 				user: '/user',
+				socket: '/socket',
 			},
 		}
 	},
@@ -428,22 +429,20 @@ export default {
 		},
 		async initSocket() {
 			try {
-				const socketUrl = await this.getSocketUrl()
-				this.socket = io(socketUrl, {
-					transports: ['websocket'],
-				})
-				this.socket.removeAllListeners()
-				this.socket.on('broadcast', data => {
-					const replyMessage = Message.init(JSON.parse(data))
-					this.messageContent.push(replyMessage)
-				})
+				const { socketUrl } = await _findOne(this.endpoint.socket)
+				if (socketUrl) {
+					this.socket = io(socketUrl, {
+						transports: ['websocket'],
+					})
+					this.socket.removeAllListeners()
+					this.socket.on('broadcast', data => {
+						const replyMessage = Message.init(JSON.parse(data))
+						this.messageContent.push(replyMessage)
+					})
+				}
 			} catch (error) {
 				console.log(error)
 			}
-		},
-		async getSocketUrl() {
-			const result = await requests.get('/socket/url')
-			return result.data.data
 		},
 		initBackground() {
 			if (this.isCleanBG == true) {

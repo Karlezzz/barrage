@@ -60,7 +60,8 @@ class AxiosHelper {
   }
 
   async findOne({ url, query }) {
-    url = `${url}/${query.id}`
+    if (query.id) url = `${url}/${query.id}`
+
     const response = await this.get(url, query)
     if (response && response.data) {
       return response.data

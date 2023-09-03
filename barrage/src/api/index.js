@@ -20,6 +20,17 @@ async function _findAll(url, options) {
   })
   return result.data || []
 }
+async function _findOne(url, options) {
+  const result = await store.dispatch('axios/findAll', {
+    url,
+    query: {
+      // active: true,
+      // deleted: false,
+      ...options,
+    },
+  })
+  return result.total === 1 ? result.data[0] : null
+}
 
 async function _updateOne(url, body) {
   const result = await store.dispatch('axios/updateOne', {
@@ -31,6 +42,7 @@ async function _updateOne(url, body) {
 
 export {
   _findAll,
+  _findOne,
   _createOne,
   _updateOne,
 }
