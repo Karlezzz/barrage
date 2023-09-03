@@ -93,18 +93,18 @@
 						v-for="(item, index) in messageContent"
 						:key="index"
 						:class="{
-							rightMessage: item.id == myId,
-							leftMessage: item.id != myId,
+							rightMessage: getUserId(item) == userId,
+							leftMessage: getUserId(item) != userId,
 						}"
 					>
 						<div
 							class="name"
 							v-if="isSameId(item, index)"
 						>
-							{{ item.name }}
+							{{ getUserName(item) }}
 						</div>
 						<div class="content">
-							{{ item.msg }}
+							{{ getContent(item) }}
 						</div>
 					</div>
 				</div>
@@ -163,15 +163,14 @@
 								alt=""
 							/>
 						</div>
-						<!-- <div class="btn" @click="isShowVoteInform=!isShowVoteInform">test vote</div> -->
 					</div>
 				</div>
 			</div>
 
 			<More
 				:isShowChat="isShowChat"
-				:name="name"
-				:myId="myId"
+				:name="userName"
+				:myId="userId"
 				@closeIsShowChat="closeIsShowChat"
 				@getNewMoreMessage="getNewMoreMessage"
 			></More>
@@ -196,10 +195,14 @@ import VoteInform from './VoteInform/VoteInform.vue'
 import Function from './Function/Function.vue'
 import More from './More/More.vue'
 import BGSelect from './BackgroundSelect/BGSelect.vue'
+
 import 'animate.css'
 import * as THREE from 'three'
 import Clouds from 'vanta/src/vanta.clouds'
+import requests from '@/api/index'
+
 import { io } from 'socket.io-client'
+import { Message, User } from '../../../lib/models'
 
 export default {
 	components: {
@@ -211,8 +214,6 @@ export default {
 	data() {
 		return {
 			isClass: '',
-			myId: '004',
-			name: 'd',
 			inputContent: '',
 			messageContent: [],
 			isSun: this.global.getIsSun(),
@@ -224,8 +225,30 @@ export default {
 			socket: null,
 		}
 	},
+  computed:{
+    userId() {
+      return this.user ? this.user.id : ''
+    },
+    userName() {
+      return this.user ? this.user.name : ''
+    },
+    user() {
+      return User.init(this.$store.state.enter.userLogin)
+    }
+  },
 	methods: {
-		//白天模式和黑夜迷哦是
+		getUser(item) {
+			return item.user
+		},
+		getContent(item) {
+			return item.content
+		},
+		getUserId(item) {
+			return this.getUser(item).id
+		},
+		getUserName(item) {
+			return this.getUser(item).name
+		},
 		changeBG() {
 			this.global.setIsSun()
 			this.isSun = this.global.getIsSun()
@@ -258,7 +281,6 @@ export default {
 					this.$refs.vantaRef.style = `background: ${this.global.staticBG}`
 			}
 		},
-		//简洁模式改变
 		cleanBackground() {
 			this.global.setIsCleanBG()
 			this.isCleanBG = this.global.getIsCleanBG()
@@ -299,12 +321,11 @@ export default {
 			this.$router.push('/enter')
 		},
 		sendNewContent() {
-			const newMsg = {
-				id: '004',
-				name: this.name,
-				msg: this.inputContent,
-				type: 1,
-			}
+			const newMsg = Message.init({
+				user: this.user,
+				content: this.inputContent,
+				type: 'chat',
+			})
 			try {
 				this.socket.emit('sendMsg', JSON.stringify(newMsg))
 			} catch (error) {
@@ -312,15 +333,15 @@ export default {
 			}
 			this.inputContent = ''
 		},
-		// 判断上一条内容和当前内容作者是否为同一个人
 		isSameId(item, index) {
 			if (index == 0) return true
-			else {
-				if (item.id == this.messageContent[index - 1].id) return false
-				else return true
-			}
+			const lastMessage = this.messageContent[index - 1]
+			const {
+				user: { id },
+			} = lastMessage
+			if (this.getUserId(item) === id) return false
+			return true
 		},
-		// 打开更多常用语言
 		showMoreChat() {
 			this.isShowChat = !this.isShowChat
 			this.isShowFunction = false
@@ -328,11 +349,9 @@ export default {
 		closeMoreChat() {
 			this.isShowChat = false
 		},
-		// 子组件用emit修改props数据，关闭常用语窗口
 		closeIsShowChat(value) {
 			this.isShowChat = value
 		},
-		// 发送常用语
 		getNewMoreMessage(item) {
 			this.isShowChat = false
 			this.messageContent.push(item)
@@ -341,7 +360,6 @@ export default {
 			this.isShowFunction = !this.isShowFunction
 			this.isShowChat = false
 		},
-		// 子组件用emit修改props数据，关闭功能窗口
 		getCloseFunction(value) {
 			this.isShowFunction = value
 		},
@@ -384,23 +402,27 @@ export default {
 		getCloseColor(value) {
 			this.isShowColor = false
 		},
-		//让子组件调用，实时改变静态背景
 		changeSelectBG() {
 			this.$refs.vantaRef.style = `background: ${this.global.staticBG}`
 		},
-		initSocket() {
-			const ip = document.location.hostname
-			const port = Number(document.location.port) + 1
-
-			this.socket = io(`ws://${ip}:${port}`, {
-        transports: ['websocket']
-      })
-
-			this.socket.removeAllListeners()
-			this.socket.on('broadcast', data => {
-				console.log(data)
-				this.messageContent.push(JSON.parse(data))
-			})
+		async initSocket() {
+			try {
+				const socketUrl = await this.getSocketUrl()
+				this.socket = io(socketUrl, {
+					transports: ['websocket'],
+				})
+				this.socket.removeAllListeners()
+				this.socket.on('broadcast', data => {
+					const replyMessage = Message.init(JSON.parse(data))
+					this.messageContent.push(replyMessage)
+				})
+			} catch (error) {
+				console.log(error)
+			}
+		},
+		async getSocketUrl() {
+			const result = await requests.get('/socket/url')
+			return result.data.data
 		},
 		initBackground() {
 			if (this.isCleanBG == true) {
@@ -425,47 +447,41 @@ export default {
 			let div = document.querySelector('.body')
 			div.scrollTop = div.scrollHeight
 		},
+
+		async init() {
+			await this.initSocket()
+			this.initBackground()
+			this.toLastLocation()
+		},
 	},
 	mounted() {
-		this.initSocket()
-
-		//背景配置
-		this.initBackground()
-
-		// 挂载后定位到最后一条消息的位置
-		this.toLastLocation()
-
-		//接受新名称
-		this.$bus.$on('getNewName', value => {
-			this.messageContent.forEach(item => {
-				if (item.name == this.name) {
-					item.name = value
-				}
-			})
-			this.name = value
-		})
-
-		//接收举手弹幕
-		this.$bus.$on('getHandMessage', value => {
-			const handMessage = {
-				name: this.name,
-				id: this.myId,
-				msg: value,
-				type: 'strong',
-			}
-			this.messageContent.push(handMessage)
-		})
+		this.init()
+		// //接受新名称
+		// this.$bus.$on('getNewName', value => {
+		// 	this.messageContent.forEach(item => {
+		// 		if (item.name == this.name) {
+		// 			item.name = value
+		// 		}
+		// 	})
+		// 	this.name = value
+		// })
+		// //接收举手弹幕
+		// this.$bus.$on('getHandMessage', value => {
+		// 	const handMessage = {
+		// 		name: this.name,
+		// 		id: this.myId,
+		// 		msg: value,
+		// 		type: 'strong',
+		// 	}
+		// 	this.messageContent.push(handMessage)
+		// })
 	},
 	beforeDestroy() {
-		//动态背景配置
 		if (this.vantaEffect) {
 			this.vantaEffect.destroy()
 		}
-
-		// this.socket.disconnect()
 	},
 	watch: {
-		// 屏幕滚动始终在最后一条
 		messageContent() {
 			this.$nextTick(() => {
 				let div = document.querySelector('.body')
