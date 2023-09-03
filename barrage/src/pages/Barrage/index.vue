@@ -243,7 +243,7 @@ export default {
 	methods: {
 		async onSubmitName({ name }) {
 			this.user.setUserName(name)
-			requests({
+			await requests({
 				method: 'put',
 				url: this.endpoint.user,
 				data: this.user,

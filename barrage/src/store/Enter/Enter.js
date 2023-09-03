@@ -1,26 +1,35 @@
-import { reqUserLogin } from '@/api'
+import requests from '@/api'
 const state = {
   userLogin: {}
 }
 const mutations = {
   USERLOGIN(state, data) {
     state.userLogin = data
-    const { id, name, token } = data
+    const { id, token } = data
     localStorage.setItem("TOKEN", token)
     localStorage.setItem('ID', id)
+
   }
 }
 const actions = {
   async userLogin({ commit }, data) {
-    let result = await reqUserLogin(data)
-    if (result.status === 200) {
-      commit("USERLOGIN", result.data)
-    } else {
-      console.log(result.statusText);
-    }
+    await requests({
+      url: '/user',
+      method: 'post',
+      data
+    }).then((res) => {
+      commit("USERLOGIN", res.data)
+      return 1
+    }).catch(() => {
+      console.log('1')
+    })
+  },
+
+  test() {
+    console.log(2);
   }
 }
 
 export default {
-  namespace: true, state, mutations, actions
+  namespaced: true, state, mutations, actions
 }
