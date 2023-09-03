@@ -99,7 +99,7 @@
 					>
 						<div
 							class="name"
-							v-if="isSameId(item, index)"
+							v-if="isSameUser(item, index)"
 						>
 							{{ getUserName(item) }}
 						</div>
@@ -176,6 +176,7 @@
 			></More>
 			<Function
 				:isShowFunction="isShowFunction"
+				@onSubmitName="onSubmitName"
 				@getCloseFunction="getCloseFunction"
 			></Function>
 			<VoteInform
@@ -199,10 +200,10 @@ import BGSelect from './BackgroundSelect/BGSelect.vue'
 import 'animate.css'
 import * as THREE from 'three'
 import Clouds from 'vanta/src/vanta.clouds'
-import requests from '@/api/index'
 
 import { io } from 'socket.io-client'
 import { Message, User } from '../../../lib/models'
+import { _findOne, _updateOne } from '@/api/index'
 
 export default {
 	components: {
@@ -223,20 +224,37 @@ export default {
 			isShowVoteInform: false,
 			isShowColor: false,
 			socket: null,
+			endpoint: {
+				user: '/user',
+				socket: '/socket',
+			},
 		}
 	},
-  computed:{
-    userId() {
-      return this.user ? this.user.id : ''
-    },
-    userName() {
-      return this.user ? this.user.name : ''
-    },
-    user() {
-      return User.init(this.$store.state.enter.userLogin)
-    }
-  },
+	computed: {
+		userId() {
+			return this.user ? this.user.id : ''
+		},
+		userName() {
+			return this.user ? this.user.name : ''
+		},
+		user() {
+			return User.init(this.$store.state.enter.userLogin)
+		},
+	},
 	methods: {
+		async onSubmitName({ name }) {
+			try {
+				this.user.setUserName(name)
+				const result = await _updateOne(this.endpoint.user, this.user)
+				if (!result) {
+					alert('Fail')
+					return
+				}
+				alert('Successful')
+			} catch (error) {
+				console.log(error)
+			}
+		},
 		getUser(item) {
 			return item.user
 		},
@@ -333,13 +351,14 @@ export default {
 			}
 			this.inputContent = ''
 		},
-		isSameId(item, index) {
+		isSameUser(item, index) {
 			if (index == 0) return true
 			const lastMessage = this.messageContent[index - 1]
 			const {
-				user: { id },
+				user: { id, name },
 			} = lastMessage
-			if (this.getUserId(item) === id) return false
+			if (this.getUserId(item) === id && this.getUserName(item) === name)
+				return false
 			return true
 		},
 		showMoreChat() {
@@ -407,22 +426,20 @@ export default {
 		},
 		async initSocket() {
 			try {
-				const socketUrl = await this.getSocketUrl()
-				this.socket = io(socketUrl, {
-					transports: ['websocket'],
-				})
-				this.socket.removeAllListeners()
-				this.socket.on('broadcast', data => {
-					const replyMessage = Message.init(JSON.parse(data))
-					this.messageContent.push(replyMessage)
-				})
+				const { socketUrl } = await _findOne(this.endpoint.socket)
+				if (socketUrl) {
+					this.socket = io(socketUrl, {
+						transports: ['websocket'],
+					})
+					this.socket.removeAllListeners()
+					this.socket.on('broadcast', data => {
+						const replyMessage = Message.init(JSON.parse(data))
+						this.messageContent.push(replyMessage)
+					})
+				}
 			} catch (error) {
 				console.log(error)
 			}
-		},
-		async getSocketUrl() {
-			const result = await requests.get('/socket/url')
-			return result.data.data
 		},
 		initBackground() {
 			if (this.isCleanBG == true) {
@@ -454,17 +471,9 @@ export default {
 			this.toLastLocation()
 		},
 	},
-	mounted() {
+	created() {
 		this.init()
-		// //接受新名称
-		// this.$bus.$on('getNewName', value => {
-		// 	this.messageContent.forEach(item => {
-		// 		if (item.name == this.name) {
-		// 			item.name = value
-		// 		}
-		// 	})
-		// 	this.name = value
-		// })
+
 		// //接收举手弹幕
 		// this.$bus.$on('getHandMessage', value => {
 		// 	const handMessage = {
