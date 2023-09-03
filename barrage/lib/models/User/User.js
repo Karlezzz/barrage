@@ -5,8 +5,20 @@ class User {
     this.name = options.name
     this.id = options.id || setId(options)
     this.ipAddress = options.ipAddress
-    this.created = options.created || new Date().getTime()
-    this.modified = options.modified || this.created
+    this.created = options.created || (new Date()).valueOf()
+    this.modified = options.modified || (new Date()).valueOf()
+    this.connections = [],
+    this.identify = 'student'
+  }
+
+  updateModified() {
+    this.modified = (new Date()).valueOf()
+    return this
+  }
+
+  setUserName(name) {
+    this.name = name
+    return this.updateModified()
   }
 
   static init(options = {}) {
@@ -16,17 +28,17 @@ class User {
     const instance = new User(options)
     return instance.isValid ? instance : null
   }
+
   static initFromArray(arr = []) {
     if (Array.isArray(arr)) {
       return arr.map(this.init)
     }
     return []
   }
+  
   static initOnlyValidFromArray(arr = []) {
     return this.initFromArray(arr).filter((i) => i)
   }
-
-
 
   get isValid() {
     return !!this.name && !!this.id

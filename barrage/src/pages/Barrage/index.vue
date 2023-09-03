@@ -99,7 +99,7 @@
 					>
 						<div
 							class="name"
-							v-if="isSameId(item, index)"
+							v-if="isSameUser(item, index)"
 						>
 							{{ getUserName(item) }}
 						</div>
@@ -176,6 +176,7 @@
 			></More>
 			<Function
 				:isShowFunction="isShowFunction"
+				@onSubmitName="onSubmitName"
 				@getCloseFunction="getCloseFunction"
 			></Function>
 			<VoteInform
@@ -223,20 +224,39 @@ export default {
 			isShowVoteInform: false,
 			isShowColor: false,
 			socket: null,
+			endpoint: {
+				user: '/user',
+			},
 		}
 	},
-  computed:{
-    userId() {
-      return this.user ? this.user.id : ''
-    },
-    userName() {
-      return this.user ? this.user.name : ''
-    },
-    user() {
-      return User.init(this.$store.state.enter.userLogin)
-    }
-  },
+	computed: {
+		userId() {
+			return this.user ? this.user.id : ''
+		},
+		userName() {
+			return this.user ? this.user.name : ''
+		},
+		user() {
+			return User.init(this.$store.state.enter.userLogin)
+		},
+	},
 	methods: {
+		async onSubmitName({ name }) {
+			this.user.setUserName(name)
+			requests({
+				method: 'put',
+				url: this.endpoint.user,
+				data: this.user,
+			})
+				.then(() => {
+					alert('Change name successfully!')
+				})
+				.catch(() => {
+					alert('Change name failed!')
+				})
+			console.log(this.user)
+			this.isShowFunction = false
+		},
 		getUser(item) {
 			return item.user
 		},
@@ -333,13 +353,14 @@ export default {
 			}
 			this.inputContent = ''
 		},
-		isSameId(item, index) {
+		isSameUser(item, index) {
 			if (index == 0) return true
 			const lastMessage = this.messageContent[index - 1]
 			const {
-				user: { id },
+				user: { id, name },
 			} = lastMessage
-			if (this.getUserId(item) === id) return false
+			if (this.getUserId(item) === id && this.getUserName(item) === name)
+				return false
 			return true
 		},
 		showMoreChat() {
@@ -456,6 +477,7 @@ export default {
 	},
 	mounted() {
 		this.init()
+		console.log(this.user)
 		// //接受新名称
 		// this.$bus.$on('getNewName', value => {
 		// 	this.messageContent.forEach(item => {
