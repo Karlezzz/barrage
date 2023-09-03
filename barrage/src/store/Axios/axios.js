@@ -21,9 +21,6 @@ const actions = {
     return state.axiosHelper.updateOne({ url, body, config })
   },
 
-  test() {
-    console.log(1)
-  }
 }
 
 export default {
