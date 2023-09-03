@@ -67,18 +67,18 @@ export default {
 						: nanoid(),
 					token: localStorage.getItem('TOKEN') || '',
 				})
-        if(result) {
-          this.$router.push({
+				if (result) {
+					this.$store.commit('enter/USERLOGIN', result)
+					this.$router.push({
 						name: 'barrage',
 						params: {
 							roomId: this.roomId,
 						},
 					})
-        }
+				}
 			} catch (error) {
-        console.log(error);
-      }
-
+				console.log(error)
+			}
 		},
 		setBlackBG() {
 			this.vantaEffect.setOptions({

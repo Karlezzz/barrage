@@ -6,7 +6,7 @@ async function _createOne(url, body) {
     url,
     body,
   })
-  return result.code === 200 ? result : null
+  return result.total === 1 ? result.data[0] : null
 }
 
 async function _findAll(url, options) {
