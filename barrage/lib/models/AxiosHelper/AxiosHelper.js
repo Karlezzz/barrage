@@ -3,7 +3,6 @@ const axios = require('axios')
 const protocol = window.location.protocol
 const host = window.location.host
 const baseUrl = `${protocol}://${host}`
-console.log(window.location.host);
 const _axios = axios.create({
   // baseURL
   baseUrl,
