@@ -1,6 +1,7 @@
 import requests from '@/api'
 const state = {
-  userLogin: {}
+  userLogin: {},
+  roomCode: null
 }
 const mutations = {
   USERLOGIN(state, data) {
@@ -8,7 +9,9 @@ const mutations = {
     const { id, token } = data
     localStorage.setItem("TOKEN", token)
     localStorage.setItem('ID', id)
-
+  },
+  SETROOMCODE(state,data) {
+    state.roomCode = data
   }
 }
 const actions = {
