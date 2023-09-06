@@ -50,7 +50,7 @@ router.beforeEach((to, from, next) => {
   // }
   // else if (to.path == '/enter') next()
 
-  if (to.path === '/enter' || localStorage.getItem('TOKEN')) {
+  if (to.path === '/enter' || sessionStorage.getItem('BARRAGEFLAG')) {
     next()
   } else {
     const { name, params: { roomId } } = to

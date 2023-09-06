@@ -9,6 +9,7 @@ const mutations = {
     const { id, token } = data
     localStorage.setItem("TOKEN", token)
     localStorage.setItem('ID', id)
+    sessionStorage.setItem('BARRAGEFLAG', true)
   },
   SETROOMCODE(state,data) {
     state.roomCode = data
