@@ -9,8 +9,8 @@
 				<div class="input">
 					<input
 						type="text"
-						v-model="roomId"
-						placeholder="RoomId"
+						v-model="roomCode"
+						:placeholder="$roomCode"
 					/>
 					<input
 						type="text"
@@ -44,13 +44,18 @@ export default {
 	name: 'Enter',
 	data() {
 		return {
-			roomId: '111',
+			roomCode: null,
 			username: new Date().getTime(),
-			password: '',
+			password: null,
 			isSun: this.global.getIsSun(),
 			isCleanBG: this.global.getIsCleanBG(),
 		}
 	},
+  computed:{
+    $roomCode() {
+      return this.$store.state.enter.roomCode || 'RoomCode'
+    }
+  },
 	methods: {
 		reset() {
 			this.username = ''
@@ -61,6 +66,7 @@ export default {
 				const result = await _createOne('/user', {
 					name: this.username,
 					roomId: this.roomId,
+          roomCode: this.roomCode,
 					password: this.password,
 					id: localStorage.getItem('ID')
 						? localStorage.getItem('ID')
@@ -117,6 +123,8 @@ export default {
 				this.setBlackBG()
 			}
 		}
+
+    this.roomCode = this.$roomCode
 	},
 
 	beforeDestroy() {

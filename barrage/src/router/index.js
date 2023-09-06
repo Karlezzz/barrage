@@ -1,6 +1,7 @@
 import VueRouter from 'vue-router'
 import Enter from '../pages/Enter/index.vue'
 import Barrage from '../pages/Barrage/index.vue'
+import store from '@/store/index'
 
 let originPush = VueRouter.prototype.push
 let originReplace = VueRouter.prototype.replace
@@ -36,7 +37,7 @@ const router = new VueRouter({
       name: 'barrage',
       path: '/barrage/:roomId',
       component: Barrage,
-      
+
     },
 
   ]
@@ -48,9 +49,14 @@ router.beforeEach((to, from, next) => {
   //   next('/enter')
   // }
   // else if (to.path == '/enter') next()
-  if(to.path === '/enter' || localStorage.getItem('TOKEN')) {
+
+  if (to.path === '/enter' || localStorage.getItem('TOKEN')) {
     next()
   } else {
+    const { name, params: { roomId } } = to
+    if (name === 'barrage') {
+      store.commit('enter/SETROOMCODE', roomId)
+    }
     next('/enter')
   }
 
