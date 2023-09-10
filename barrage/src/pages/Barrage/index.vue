@@ -240,8 +240,12 @@ export default {
 		},
 	},
 	methods: {
-		onSubmitScore({ score }) {
-			console.log(score)
+		async onSubmitScore({ score }) {
+			try {
+        const result = await _updateOne(endpoint.score, score)
+      } catch (error) {
+        console.log(error)
+      }
 		},
 		async onSubmitName({ name }) {
 			try {
