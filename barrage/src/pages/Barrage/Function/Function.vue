@@ -107,7 +107,7 @@
 		<Advice
 			:isShowAdvice="sonFunctionState.isShowAdvice"
 			@getCloseAdvice="getCloseAdvice"
-			@advicedClose="advicedClose"
+      @onSubmitComment="onSubmitComment"
 		></Advice>
 		<Vote
 			:isShowVote="sonFunctionState.isShowVote"
@@ -190,8 +190,9 @@ export default {
 		getCloseAdvice() {
 			this.sonFunctionState.isShowAdvice = false
 		},
-		advicedClose() {
+		onSubmitComment({comment}) {
 			this.closeFunction()
+      this.$emit('onSubmitComment',{comment})
 		},
 		getCloseVote() {
 			this.sonFunctionState.isShowVote = false

@@ -179,6 +179,7 @@
 				@onSubmitName="onSubmitName"
 				@getCloseFunction="getCloseFunction"
 				@onSubmitScore="onSubmitScore"
+        @onSubmitComment="onSubmitComment"
 			></Function>
 			<VoteInform
 				:isShowVoteInform="isShowVoteInform"
@@ -240,6 +241,13 @@ export default {
 		},
 	},
 	methods: {
+    async onSubmitComment({comment}) {
+      try {
+        const result = await _updateOne(endpoint.comment, comment)
+      } catch (error) {
+        console.log(error)
+      }
+    },
 		async onSubmitScore({ score }) {
 			try {
         const result = await _updateOne(endpoint.score, score)
