@@ -5,6 +5,8 @@ const endpoint = {
   classRoom: '/classRoom',
   room: '/room',
   vote: '/vote',
+  score: '/score',
+  comment: '/comment'
 }
 export {
   endpoint
