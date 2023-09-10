@@ -1,17 +1,22 @@
+const { nanoid } = require("nanoid")
 const { ClassRoom } = require("../ClassRoom")
 const { User } = require("../User")
 
 class Comment {
   constructor(options) {
     options = options || {}
+    this.id = options.id || nanoid()
     this.created = options.created || (new Date().valueOf())
     this.creator = User.init(options.creator)
     this.value = options.value
-    this.classRoom = ClassRoom.init(options.classRoom)
+    // this.classRoom = ClassRoom.init(options.classRoom)
   }
 
   get isValid() {
-    return !!this.id && !!this.creator && !!this.value && !!this.classRoom
+    return !!this.id 
+    && !!this.creator 
+    && !!this.value 
+    // && !!this.classRoom
   }
 
   static init(options = {}) {
