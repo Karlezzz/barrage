@@ -13,7 +13,8 @@ class Score {
   }
 
   get isValid() {
-    return !!this.id && !!this.creator && !!this.value && !!this.classRoom
+    // return !!this.id && !!this.creator && !!this.value && !!this.classRoom
+    return !!this.id && !!this.creator && !!this.value
   }
 
   static init(options = {}) {
