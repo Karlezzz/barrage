@@ -1,7 +1,8 @@
 import requests from '@/api'
 const state = {
   userLogin: null,
-  roomCode: null
+  roomCode: null,
+  classRoomCode: null
 }
 const mutations = {
   USERLOGIN(state, data) {
@@ -11,8 +12,11 @@ const mutations = {
     localStorage.setItem('ID', id)
     sessionStorage.setItem('BARRAGEFLAG', true)
   },
-  SETROOMCODE(state,data) {
+  SETROOMCODE(state, data) {
     state.roomCode = data
+  },
+  SETCLASSROOMCODE(state, data) {
+    state.classRoomCode = data
   }
 }
 const actions = {
