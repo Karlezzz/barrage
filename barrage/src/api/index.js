@@ -1,8 +1,48 @@
-import requestMock from './requestMock'
+import store from '@/store/index'
+// console.log(store.dispatch('createOne'));
 
+async function _createOne(url, body) {
+  const result = await store.dispatch('axios/createOne', {
+    url,
+    body,
+  })
+  return result.total === 1 ? result.data[0] : null
+}
 
-export const reqUserLogin = (data) => requestMock({
-    url:'https://www.fastmock.site/mock/6fb036f9a523faa1abf35ad394f8483e/api/userLogin',
-    method:'post',
-    data
-})
+async function _findAll(url, options) {
+  const result = await store.dispatch('axios/findAll', {
+    url,
+    query: {
+      active: true,
+      deleted: false,
+      ...options,
+    },
+  })
+  return result.data || []
+}
+async function _findOne(url, options) {
+  const result = await store.dispatch('axios/findAll', {
+    url,
+    query: {
+      // active: true,
+      // deleted: false,
+      ...options,
+    },
+  })
+  return result.total === 1 ? result.data[0] : null
+}
+
+async function _updateOne(url, body) {
+  const result = await store.dispatch('axios/updateOne', {
+    url,
+    body,
+  })
+  return result.total === 1 ? result.data[0] : null
+}
+
+export {
+  _findAll,
+  _findOne,
+  _createOne,
+  _updateOne,
+}

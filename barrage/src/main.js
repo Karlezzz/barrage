@@ -8,11 +8,12 @@ import echarts_ from './echats/index'
 
 Vue.use(VueRouter)
 Vue.config.productionTip = false
+
 new Vue({
   render: h => h(App),
   router,
   store,
-  beforeCreate(){
+  beforeCreate() {
     Vue.prototype.$bus = this
     Vue.prototype.global = global_
     Vue.prototype.echarts = echarts_
