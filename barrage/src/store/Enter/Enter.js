@@ -1,25 +1,43 @@
-import { reqUserLogin } from '@/api'
-const state={
-    userLogin:{}
+import requests from '@/api'
+const state = {
+  userLogin: null,
+  roomCode: null,
+  classRoomCode: null
 }
-const mutations={
-    USERLOGIN(state,data){
-        state.userLogin = data
-        localStorage.setItem("TOKEN",data.token)
-        localStorage.setItem('ID',data.id)
-    }
+const mutations = {
+  USERLOGIN(state, data) {
+    state.userLogin = data
+    const { id, token } = data
+    localStorage.setItem("TOKEN", token)
+    localStorage.setItem('ID', id)
+    sessionStorage.setItem('BARRAGEFLAG', true)
+  },
+  SETROOMCODE(state, data) {
+    state.roomCode = data
+  },
+  SETCLASSROOMCODE(state, data) {
+    state.classRoomCode = data
+  }
 }
-const actions={
-    async userLogin({commit},data){
-        let result = await reqUserLogin(data)
-        if(result.code===200){
-            commit("USERLOGIN",result.data)
-        }else{
-            console.log(error);
-        }
-    }
+const actions = {
+  async userLogin({ commit }, data) {
+    await requests({
+      url: '/user',
+      method: 'post',
+      data
+    }).then((res) => {
+      commit("USERLOGIN", res.data)
+      return 1
+    }).catch(() => {
+      console.log('1')
+    })
+  },
+
+  test() {
+    console.log(2);
+  }
 }
 
-export default{
-    namespace:true,state,mutations,actions
+export default {
+  namespaced: true, state, mutations, actions
 }
