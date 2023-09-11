@@ -65,10 +65,10 @@ export default {
 			this.password = ''
 		},
 		async addRoom() {
-      if(typeof this.roomCode !== 'number') {
-        alert('Room code is number')
-        return
-      }
+      // if(typeof Number(this.roomCode) !== 'number') {
+      //   alert('Room code is number')
+      //   return
+      // }
 			try {
 				const result = await _createOne('/user', {
 					name: this.username,
