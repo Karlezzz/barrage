@@ -53,9 +53,12 @@ router.beforeEach((to, from, next) => {
   if (to.path === '/enter' || sessionStorage.getItem('BARRAGEFLAG')) {
     next()
   } else {
-    const { name, params: { roomId } } = to
+    const { name, params: { roomCode, classRoomCode } } = to
     if (name === 'barrage') {
-      store.commit('enter/SETROOMCODE', roomId)
+      store.commit('enter/SETROOMCODE', roomCode)
+      store.commit('enter/SETCLASSROOMCODE', classRoomCode)
+      sessionStorage.setItem('roomCode',roomCode)
+      sessionStorage.setItem('classRoomCode',classRoomCode)
     }
     next('/enter')
   }
