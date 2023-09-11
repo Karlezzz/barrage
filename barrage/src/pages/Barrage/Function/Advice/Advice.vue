@@ -44,6 +44,9 @@ export default {
     user() {
       return this.$store.state.enter.userLogin
     },
+    classRoomCode() {
+      return this.$store.state.enter.classRoomCode || sessionStorage.getItem('classRoomCode') || ''
+    }
   },
 	methods: {
 		closeAdvice() {
@@ -54,6 +57,7 @@ export default {
       const comment = Comment.init({
         creator:this.user,
         value:this.advice,
+        classRoomCode: this.classRoomCode
       })
 			this.$emit('onSubmitComment', {comment})
 		},
