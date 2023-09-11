@@ -241,6 +241,9 @@ export default {
 		},
 	},
 	methods: {
+    async getAllVotes() {
+			await this.$store.dispatch('vote/getAllVotes')
+		},
 		async onSubmitComment({ comment }) {
 			try {
 				const result = await _updateOne(endpoint.comment, comment)
