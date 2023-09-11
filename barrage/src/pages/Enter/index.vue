@@ -54,6 +54,9 @@ export default {
   computed:{
     $roomCode() {
       return this.$store.state.enter.roomCode || sessionStorage.getItem('roomCode') || 'RoomCode'
+    },
+    classRoomCode() {
+      return this.$store.state.enter.classRoomCode || sessionStorage.getItem('classRoomCode') || '111'
     }
   },
 	methods: {
@@ -75,12 +78,9 @@ export default {
 				})
 				if (result) {
 					this.$store.commit('enter/USERLOGIN', result)
-					this.$router.push({
-						name: 'barrage',
-						params: {
-							roomId: this.roomId,
-						},
-					})
+          this.$router.push({
+            path: `/barrage/${this.roomCode}/${this.classRoomCode}`
+          })
 				}
 			} catch (error) {
 				console.log(error)
