@@ -65,10 +65,13 @@ export default {
 			this.password = ''
 		},
 		async addRoom() {
+      if(typeof this.roomCode !== 'number') {
+        alert('Room code is number')
+        return
+      }
 			try {
 				const result = await _createOne('/user', {
 					name: this.username,
-					roomId: this.roomId,
           roomCode: this.roomCode,
 					password: this.password,
 					id: localStorage.getItem('ID')
