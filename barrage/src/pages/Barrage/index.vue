@@ -241,7 +241,7 @@ export default {
 		},
 	},
 	methods: {
-    async getAllVotes() {
+		async getAllVotes() {
 			await this.$store.dispatch('vote/getAllVotes')
 		},
 		async onSubmitComment({ comment }) {
