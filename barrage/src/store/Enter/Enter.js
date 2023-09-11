@@ -1,6 +1,6 @@
 import requests from '@/api'
 const state = {
-  userLogin: {},
+  userLogin: null,
   roomCode: null
 }
 const mutations = {

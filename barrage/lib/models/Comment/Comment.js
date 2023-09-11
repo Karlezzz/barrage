@@ -1,26 +1,29 @@
-const { ClassRoom } = require('../ClassRoom/index')
-class Room {
+const { nanoid } = require("nanoid")
+const { ClassRoom } = require("../ClassRoom")
+const { User } = require("../User")
+
+class Comment {
   constructor(options) {
     options = options || {}
-    this.id = options.id
-    this.code = parseInt(options.code) || 10000
-    this.name = options.name || 'Classroom'
-    this.password = options.password
+    this.id = options.id || nanoid()
     this.created = options.created || (new Date().valueOf())
-    this.modified = options.modified || (new Date().valueOf())
-    // this.owner = options.owner
-    this.classRoom = ClassRoom.initFromArray(options.classRoom) || []
+    this.creator = User.init(options.creator)
+    this.value = options.value
+    // this.classRoom = ClassRoom.init(options.classRoom)
   }
 
   get isValid() {
-    return !!this.id
+    return !!this.id 
+    && !!this.creator 
+    && !!this.value 
+    // && !!this.classRoom
   }
 
   static init(options = {}) {
-    if (options instanceof Room) {
+    if (options instanceof Comment) {
       return options
     }
-    const instance = new Room(options)
+    const instance = new Comment(options)
     return instance.isValid ? instance : null
   }
 
@@ -35,7 +38,6 @@ class Room {
     return this.initFromArray(arr).filter((i) => i)
   }
 }
-
 module.exports = {
-  Room
+  Comment
 }

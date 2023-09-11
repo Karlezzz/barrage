@@ -178,6 +178,8 @@
 				:isShowFunction="isShowFunction"
 				@onSubmitName="onSubmitName"
 				@getCloseFunction="getCloseFunction"
+				@onSubmitScore="onSubmitScore"
+				@onSubmitComment="onSubmitComment"
 			></Function>
 			<VoteInform
 				:isShowVoteInform="isShowVoteInform"
@@ -204,6 +206,7 @@ import Clouds from 'vanta/src/vanta.clouds'
 import { io } from 'socket.io-client'
 import { Message, User } from '../../../lib/models'
 import { _findOne, _updateOne } from '@/api/index'
+import { endpoint } from '../../api/ednpoint.js'
 
 export default {
 	components: {
@@ -224,10 +227,6 @@ export default {
 			isShowVoteInform: false,
 			isShowColor: false,
 			socket: null,
-			endpoint: {
-				user: '/user',
-				socket: '/socket',
-			},
 		}
 	},
 	computed: {
@@ -242,10 +241,29 @@ export default {
 		},
 	},
 	methods: {
+		async getAllVotes() {
+			await this.$store.dispatch('vote/getAllVotes')
+		},
+		async onSubmitComment({ comment }) {
+			try {
+				const result = await _updateOne(endpoint.comment, comment)
+				if (result) console.log(result)
+			} catch (error) {
+				console.log(error)
+			}
+		},
+		async onSubmitScore({ score }) {
+			try {
+				const result = await _updateOne(endpoint.score, score)
+				if (result) console.log(result)
+			} catch (error) {
+				console.log(error)
+			}
+		},
 		async onSubmitName({ name }) {
 			try {
 				this.user.setUserName(name)
-				const result = await _updateOne(this.endpoint.user, this.user)
+				const result = await _updateOne(endpoint.user, this.user)
 				if (!result) {
 					alert('Fail')
 					return
@@ -426,7 +444,7 @@ export default {
 		},
 		async initSocket() {
 			try {
-				const { socketUrl } = await _findOne(this.endpoint.socket)
+				const { socketUrl } = await _findOne(endpoint.socket)
 				if (socketUrl) {
 					this.socket = io(socketUrl, {
 						transports: ['websocket'],

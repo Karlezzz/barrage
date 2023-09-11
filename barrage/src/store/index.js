@@ -4,10 +4,12 @@ Vue.use(Vuex)
 
 import enter from './Enter/Enter'
 import axios from './Axios/axios'
+import vote from './Vote/Vote'
 
 export default new Vuex.Store({
   modules: {
     enter,
-    axios
+    axios,
+    vote
   }
 })
