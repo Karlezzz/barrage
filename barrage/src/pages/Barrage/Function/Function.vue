@@ -101,13 +101,13 @@
 		<Score
 			:isShowScore="sonFunctionState.isShowScore"
 			@getCloseScore="getCloseScore"
-			@scoredClose="scoredClose"
+			@onSubmitScore="onSubmitScore"
 		>
 		</Score>
 		<Advice
 			:isShowAdvice="sonFunctionState.isShowAdvice"
 			@getCloseAdvice="getCloseAdvice"
-			@advicedClose="advicedClose"
+      @onSubmitComment="onSubmitComment"
 		></Advice>
 		<Vote
 			:isShowVote="sonFunctionState.isShowVote"
@@ -183,14 +183,16 @@ export default {
 		getCloseScore(value) {
 			this.sonFunctionState.isShowScore = false
 		},
-		scoredClose() {
+		onSubmitScore({score}) {
+      this.$emit('onSubmitScore', {score})
 			this.closeFunction()
 		},
 		getCloseAdvice() {
 			this.sonFunctionState.isShowAdvice = false
 		},
-		advicedClose() {
+		onSubmitComment({comment}) {
 			this.closeFunction()
+      this.$emit('onSubmitComment',{comment})
 		},
 		getCloseVote() {
 			this.sonFunctionState.isShowVote = false
