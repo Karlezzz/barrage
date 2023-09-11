@@ -169,10 +169,8 @@
 
 			<More
 				:isShowChat="isShowChat"
-				:name="userName"
-				:myId="userId"
 				@closeIsShowChat="closeIsShowChat"
-				@getNewMoreMessage="getNewMoreMessage"
+				@onSubmitMoreMessage="onSubmitMoreMessage"
 			></More>
 			<Function
 				:isShowFunction="isShowFunction"
@@ -389,9 +387,13 @@ export default {
 		closeIsShowChat(value) {
 			this.isShowChat = value
 		},
-		getNewMoreMessage(item) {
+		onSubmitMoreMessage({newMessage}) {
 			this.isShowChat = false
-			this.messageContent.push(item)
+      try {
+				this.socket.emit('sendMsg', JSON.stringify(newMessage))
+			} catch (error) {
+				console.log(error)
+			}
 		},
 		showFunction() {
 			this.isShowFunction = !this.isShowFunction
