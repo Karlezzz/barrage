@@ -53,7 +53,10 @@ export default {
 	},
   computed:{
     $roomCode() {
-      return this.$store.state.enter.roomCode || 'RoomCode'
+      return this.$store.state.enter.roomCode || sessionStorage.getItem('roomCode') || 'RoomCode'
+    },
+    classRoomCode() {
+      return this.$store.state.enter.classRoomCode || sessionStorage.getItem('classRoomCode') || '111'
     }
   },
 	methods: {
@@ -62,10 +65,13 @@ export default {
 			this.password = ''
 		},
 		async addRoom() {
+      if(typeof this.roomCode !== 'number') {
+        alert('Room code is number')
+        return
+      }
 			try {
 				const result = await _createOne('/user', {
 					name: this.username,
-					roomId: this.roomId,
           roomCode: this.roomCode,
 					password: this.password,
 					id: localStorage.getItem('ID')
@@ -75,12 +81,9 @@ export default {
 				})
 				if (result) {
 					this.$store.commit('enter/USERLOGIN', result)
-					this.$router.push({
-						name: 'barrage',
-						params: {
-							roomId: this.roomId,
-						},
-					})
+          this.$router.push({
+            path: `/barrage/${this.roomCode}/${this.classRoomCode}`
+          })
 				}
 			} catch (error) {
 				console.log(error)

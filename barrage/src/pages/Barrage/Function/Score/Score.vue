@@ -49,7 +49,9 @@ export default {
     user() {
       return this.$store.state.enter.userLogin
     },
-
+    classRoomCode() {
+      return this.$store.state.enter.classRoomCode || sessionStorage.getItem('classRoomCode') || ''
+    }
   },
 	methods: {
 		closeScore() {
@@ -63,7 +65,8 @@ export default {
 			this.closeScore()
       const score = Score.init({
         value:this.score,
-        creator:this.user
+        creator:this.user,
+        classRoomCode:this.classRoomCode
       })
 			this.$emit('onSubmitScore', {score})
 		},
