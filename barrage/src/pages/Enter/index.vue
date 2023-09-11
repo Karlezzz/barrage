@@ -53,7 +53,7 @@ export default {
 	},
   computed:{
     $roomCode() {
-      return this.$store.state.enter.roomCode || 'RoomCode'
+      return this.$store.state.enter.roomCode || sessionStorage.getItem('roomCode') || 'RoomCode'
     }
   },
 	methods: {
