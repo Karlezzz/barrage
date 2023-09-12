@@ -37,7 +37,7 @@
 						</div>
 						<div class="word">修改名称</div>
 					</div>
-					<div
+					<!-- <div
 						class="card"
 						@click="showSonFunction(2)"
 					>
@@ -48,7 +48,7 @@
 							/>
 						</div>
 						<div class="word">举手弹幕</div>
-					</div>
+					</div> -->
 					<div
 						class="card"
 						@click="showSonFunction(3)"
@@ -93,11 +93,11 @@
 			@onSubmitName="onSubmitName"
 			@onCloseChangeName="onCloseChangeName"
 		></ChangeName>
-		<Hand
+		<!-- <Hand
 			:isShowHand="sonFunctionState.isShowHand"
 			@getCloseHand="getCloseHand"
 			@handedMessageClose="handedMessageClose"
-		></Hand>
+		></Hand> -->
 		<Score
 			:isShowScore="sonFunctionState.isShowScore"
 			@getCloseScore="getCloseScore"
