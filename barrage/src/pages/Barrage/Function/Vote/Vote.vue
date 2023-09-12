@@ -28,7 +28,7 @@
 				>
 					<div
 						class="historyVote"
-						v-if="!isShowDetail"
+						v-if="!isShowDetail && !isShowSelect"
 					>
 						<div
 							class="historyVoteItem"
@@ -51,6 +51,22 @@
 						v-if="isShowDetail"
 					></div>
 				</transition>
+
+				<transition
+					enter-active-class="animate__animated animate__fadeInUp animate__faster"
+					leave-active-class="animate__animated animate__fadeOutLeft animate__faster"
+				>
+					<div
+						class="__select"
+					>
+            <div class="__question">how to do that</div>
+            <div class="__selectOptions">
+              <div class="__option">1</div>
+              <div class="__option">2</div>
+              <div class="__option">3</div>
+            </div>
+          </div>
+				</transition>
 			</div>
 		</div>
 	</transition>
@@ -62,7 +78,9 @@ export default {
 	data() {
 		return {
 			isShowDetail: false,
+			isShowSelect: false,
 			myEcharts: null,
+      selectedVote:null
 		}
 	},
 	props: ['isShowVote'],
@@ -70,11 +88,19 @@ export default {
 		voteList() {
 			return this.$store.state.vote.votes || []
 		},
+		showSelectOrDetail() {
+			return false
+		},
 	},
 	methods: {
 		showDetail(vote) {
-			this.isShowDetail = true
-			this.charts(this.convert(vote))
+			if (vote.isInValidTime()) {
+				this.isShowSelect = true
+        this.selectedVote = vote
+			} else {
+				this.isShowDetail = true
+				this.charts(this.convert(vote))
+			}
 		},
 		charts(option) {
 			const ch = new Promise((resolve, reject) => {
@@ -137,12 +163,12 @@ export default {
 			return option
 		},
 	},
-  watch: {
+	watch: {
 		voteList: {
 			deep: true,
 			handler() {
 				const newVote = this.historyVoteList[this.historyVoteList.length - 1]
-        this.myEcharts.dispose()
+				this.myEcharts.dispose()
 				this.charts(this.convert(newVote))
 			},
 		},
@@ -151,6 +177,47 @@ export default {
 </script>
 
 <style scoped>
+.__select{
+	background-color: #41414192;
+  position: absolute;
+	top: 20%;
+	left: 0;
+	width: 100%;
+	height: 80%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+  flex-direction: column;
+	overflow: scroll;
+}
+
+.__select .__question {
+  color: white;
+  width: 90%;
+  height: 30%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.__select .__selectOptions {
+  width: 90%;
+  height: 100%;
+  overflow: scroll;
+}
+
+.__select .__selectOptions .__option {
+  color: white;
+  background-color: #25252592;
+  width: 80%;
+  height: 30%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  margin-bottom: 5%;
+  margin-left: 10%;
+}
+
 .box_son {
 	position: absolute;
 	top: 0;
