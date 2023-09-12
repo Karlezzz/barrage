@@ -56,16 +56,12 @@
 					enter-active-class="animate__animated animate__fadeInUp animate__faster"
 					leave-active-class="animate__animated animate__fadeOutLeft animate__faster"
 				>
-					<div
-						class="__select"
-					>
-            <div class="__question">how to do that</div>
-            <div class="__selectOptions">
-              <div class="__option">1</div>
-              <div class="__option">2</div>
-              <div class="__option">3</div>
-            </div>
-          </div>
+					<div class="__select" v-if="isShowSelect">
+						<div class="__question">how to do that</div>
+						<div class="__selectOptions">
+							<div class="__option" v-for="(i,idx) in voteOptions" :key="idx">{{ i.optionValue }}</div>
+						</div>
+					</div>
 				</transition>
 			</div>
 		</div>
@@ -80,7 +76,7 @@ export default {
 			isShowDetail: false,
 			isShowSelect: false,
 			myEcharts: null,
-      selectedVote:null
+			selectedVote: null,
 		}
 	},
 	props: ['isShowVote'],
@@ -91,12 +87,16 @@ export default {
 		showSelectOrDetail() {
 			return false
 		},
+		voteOptions() {
+			const { voteOptions } = this.selectedVote
+			return voteOptions
+		},
 	},
 	methods: {
 		showDetail(vote) {
 			if (vote.isInValidTime()) {
 				this.isShowSelect = true
-        this.selectedVote = vote
+				this.selectedVote = vote
 			} else {
 				this.isShowDetail = true
 				this.charts(this.convert(vote))
@@ -177,47 +177,6 @@ export default {
 </script>
 
 <style scoped>
-.__select{
-	background-color: #41414192;
-  position: absolute;
-	top: 20%;
-	left: 0;
-	width: 100%;
-	height: 80%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-  flex-direction: column;
-	overflow: scroll;
-}
-
-.__select .__question {
-  color: white;
-  width: 90%;
-  height: 30%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.__select .__selectOptions {
-  width: 90%;
-  height: 100%;
-  overflow: scroll;
-}
-
-.__select .__selectOptions .__option {
-  color: white;
-  background-color: #25252592;
-  width: 80%;
-  height: 30%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 10px;
-  margin-bottom: 5%;
-  margin-left: 10%;
-}
-
 .box_son {
 	position: absolute;
 	top: 0;
@@ -277,14 +236,11 @@ export default {
 	background-color: #41414192;
 	border-radius: 10%;
 	margin: 5px 5px;
-
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	color: white;
 	font-size: 10px;
-	/* padding: 0 2px 0 2px; */
-
 	overflow: scroll;
 }
 
@@ -293,5 +249,46 @@ export default {
 	top: 10%;
 	width: 90%;
 	height: 80%;
+}
+
+.__select {
+	background-color: #41414192;
+	position: absolute;
+	top: 20%;
+	left: 0;
+	width: 100%;
+	height: 80%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	overflow: scroll;
+}
+
+.__select .__question {
+	color: white;
+	width: 90%;
+	height: 30%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.__select .__selectOptions {
+	width: 90%;
+	height: 100%;
+	overflow: scroll;
+}
+
+.__select .__selectOptions .__option {
+	color: white;
+	background-color: #25252592;
+	width: 80%;
+	height: 30%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 10px;
+	margin-bottom: 5%;
+	margin-left: 10%;
 }
 </style>
