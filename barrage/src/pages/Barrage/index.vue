@@ -78,7 +78,7 @@
 								alt=""
 							/>
 							<img
-								v-if="!isSun&&!isCleanBG"
+								v-if="!isSun && !isCleanBG"
 								key="2"
 								src="./images/夜间模式.png"
 								alt=""
@@ -176,7 +176,7 @@
 				@getCloseFunction="getCloseFunction"
 				@onSubmitScore="onSubmitScore"
 				@onSubmitComment="onSubmitComment"
-        @onSubmitVote="onSubmitVote"
+				@onSubmitVote="onSubmitVote"
 			></Function>
 			<VoteInform
 				:isShowVoteInform="isShowVoteInform"
@@ -270,13 +270,16 @@ export default {
 				console.log(error)
 			}
 		},
-    async onSubmitVote({voteResult}) {
-      try {
-        const result = await _updateOne(endpoint.vote, voteResult)
-      } catch (error) {
-        console.log(error);
-      }
-    },
+		async onSubmitVote({ voteResult }) {
+			try {
+				const result = await _updateOne(endpoint.vote, {
+					...voteResult,
+					id: voteResult.vote.id,
+				})
+			} catch (error) {
+				console.log(error)
+			}
+		},
 		getUser(item) {
 			return item.user
 		},
@@ -393,9 +396,9 @@ export default {
 		closeIsShowChat(value) {
 			this.isShowChat = value
 		},
-		onSubmitMoreMessage({newMessage}) {
+		onSubmitMoreMessage({ newMessage }) {
 			this.isShowChat = false
-      try {
+			try {
 				this.socket.emit('sendMsg', JSON.stringify(newMessage))
 			} catch (error) {
 				console.log(error)
@@ -601,12 +604,11 @@ export default {
 .bar .title {
 	flex: 0.07;
 	text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: row;
 }
-
 
 .bar .title .home {
 	display: inline-block;
@@ -636,9 +638,9 @@ export default {
 	height: 20px;
 	border-radius: 10px;
 	color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .bar .title .cleanBC .changeBG {
@@ -659,7 +661,7 @@ export default {
 	font-size: 105%;
 	color: rgb(248, 248, 248);
 	font-weight: 500;
-  margin-bottom: 5%;
+	margin-bottom: 5%;
 }
 
 .bar .title .backgroundChange {
