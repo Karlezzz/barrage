@@ -61,8 +61,7 @@
 							/>
 						</div>
 					</div>
-
-					<span>Barrage Room</span>
+					<div class="__content">Barrage Room</div>
 					<div
 						class="backgroundChange"
 						@click="changeBG"
@@ -602,7 +601,12 @@ export default {
 .bar .title {
 	flex: 0.07;
 	text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
 }
+
 
 .bar .title .home {
 	display: inline-block;
@@ -626,9 +630,9 @@ export default {
 	position: absolute;
 	top: 20px;
 	left: 15%;
-	font-size: 12px;
+	font-size: 10px;
 	border: 1px solid white;
-	width: 60px;
+	width: 50px;
 	height: 20px;
 	border-radius: 10px;
 	color: white;
@@ -639,7 +643,7 @@ export default {
 	width: 20px;
 	height: 20px;
 	position: absolute;
-	top: -1%;
+	top: 0%;
 	left: 105%;
 }
 
@@ -648,13 +652,11 @@ export default {
 	height: 100%;
 }
 
-.bar .title span {
-	display: inline-block;
-	font-size: 110%;
-	letter-spacing: 2px;
+.bar .title .__content {
+	font-size: 105%;
 	color: rgb(248, 248, 248);
 	font-weight: 500;
-	padding-top: 10px;
+  margin-bottom: 5%;
 }
 
 .bar .title .backgroundChange {
