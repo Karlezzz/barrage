@@ -636,6 +636,9 @@ export default {
 	height: 20px;
 	border-radius: 10px;
 	color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .bar .title .cleanBC .changeBG {
