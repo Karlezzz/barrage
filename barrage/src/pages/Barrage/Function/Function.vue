@@ -35,9 +35,9 @@
 								alt=""
 							/>
 						</div>
-						<div class="word">修改名称</div>
+						<div class="word">Change Name</div>
 					</div>
-					<div
+					<!-- <div
 						class="card"
 						@click="showSonFunction(2)"
 					>
@@ -48,7 +48,7 @@
 							/>
 						</div>
 						<div class="word">举手弹幕</div>
-					</div>
+					</div> -->
 					<div
 						class="card"
 						@click="showSonFunction(3)"
@@ -59,7 +59,7 @@
 								alt=""
 							/>
 						</div>
-						<div class="word">阶段打分</div>
+						<div class="word">Score</div>
 					</div>
 					<div
 						class="card"
@@ -71,7 +71,7 @@
 								alt=""
 							/>
 						</div>
-						<div class="word">评价建议</div>
+						<div class="word">Advise</div>
 					</div>
 					<div
 						class="card"
@@ -83,7 +83,7 @@
 								alt=""
 							/>
 						</div>
-						<div class="word">历史投票</div>
+						<div class="word">Vote</div>
 					</div>
 				</div>
 			</div>
@@ -93,11 +93,11 @@
 			@onSubmitName="onSubmitName"
 			@onCloseChangeName="onCloseChangeName"
 		></ChangeName>
-		<Hand
+		<!-- <Hand
 			:isShowHand="sonFunctionState.isShowHand"
 			@getCloseHand="getCloseHand"
 			@handedMessageClose="handedMessageClose"
-		></Hand>
+		></Hand> -->
 		<Score
 			:isShowScore="sonFunctionState.isShowScore"
 			@getCloseScore="getCloseScore"
@@ -112,6 +112,7 @@
 		<Vote
 			:isShowVote="sonFunctionState.isShowVote"
 			@getCloseVote="getCloseVote"
+      @onSubmitVote="onSubmitVote"
 		></Vote>
 	</div>
 </template>
@@ -139,12 +140,15 @@ export default {
 	},
 	components: {
 		ChangeName,
-		Hand,
+		// Hand,
 		Score,
 		Advice,
 		Vote,
 	},
 	methods: {
+    onSubmitVote({voteResult}){
+      this.$emit('onSubmitVote', { voteResult })
+    },
 		onSubmitName({ name }) {
 			this.$emit('onSubmitName', { name })
       this.closeFunction()
