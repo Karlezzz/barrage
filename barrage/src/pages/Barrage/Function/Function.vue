@@ -35,7 +35,7 @@
 								alt=""
 							/>
 						</div>
-						<div class="word">修改名称</div>
+						<div class="word">Change Name</div>
 					</div>
 					<!-- <div
 						class="card"
@@ -59,7 +59,7 @@
 								alt=""
 							/>
 						</div>
-						<div class="word">阶段打分</div>
+						<div class="word">Score</div>
 					</div>
 					<div
 						class="card"
@@ -71,7 +71,7 @@
 								alt=""
 							/>
 						</div>
-						<div class="word">评价建议</div>
+						<div class="word">Advise</div>
 					</div>
 					<div
 						class="card"
@@ -83,7 +83,7 @@
 								alt=""
 							/>
 						</div>
-						<div class="word">历史投票</div>
+						<div class="word">Vote</div>
 					</div>
 				</div>
 			</div>

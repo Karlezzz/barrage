@@ -4,7 +4,6 @@
 		class="background"
 		:style="{ background: isCleanBG ? this.global.staticBG : '#626262' }"
 	>
-		<!-- 卡片背景 -->
 		<div class="box animate__zoomIn animate__animated">
 			<div class="bar animate__zoomIn animate__animated">
 				<div class="title">
@@ -42,7 +41,7 @@
 							class="cleanBC_son"
 							@click="cleanBackground"
 						>
-							{{ this.isCleanBG == true ? '简洁背景' : '正常背景' }}
+							{{ this.isCleanBG == true ? 'Clear' : 'Normal' }}
 						</div>
 
 						<div
@@ -63,7 +62,7 @@
 						</div>
 					</div>
 
-					<span>弹幕室</span>
+					<span>Barrage Room</span>
 					<div
 						class="backgroundChange"
 						@click="changeBG"
@@ -142,7 +141,7 @@
 					<div class="input">
 						<input
 							type="text"
-							placeholder="快来发言吧..."
+							placeholder="Come and speak"
 							v-model="inputContent"
 							@keyup.enter="sendNewContent"
 						/>

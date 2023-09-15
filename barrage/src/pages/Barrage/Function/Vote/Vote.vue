@@ -56,10 +56,19 @@
 					enter-active-class="animate__animated animate__fadeInUp animate__faster"
 					leave-active-class="animate__animated animate__fadeOutLeft animate__faster"
 				>
-					<div class="__select" v-if="isShowSelect">
+					<div
+						class="__select"
+						v-if="isShowSelect"
+					>
 						<div class="__question">how to do that</div>
 						<div class="__selectOptions">
-							<div class="__option" v-for="(i,idx) in voteOptions" :key="idx">{{ i.optionValue }}</div>
+							<div
+								class="__option"
+								v-for="(i, idx) in voteOptions"
+								:key="idx"
+							>
+								{{ i.optionValue }}
+							</div>
 						</div>
 					</div>
 				</transition>
