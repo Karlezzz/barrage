@@ -276,6 +276,9 @@ export default {
 					...voteResult,
 					id: voteResult.vote.id,
 				})
+        if(result) {
+          this.$store.commit('vote/UPDATEALLVOTES', result)
+        }
 			} catch (error) {
 				console.log(error)
 			}
