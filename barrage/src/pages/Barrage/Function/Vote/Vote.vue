@@ -60,12 +60,13 @@
 						class="__select"
 						v-if="isShowSelect"
 					>
-						<div class="__question">how to do that</div>
+						<div class="__question">{{ selectQuestion }}</div>
 						<div class="__selectOptions">
 							<div
 								class="__option"
 								v-for="(i, idx) in voteOptions"
 								:key="idx"
+								@click="selectVoteOption(i)"
 							>
 								{{ i.optionValue }}
 							</div>
@@ -98,10 +99,26 @@ export default {
 		},
 		voteOptions() {
 			const { voteOptions } = this.selectedVote
-			return voteOptions
+			return voteOptions ? voteOptions : null
+		},
+		selectQuestion() {
+			return this.selectedVote.question
+		},
+		user() {
+			return this.$store.state.enter.userLogin
 		},
 	},
 	methods: {
+		selectVoteOption(option) {
+			const voteResult = {
+				vote: this.vote,
+				user: this.user,
+				option,
+			}
+			this.$emit('onSubmitVote', { voteResult })
+      this.isShowDetail = false
+      this.isShowDetail = true
+		},
 		showDetail(vote) {
 			if (vote.isInValidTime()) {
 				this.isShowSelect = true
@@ -121,10 +138,12 @@ export default {
 			})
 		},
 		back() {
-			if (this.isShowDetail == true) {
+			if (this.isShowSelect) {
+				this.isShowSelect = !this.isShowSelect
+			} else if (this.isShowDetail) {
 				this.myEcharts.dispose()
-				this.isShowDetail = false
-			} else if (this.isShowDetail == false) {
+				this.isShowDetail = !this.isShowDetail
+			} else if (!this.isShowDetail && !this.isShowSelect) {
 				this.$emit('getCloseVote', false)
 			}
 		},

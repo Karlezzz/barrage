@@ -112,6 +112,7 @@
 		<Vote
 			:isShowVote="sonFunctionState.isShowVote"
 			@getCloseVote="getCloseVote"
+      @onSubmitVote="onSubmitVote"
 		></Vote>
 	</div>
 </template>
@@ -139,12 +140,15 @@ export default {
 	},
 	components: {
 		ChangeName,
-		Hand,
+		// Hand,
 		Score,
 		Advice,
 		Vote,
 	},
 	methods: {
+    onSubmitVote({voteResult}){
+      this.$emit('onSubmitVote', { voteResult })
+    },
 		onSubmitName({ name }) {
 			this.$emit('onSubmitName', { name })
       this.closeFunction()

@@ -177,6 +177,7 @@
 				@getCloseFunction="getCloseFunction"
 				@onSubmitScore="onSubmitScore"
 				@onSubmitComment="onSubmitComment"
+        @onSubmitVote="onSubmitVote"
 			></Function>
 			<VoteInform
 				:isShowVoteInform="isShowVoteInform"
@@ -270,6 +271,13 @@ export default {
 				console.log(error)
 			}
 		},
+    async onSubmitVote({voteResult}) {
+      try {
+        const result = await _updateOne(endpoint.vote, voteResult)
+      } catch (error) {
+        console.log(error);
+      }
+    },
 		getUser(item) {
 			return item.user
 		},
