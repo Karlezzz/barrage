@@ -11,6 +11,11 @@ class Vote {
     this.voteOptions = VoteOption.initFromArray(options.voteOptions) || []
   }
 
+  isInValidTime() {
+    const now = new Date().valueOf()
+    return now <= this.endTime ? true : false
+  }
+
   get isValid() {
     return !!this.question
     && !!this.voteOptions

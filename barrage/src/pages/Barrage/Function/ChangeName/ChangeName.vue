@@ -15,13 +15,13 @@
 			<div class="body">
 				<input
 					type="text"
-					placeholder="换个名称..."
+					placeholder="Input new name"
 					v-model="newName"
 				/>
 			</div>
 			<div class="foot">
-				<button @click="onCloseChangeName">返回</button>
-				<button @click="onSubmitName">确认</button>
+				<button @click="onCloseChangeName">Back</button>
+				<button @click="onSubmitName">Confirm</button>
 			</div>
 		</div>
 	</transition>

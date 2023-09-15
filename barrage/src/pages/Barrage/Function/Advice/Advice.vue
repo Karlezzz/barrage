@@ -19,12 +19,12 @@
 					cols="20"
 					rows="3"
 					v-model="advice"
-					placeholder="留下宝贵建议..."
+					placeholder="Please leave valuable suggestions"
 				></textarea>
 			</div>
 			<div class="foot">
-				<button @click="closeAdvice">取消</button>
-				<button @click="onSubmitComment">提交</button>
+				<button @click="closeAdvice">Cancel</button>
+				<button @click="onSubmitComment">Confirm</button>
 			</div>
 		</div>
 	</transition>
