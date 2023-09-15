@@ -26,8 +26,8 @@
 					/>
 				</div>
 				<div class="button">
+          <button @click.prevent="reset">Reset</button>
 					<button @click.prevent="addRoom">Enter</button>
-					<button @click.prevent="reset">Reset</button>
 				</div>
 			</form>
 		</div>
