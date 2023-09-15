@@ -19,7 +19,7 @@
 					cols="20"
 					rows="3"
 					v-model="advice"
-					placeholder="Please leave valuable suggestions"
+					placeholder="Please leave valuable suggestions..."
 				></textarea>
 			</div>
 			<div class="foot">
@@ -97,7 +97,6 @@ export default {
 	padding-left: 10px;
 	background-color: rgba(255, 255, 255, 0);
 	color: white;
-	letter-spacing: 2px;
 }
 
 .box_son .body textarea:focus {
@@ -106,6 +105,7 @@ export default {
 
 .box_son .body textarea::placeholder {
 	color: white;
+  padding-top: 4%;
 }
 
 .box_son .foot {
@@ -126,8 +126,10 @@ export default {
 	border: none;
 	color: white;
 	font-size: 100%;
-	letter-spacing: 5px;
-	text-align: center;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .box_son .foot button:nth-child(1) {

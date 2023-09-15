@@ -641,6 +641,7 @@ export default {
 	top: 20px;
 	left: 15%;
 	font-size: 10px;
+  font-weight: 600;
 	border: 1px solid white;
 	width: 50px;
 	height: 20px;
@@ -668,7 +669,7 @@ export default {
 .bar .title .__content {
 	font-size: 105%;
 	color: rgb(248, 248, 248);
-	font-weight: 500;
+	font-weight: 600;
 	margin-bottom: 5%;
 }
 

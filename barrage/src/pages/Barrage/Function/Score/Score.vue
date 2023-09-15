@@ -114,8 +114,10 @@ export default {
 	border: none;
 	color: white;
 	font-size: 100%;
-	letter-spacing: 5px;
-	text-align: center;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .box_son .foot button:nth-child(1) {
