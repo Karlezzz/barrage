@@ -39,13 +39,14 @@ import * as THREE from 'three'
 import Clouds from 'vanta/src/vanta.clouds'
 import { nanoid } from 'nanoid'
 import { _createOne } from '@/api/index'
+import { getUserName } from '../../../lib/helper/userName'
 export default {
 	// eslint-disable-next-line vue/multi-word-component-names
 	name: 'Enter',
 	data() {
 		return {
 			roomCode: null,
-			username: new Date().getTime(),
+			username: getUserName(),
 			password: null,
 			isSun: this.global.getIsSun(),
 			isCleanBG: this.global.getIsCleanBG(),
@@ -65,10 +66,6 @@ export default {
 			this.password = ''
 		},
 		async addRoom() {
-      // if(typeof Number(this.roomCode) !== 'number') {
-      //   alert('Room code is number')
-      //   return
-      // }
 			try {
 				const result = await _createOne('/user', {
 					name: this.username,
@@ -131,7 +128,6 @@ export default {
 	},
 
 	beforeDestroy() {
-		//动态背景配置
 		if (this.vantaEffect) {
 			this.vantaEffect.destroy()
 		}
