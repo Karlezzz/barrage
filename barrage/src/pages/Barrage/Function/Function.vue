@@ -312,7 +312,8 @@ export default {
 }
 
 .body .card .word {
-	font-size: 70%;
+	font-size: 75%;
+  font-weight: 600;
 	margin-top: 5px;
 	text-align: center;
 	color: white;

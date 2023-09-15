@@ -72,7 +72,6 @@ export default {
 	width: 90%;
 	height: 30%;
 	border-radius: 30px;
-	background-color: #626262;
 }
 
 .box .body {

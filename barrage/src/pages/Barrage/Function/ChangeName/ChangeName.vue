@@ -20,7 +20,7 @@
 				/>
 			</div>
 			<div class="foot">
-				<button @click="onCloseChangeName">Back</button>
+				<button @click="onCloseChangeName">Cancel</button>
 				<button @click="onSubmitName">Confirm</button>
 			</div>
 		</div>
@@ -105,8 +105,10 @@ export default {
 	border: none;
 	color: white;
 	font-size: 100%;
-	letter-spacing: 5px;
-	text-align: center;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .box .foot button:nth-child(1) {
