@@ -276,9 +276,9 @@ export default {
 					...voteResult,
 					id: voteResult.vote.id,
 				})
-        if(result) {
-          this.$store.commit('vote/UPDATEALLVOTES', result)
-        }
+				// if (result) {
+				// 	this.$store.commit('vote/UPDATEALLVOTES', result)
+				// }
 			} catch (error) {
 				console.log(error)
 			}
@@ -464,9 +464,14 @@ export default {
 						transports: ['websocket'],
 					})
 					this.socket.removeAllListeners()
+
 					this.socket.on('broadcast', data => {
 						const replyMessage = Message.init(JSON.parse(data))
 						this.messageContent.push(replyMessage)
+					})
+
+					this.socket.on('updateVote', data => {
+						this.$store.commit('vote/UPDATEALLVOTES', data)
 					})
 				}
 			} catch (error) {
