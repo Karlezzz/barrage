@@ -73,13 +73,13 @@
 							leave-active-class="animate__animated animate__zoomOut animate__faster"
 						>
 							<img
-								v-if="isSun"
+								v-if="isSun && !isCleanBG"
 								key="1"
 								src="./images/白天模式，明亮模式.png"
 								alt=""
 							/>
 							<img
-								v-if="!isSun"
+								v-if="!isSun&&!isCleanBG"
 								key="2"
 								src="./images/夜间模式.png"
 								alt=""
