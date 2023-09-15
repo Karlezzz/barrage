@@ -196,7 +196,7 @@ export default {
 		voteList: {
 			deep: true,
 			handler() {
-				const newVote = this.historyVoteList[this.historyVoteList.length - 1]
+				const newVote = this.voteList[this.voteList.length - 1]
 				this.myEcharts.dispose()
 				this.charts(this.convert(newVote))
 			},
