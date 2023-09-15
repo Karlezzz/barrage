@@ -111,13 +111,14 @@ export default {
 	methods: {
 		selectVoteOption(option) {
 			const voteResult = {
-				vote: this.vote,
+				vote: this.selectedVote,
 				user: this.user,
 				option,
 			}
 			this.$emit('onSubmitVote', { voteResult })
-      this.isShowDetail = false
+      this.isShowSelect = false
       this.isShowDetail = true
+      this.charts(this.convert(this.selectedVote))
 		},
 		showDetail(vote) {
 			if (vote.isInValidTime()) {
