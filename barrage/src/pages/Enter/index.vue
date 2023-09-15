@@ -176,11 +176,16 @@ export default {
 	border-radius: 10px;
 	box-shadow: 0 20px 20px 0 rgb(0, 0, 0, 0.3);
 	background: rgba(140, 127, 127, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .login form .title {
 	position: relative;
-	margin: 20px 0 20px 30px;
+	/* margin: 20px 0 20px 30px; */
+  margin-left: -65%;
 	font-size: 20px;
 	font-weight: 600;
 	color: #ffffff;
@@ -197,9 +202,11 @@ export default {
 }
 
 .login form .input {
-	margin: 10px 0 0 20px;
+	/* margin: 10px 0 0 20px; */
+  /* margin-left: -5%; */
+  margin-top: 5%;
 	height: 170px;
-	width: 85%;
+	width: 90%;
 }
 
 .login form .input input {
@@ -212,7 +219,8 @@ export default {
 	border-radius: 35px;
 	box-shadow: 0 10px 5px 0 rgb(0, 0, 0, 0.2);
 	background: rgba(255, 255, 255, 0.168);
-	color: rgba(255, 255, 255, 0.911);
+	color: rgba(255, 255, 255, 0.947);
+  font-size: 85%;
 }
 
 .login form .input input:focus {
@@ -234,8 +242,14 @@ export default {
 	color: rgba(255, 255, 255, 0.781);
 }
 
+.button{
+  width: 80%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
 .login form button {
-	margin: 0px 0 0 20px;
+	/* margin: 0px 0 0 20px; */
 	width: 100px;
 	height: 35px;
 	border: none;
