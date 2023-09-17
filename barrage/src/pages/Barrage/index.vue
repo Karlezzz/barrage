@@ -177,11 +177,8 @@
 				@onSubmitScore="onSubmitScore"
 				@onSubmitComment="onSubmitComment"
 				@onSubmitVote="onSubmitVote"
+        @onGetAllVotes="onGetAllVotes"
 			></Function>
-			<VoteInform
-				:isShowVoteInform="isShowVoteInform"
-				@getCloseVote="getCloseVote"
-			></VoteInform>
 			<BGSelect
 				:isShowColor="isShowColor"
 				@getCloseColor="getCloseColor"
@@ -191,7 +188,6 @@
 </template>
 
 <script>
-import VoteInform from './VoteInform/VoteInform.vue'
 import Function from './Function/Function.vue'
 import More from './More/More.vue'
 import BGSelect from './BackgroundSelect/BGSelect.vue'
@@ -209,7 +205,6 @@ export default {
 	components: {
 		More,
 		Function,
-		VoteInform,
 		BGSelect,
 	},
 	data() {
@@ -238,6 +233,9 @@ export default {
 		},
 	},
 	methods: {
+    async onGetAllVotes() {
+      await this.getAllVotes()
+    },
 		async getAllVotes() {
 			await this.$store.dispatch('vote/getAllVotes')
 		},
@@ -471,7 +469,7 @@ export default {
 					})
 
 					this.socket.on('updateVote', data => {
-						this.$store.commit('vote/UPDATEALLVOTES', data)
+						this.$store.commit('vote/UPDATEVOTE', data)
 					})
 				}
 			} catch (error) {
@@ -510,17 +508,6 @@ export default {
 	},
 	created() {
 		this.init()
-
-		// //接收举手弹幕
-		// this.$bus.$on('getHandMessage', value => {
-		// 	const handMessage = {
-		// 		name: this.name,
-		// 		id: this.myId,
-		// 		msg: value,
-		// 		type: 'strong',
-		// 	}
-		// 	this.messageContent.push(handMessage)
-		// })
 	},
 	beforeDestroy() {
 		if (this.vantaEffect) {

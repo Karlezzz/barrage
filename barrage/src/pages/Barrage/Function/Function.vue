@@ -163,7 +163,10 @@ export default {
 			if (fun == 2) this.sonFunctionState.isShowHand = true
 			if (fun == 3) this.sonFunctionState.isShowScore = true
 			if (fun == 4) this.sonFunctionState.isShowAdvice = true
-			if (fun == 5) this.sonFunctionState.isShowVote = true
+			if (fun == 5) {
+        this.sonFunctionState.isShowVote = true
+        this.$emit('onGetAllVotes')
+      }
 		},
 		closeFunction() {
 			//关闭Function组件界面

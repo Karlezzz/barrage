@@ -79,6 +79,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
 	name: 'Vote',
 	data() {
@@ -91,9 +92,9 @@ export default {
 	},
 	props: ['isShowVote'],
 	computed: {
-		voteList() {
-			return this.$store.state.vote.votes || []
-		},
+		// voteList() {
+		// 	return this.$store.state.vote.votes || []
+		// },
 		showSelectOrDetail() {
 			return false
 		},
@@ -107,6 +108,10 @@ export default {
 		user() {
 			return this.$store.state.enter.userLogin
 		},
+    ...mapGetters('vote',{
+      voteList: 'votes'
+    })
+
 	},
 	methods: {
 		selectVoteOption(option) {
@@ -154,7 +159,7 @@ export default {
 				return {
 					...vo,
 					name: vo.optionValue,
-					value: vo.selectMembers.length,
+					value: vo.selectMembersId.length,
 				}
 			})
 			const option = {
@@ -192,13 +197,16 @@ export default {
 			return option
 		},
 	},
-	watch: {
+  watch: {
 		voteList: {
 			deep: true,
-			handler() {
+			handler(newV, oldV) {
+				if (newV.length !== oldV) return
+				if (!this.isShowDetail) return
 				const newVote = this.voteList[this.voteList.length - 1]
 				this.myEcharts.dispose()
 				this.charts(this.convert(newVote))
+        
 			},
 		},
 	},
