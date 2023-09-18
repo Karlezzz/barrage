@@ -79,6 +79,8 @@
 </template>
 
 <script>
+import { Vote } from '../../../../../lib/models'
+import { mapGetters } from 'vuex'
 export default {
 	name: 'Vote',
 	data() {
@@ -91,9 +93,6 @@ export default {
 	},
 	props: ['isShowVote'],
 	computed: {
-		voteList() {
-			return this.$store.state.vote.votes || []
-		},
 		showSelectOrDetail() {
 			return false
 		},
@@ -107,6 +106,9 @@ export default {
 		user() {
 			return this.$store.state.enter.userLogin
 		},
+		...mapGetters('vote', {
+			voteList: 'votes',
+		}),
 	},
 	methods: {
 		selectVoteOption(option) {
@@ -115,13 +117,12 @@ export default {
 				user: this.user,
 				option,
 			}
+			this.isShowSelect = false
+			this.isShowDetail = true
 			this.$emit('onSubmitVote', { voteResult })
-      this.isShowSelect = false
-      this.isShowDetail = true
-      this.charts(this.convert(this.selectedVote))
 		},
 		showDetail(vote) {
-			if (vote.isInValidTime()) {
+			if (vote.isInValidTime() && vote.hasVoted(this.user,vote)) {
 				this.isShowSelect = true
 				this.selectedVote = vote
 			} else {
@@ -154,7 +155,7 @@ export default {
 				return {
 					...vo,
 					name: vo.optionValue,
-					value: vo.selectMembers.length,
+					value: vo.selectMembersId.length,
 				}
 			})
 			const option = {
@@ -195,10 +196,18 @@ export default {
 	watch: {
 		voteList: {
 			deep: true,
-			handler() {
-				const newVote = this.voteList[this.voteList.length - 1]
-				this.myEcharts.dispose()
-				this.charts(this.convert(newVote))
+			handler(newV, oldV) {
+				if (!this.selectedVote) return
+				const { id } = this.selectedVote
+				this.selectedVote = this.voteList.find(v => {
+					return v.id === id
+				})
+				if (this.myEcharts) {
+          this.myEcharts.dispose()
+        }
+        if(this.selectedVote) {
+          this.charts(this.convert(this.selectedVote))
+        }
 			},
 		},
 	},

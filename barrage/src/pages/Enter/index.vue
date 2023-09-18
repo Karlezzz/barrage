@@ -41,7 +41,6 @@ import { nanoid } from 'nanoid'
 import { _createOne } from '@/api/index'
 import { getUserName } from '../../../lib/helper/userName'
 export default {
-	// eslint-disable-next-line vue/multi-word-component-names
 	name: 'Enter',
 	data() {
 		return {

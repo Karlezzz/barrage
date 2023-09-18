@@ -16,12 +16,22 @@ class Vote {
     return now <= this.endTime ? true : false
   }
 
+  hasVoted(user, vote) {
+    const { id } = user
+    const { voteOptions } = vote
+    const userId = voteOptions.reduce((acc, o) => {
+      return acc = acc.concat(o.selectMembersId)
+    }, [])
+    if (userId.find(u => u === id)) return false
+    return true
+  }
+
   get isValid() {
     return !!this.question
-    && !!this.voteOptions
-    && this.voteOptions.length >= 2
-    && this.created
-    && this.duration
+      && !!this.voteOptions
+      && this.voteOptions.length >= 2
+      && this.created
+      && this.duration
   }
 
   static init(options = {}) {

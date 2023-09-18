@@ -3,49 +3,19 @@ import { endpoint } from '@/api/ednpoint'
 const { Vote } = require('../../../lib/models')
 
 const state = {
-  votes: Vote.initFromArray([{
-    question: 'How to learn Vue?',
-    id:'111',
-    content: 'test',
-    duration: 600000,
-    voteOptions: [
-      {
-        id: 'A2HRJMCVVvUZEMSJqzQQl',
-        optionValue: 'Online',
-        selectMembers: [
-          { name: 'Tom', id: '001' },
-          { name: 'Sam', id: '002' },
-        ],
-      },
-      {
-        id: 'A2HRJMCVVvUZEMSJqzQ23',
-        optionValue: 'Book',
-        selectMembers: [
-          { name: 'Karle', id: '011' },
-          { name: 'Mary', id: '032' },
-          { name: 'Don', id: '031' },
-        ],
-      },
-      {
-        id: 'A2HRJMCVVvUDUHFSJqzQ23',
-        optionValue: 'Class',
-        selectMembers: [
-          { name: 'Joe', id: '005' },
-          { name: 'Yan', id: '036' },
-          { name: 'Perry', id: '056' },
-        ],
-      },
-    ],
-  }]),
+  votes: []
 }
 const mutations = {
   SETVOTES(state, data) {
-    state.votes.push(data)
+    state.votes = data
   },
-  UPDATEALLVOTES(state,data) {
-    state.votes = []
-    state.votes = [data]
-  }
+  UPDATEVOTE(state, data) {
+    const { votes } = state
+    const originVoteIndex = votes.findIndex((v) => {
+      return v.id === data.id
+    })
+    state.votes.splice(originVoteIndex, 1, data)
+  },
 }
 const actions = {
   async getAllVotes({ commit }) {
@@ -61,9 +31,15 @@ const actions = {
     }
   },
 }
+
+const getters = {
+  votes: state => Vote.initFromArray(state.votes)
+}
+
 export default {
   namespaced: true,
   state,
   mutations,
   actions,
+  getters
 }
