@@ -4,7 +4,6 @@
 		class="background"
 		:style="{ background: isCleanBG ? this.global.staticBG : '#626262' }"
 	>
-		<!-- 卡片背景 -->
 		<div class="box animate__zoomIn animate__animated">
 			<div class="bar animate__zoomIn animate__animated">
 				<div class="title">
@@ -42,7 +41,7 @@
 							class="cleanBC_son"
 							@click="cleanBackground"
 						>
-							{{ this.isCleanBG == true ? '简洁背景' : '正常背景' }}
+							{{ this.isCleanBG == true ? 'Clear' : 'Normal' }}
 						</div>
 
 						<div
@@ -62,8 +61,7 @@
 							/>
 						</div>
 					</div>
-
-					<span>弹幕室</span>
+					<div class="__content">Barrage Room</div>
 					<div
 						class="backgroundChange"
 						@click="changeBG"
@@ -74,13 +72,13 @@
 							leave-active-class="animate__animated animate__zoomOut animate__faster"
 						>
 							<img
-								v-if="isSun"
+								v-if="isSun && !isCleanBG"
 								key="1"
 								src="./images/白天模式，明亮模式.png"
 								alt=""
 							/>
 							<img
-								v-if="!isSun"
+								v-if="!isSun && !isCleanBG"
 								key="2"
 								src="./images/夜间模式.png"
 								alt=""
@@ -142,7 +140,7 @@
 					<div class="input">
 						<input
 							type="text"
-							placeholder="快来发言吧..."
+							placeholder="Come and speak"
 							v-model="inputContent"
 							@keyup.enter="sendNewContent"
 						/>
@@ -178,11 +176,9 @@
 				@getCloseFunction="getCloseFunction"
 				@onSubmitScore="onSubmitScore"
 				@onSubmitComment="onSubmitComment"
+				@onSubmitVote="onSubmitVote"
+				@onGetAllVotes="onGetAllVotes"
 			></Function>
-			<VoteInform
-				:isShowVoteInform="isShowVoteInform"
-				@getCloseVote="getCloseVote"
-			></VoteInform>
 			<BGSelect
 				:isShowColor="isShowColor"
 				@getCloseColor="getCloseColor"
@@ -192,7 +188,6 @@
 </template>
 
 <script>
-import VoteInform from './VoteInform/VoteInform.vue'
 import Function from './Function/Function.vue'
 import More from './More/More.vue'
 import BGSelect from './BackgroundSelect/BGSelect.vue'
@@ -210,7 +205,6 @@ export default {
 	components: {
 		More,
 		Function,
-		VoteInform,
 		BGSelect,
 	},
 	data() {
@@ -239,6 +233,9 @@ export default {
 		},
 	},
 	methods: {
+		async onGetAllVotes() {
+			await this.getAllVotes()
+		},
 		async getAllVotes() {
 			await this.$store.dispatch('vote/getAllVotes')
 		},
@@ -267,6 +264,19 @@ export default {
 					return
 				}
 				alert('Successful')
+			} catch (error) {
+				console.log(error)
+			}
+		},
+		async onSubmitVote({ voteResult }) {
+			try {
+				const result = await _updateOne(endpoint.vote, {
+					...voteResult,
+					id: voteResult.vote.id,
+				})
+				if (result) {
+					this.$store.commit('vote/UPDATEVOTE', result)
+				}
 			} catch (error) {
 				console.log(error)
 			}
@@ -387,9 +397,9 @@ export default {
 		closeIsShowChat(value) {
 			this.isShowChat = value
 		},
-		onSubmitMoreMessage({newMessage}) {
+		onSubmitMoreMessage({ newMessage }) {
 			this.isShowChat = false
-      try {
+			try {
 				this.socket.emit('sendMsg', JSON.stringify(newMessage))
 			} catch (error) {
 				console.log(error)
@@ -452,9 +462,14 @@ export default {
 						transports: ['websocket'],
 					})
 					this.socket.removeAllListeners()
+
 					this.socket.on('broadcast', data => {
 						const replyMessage = Message.init(JSON.parse(data))
 						this.messageContent.push(replyMessage)
+					})
+
+					this.socket.on('updateVote', data => {
+						this.$store.commit('vote/UPDATEVOTE', data)
 					})
 				}
 			} catch (error) {
@@ -493,17 +508,6 @@ export default {
 	},
 	created() {
 		this.init()
-
-		// //接收举手弹幕
-		// this.$bus.$on('getHandMessage', value => {
-		// 	const handMessage = {
-		// 		name: this.name,
-		// 		id: this.myId,
-		// 		msg: value,
-		// 		type: 'strong',
-		// 	}
-		// 	this.messageContent.push(handMessage)
-		// })
 	},
 	beforeDestroy() {
 		if (this.vantaEffect) {
@@ -595,6 +599,10 @@ export default {
 .bar .title {
 	flex: 0.07;
 	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: row;
 }
 
 .bar .title .home {
@@ -619,12 +627,16 @@ export default {
 	position: absolute;
 	top: 20px;
 	left: 15%;
-	font-size: 12px;
+	font-size: 10px;
+	font-weight: 600;
 	border: 1px solid white;
-	width: 60px;
+	width: 50px;
 	height: 20px;
 	border-radius: 10px;
 	color: white;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .bar .title .cleanBC .changeBG {
@@ -632,7 +644,7 @@ export default {
 	width: 20px;
 	height: 20px;
 	position: absolute;
-	top: -1%;
+	top: 0%;
 	left: 105%;
 }
 
@@ -641,13 +653,11 @@ export default {
 	height: 100%;
 }
 
-.bar .title span {
-	display: inline-block;
-	font-size: 110%;
-	letter-spacing: 2px;
+.bar .title .__content {
+	font-size: 105%;
 	color: rgb(248, 248, 248);
-	font-weight: 500;
-	padding-top: 10px;
+	font-weight: 600;
+	margin-bottom: 5%;
 }
 
 .bar .title .backgroundChange {
