@@ -122,7 +122,7 @@ export default {
 			this.$emit('onSubmitVote', { voteResult })
 		},
 		showDetail(vote) {
-			if (vote.isInValidTime()) {
+			if (vote.isInValidTime() && vote.hasVoted(this.user,vote)) {
 				this.isShowSelect = true
 				this.selectedVote = vote
 			} else {
