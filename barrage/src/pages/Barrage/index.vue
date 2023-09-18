@@ -177,7 +177,7 @@
 				@onSubmitScore="onSubmitScore"
 				@onSubmitComment="onSubmitComment"
 				@onSubmitVote="onSubmitVote"
-        @onGetAllVotes="onGetAllVotes"
+				@onGetAllVotes="onGetAllVotes"
 			></Function>
 			<BGSelect
 				:isShowColor="isShowColor"
@@ -233,9 +233,9 @@ export default {
 		},
 	},
 	methods: {
-    async onGetAllVotes() {
-      await this.getAllVotes()
-    },
+		async onGetAllVotes() {
+			await this.getAllVotes()
+		},
 		async getAllVotes() {
 			await this.$store.dispatch('vote/getAllVotes')
 		},
@@ -274,9 +274,9 @@ export default {
 					...voteResult,
 					id: voteResult.vote.id,
 				})
-				// if (result) {
-				// 	this.$store.commit('vote/UPDATEALLVOTES', result)
-				// }
+				if (result) {
+					this.$store.commit('vote/UPDATEVOTE', result)
+				}
 			} catch (error) {
 				console.log(error)
 			}
@@ -628,7 +628,7 @@ export default {
 	top: 20px;
 	left: 15%;
 	font-size: 10px;
-  font-weight: 600;
+	font-weight: 600;
 	border: 1px solid white;
 	width: 50px;
 	height: 20px;

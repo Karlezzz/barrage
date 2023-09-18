@@ -79,6 +79,7 @@
 </template>
 
 <script>
+import { Vote } from '../../../../../lib/models'
 import { mapGetters } from 'vuex'
 export default {
 	name: 'Vote',
@@ -92,9 +93,6 @@ export default {
 	},
 	props: ['isShowVote'],
 	computed: {
-		// voteList() {
-		// 	return this.$store.state.vote.votes || []
-		// },
 		showSelectOrDetail() {
 			return false
 		},
@@ -108,10 +106,9 @@ export default {
 		user() {
 			return this.$store.state.enter.userLogin
 		},
-    ...mapGetters('vote',{
-      voteList: 'votes'
-    })
-
+		...mapGetters('vote', {
+			voteList: 'votes',
+		}),
 	},
 	methods: {
 		selectVoteOption(option) {
@@ -120,10 +117,9 @@ export default {
 				user: this.user,
 				option,
 			}
+			this.isShowSelect = false
+			this.isShowDetail = true
 			this.$emit('onSubmitVote', { voteResult })
-      this.isShowSelect = false
-      this.isShowDetail = true
-      this.charts(this.convert(this.selectedVote))
 		},
 		showDetail(vote) {
 			if (vote.isInValidTime()) {
@@ -197,16 +193,19 @@ export default {
 			return option
 		},
 	},
-  watch: {
+	watch: {
 		voteList: {
 			deep: true,
 			handler(newV, oldV) {
-				if (newV.length !== oldV) return
-				if (!this.isShowDetail) return
-				const newVote = this.voteList[this.voteList.length - 1]
-				this.myEcharts.dispose()
-				this.charts(this.convert(newVote))
-        
+				if (!this.selectedVote) return
+				const { id } = this.selectedVote
+				this.selectedVote = this.voteList.find(v => {
+					return v.id === id
+				})
+				if (this.myEcharts) {
+          this.myEcharts.dispose()
+        }
+				this.charts(this.convert(this.selectedVote))
 			},
 		},
 	},

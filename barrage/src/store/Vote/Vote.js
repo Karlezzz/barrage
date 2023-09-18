@@ -7,14 +7,14 @@ const state = {
 }
 const mutations = {
   SETVOTES(state, data) {
-    state.votes = [...data, ...state.votes].flat(1)
+    state.votes = data
   },
   UPDATEVOTE(state, data) {
     const { votes } = state
     const originVoteIndex = votes.findIndex((v) => {
       return v.id === data.id
     })
-    votes[originVoteIndex] = data
+    state.votes.splice(originVoteIndex, 1, data)
   },
 }
 const actions = {
@@ -33,9 +33,7 @@ const actions = {
 }
 
 const getters = {
-  votes(state) {
-    return Vote.initFromArray(state.votes)
-  }
+  votes: state => Vote.initFromArray(state.votes)
 }
 
 export default {
