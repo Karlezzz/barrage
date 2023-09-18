@@ -35,9 +35,9 @@
 								alt=""
 							/>
 						</div>
-						<div class="word">修改名称</div>
+						<div class="word">Change Name</div>
 					</div>
-					<div
+					<!-- <div
 						class="card"
 						@click="showSonFunction(2)"
 					>
@@ -48,7 +48,7 @@
 							/>
 						</div>
 						<div class="word">举手弹幕</div>
-					</div>
+					</div> -->
 					<div
 						class="card"
 						@click="showSonFunction(3)"
@@ -59,7 +59,7 @@
 								alt=""
 							/>
 						</div>
-						<div class="word">阶段打分</div>
+						<div class="word">Score</div>
 					</div>
 					<div
 						class="card"
@@ -71,7 +71,7 @@
 								alt=""
 							/>
 						</div>
-						<div class="word">评价建议</div>
+						<div class="word">Advise</div>
 					</div>
 					<div
 						class="card"
@@ -83,7 +83,7 @@
 								alt=""
 							/>
 						</div>
-						<div class="word">历史投票</div>
+						<div class="word">Vote</div>
 					</div>
 				</div>
 			</div>
@@ -93,11 +93,11 @@
 			@onSubmitName="onSubmitName"
 			@onCloseChangeName="onCloseChangeName"
 		></ChangeName>
-		<Hand
+		<!-- <Hand
 			:isShowHand="sonFunctionState.isShowHand"
 			@getCloseHand="getCloseHand"
 			@handedMessageClose="handedMessageClose"
-		></Hand>
+		></Hand> -->
 		<Score
 			:isShowScore="sonFunctionState.isShowScore"
 			@getCloseScore="getCloseScore"
@@ -112,6 +112,7 @@
 		<Vote
 			:isShowVote="sonFunctionState.isShowVote"
 			@getCloseVote="getCloseVote"
+      @onSubmitVote="onSubmitVote"
 		></Vote>
 	</div>
 </template>
@@ -139,12 +140,15 @@ export default {
 	},
 	components: {
 		ChangeName,
-		Hand,
+		// Hand,
 		Score,
 		Advice,
 		Vote,
 	},
 	methods: {
+    onSubmitVote({voteResult}){
+      this.$emit('onSubmitVote', { voteResult })
+    },
 		onSubmitName({ name }) {
 			this.$emit('onSubmitName', { name })
       this.closeFunction()
@@ -159,7 +163,10 @@ export default {
 			if (fun == 2) this.sonFunctionState.isShowHand = true
 			if (fun == 3) this.sonFunctionState.isShowScore = true
 			if (fun == 4) this.sonFunctionState.isShowAdvice = true
-			if (fun == 5) this.sonFunctionState.isShowVote = true
+			if (fun == 5) {
+        this.sonFunctionState.isShowVote = true
+        this.$emit('onGetAllVotes')
+      }
 		},
 		closeFunction() {
 			//关闭Function组件界面
@@ -308,7 +315,8 @@ export default {
 }
 
 .body .card .word {
-	font-size: 70%;
+	font-size: 75%;
+  font-weight: 600;
 	margin-top: 5px;
 	text-align: center;
 	color: white;

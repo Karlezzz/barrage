@@ -15,13 +15,13 @@
 			<div class="body">
 				<input
 					type="text"
-					placeholder="换个名称..."
+					placeholder="Input new name"
 					v-model="newName"
 				/>
 			</div>
 			<div class="foot">
-				<button @click="onCloseChangeName">返回</button>
-				<button @click="onSubmitName">确认</button>
+				<button @click="onCloseChangeName">Cancel</button>
+				<button @click="onSubmitName">Confirm</button>
 			</div>
 		</div>
 	</transition>
@@ -105,8 +105,10 @@ export default {
 	border: none;
 	color: white;
 	font-size: 100%;
-	letter-spacing: 5px;
-	text-align: center;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .box .foot button:nth-child(1) {

@@ -28,7 +28,7 @@
 				>
 					<div
 						class="historyVote"
-						v-if="!isShowDetail"
+						v-if="!isShowDetail && !isShowSelect"
 					>
 						<div
 							class="historyVoteItem"
@@ -51,30 +51,84 @@
 						v-if="isShowDetail"
 					></div>
 				</transition>
+
+				<transition
+					enter-active-class="animate__animated animate__fadeInUp animate__faster"
+					leave-active-class="animate__animated animate__fadeOutLeft animate__faster"
+				>
+					<div
+						class="__select"
+						v-if="isShowSelect"
+					>
+						<div class="__question">{{ selectQuestion }}</div>
+						<div class="__selectOptions">
+							<div
+								class="__option"
+								v-for="(i, idx) in voteOptions"
+								:key="idx"
+								@click="selectVoteOption(i)"
+							>
+								{{ i.optionValue }}
+							</div>
+						</div>
+					</div>
+				</transition>
 			</div>
 		</div>
 	</transition>
 </template>
 
 <script>
+import { Vote } from '../../../../../lib/models'
+import { mapGetters } from 'vuex'
 export default {
 	name: 'Vote',
 	data() {
 		return {
 			isShowDetail: false,
+			isShowSelect: false,
 			myEcharts: null,
+			selectedVote: null,
 		}
 	},
 	props: ['isShowVote'],
 	computed: {
-		voteList() {
-			return this.$store.state.vote.votes || []
+		showSelectOrDetail() {
+			return false
 		},
+		voteOptions() {
+			const { voteOptions } = this.selectedVote
+			return voteOptions ? voteOptions : null
+		},
+		selectQuestion() {
+			return this.selectedVote.question
+		},
+		user() {
+			return this.$store.state.enter.userLogin
+		},
+		...mapGetters('vote', {
+			voteList: 'votes',
+		}),
 	},
 	methods: {
-		showDetail(vote) {
+		selectVoteOption(option) {
+			const voteResult = {
+				vote: this.selectedVote,
+				user: this.user,
+				option,
+			}
+			this.isShowSelect = false
 			this.isShowDetail = true
-			this.charts(this.convert(vote))
+			this.$emit('onSubmitVote', { voteResult })
+		},
+		showDetail(vote) {
+			if (vote.isInValidTime() && vote.hasVoted(this.user,vote)) {
+				this.isShowSelect = true
+				this.selectedVote = vote
+			} else {
+				this.isShowDetail = true
+				this.charts(this.convert(vote))
+			}
 		},
 		charts(option) {
 			const ch = new Promise((resolve, reject) => {
@@ -86,10 +140,12 @@ export default {
 			})
 		},
 		back() {
-			if (this.isShowDetail == true) {
+			if (this.isShowSelect) {
+				this.isShowSelect = !this.isShowSelect
+			} else if (this.isShowDetail) {
 				this.myEcharts.dispose()
-				this.isShowDetail = false
-			} else if (this.isShowDetail == false) {
+				this.isShowDetail = !this.isShowDetail
+			} else if (!this.isShowDetail && !this.isShowSelect) {
 				this.$emit('getCloseVote', false)
 			}
 		},
@@ -99,7 +155,7 @@ export default {
 				return {
 					...vo,
 					name: vo.optionValue,
-					value: vo.selectMembers.length,
+					value: vo.selectMembersId.length,
 				}
 			})
 			const option = {
@@ -137,13 +193,21 @@ export default {
 			return option
 		},
 	},
-  watch: {
+	watch: {
 		voteList: {
 			deep: true,
-			handler() {
-				const newVote = this.historyVoteList[this.historyVoteList.length - 1]
-        this.myEcharts.dispose()
-				this.charts(this.convert(newVote))
+			handler(newV, oldV) {
+				if (!this.selectedVote) return
+				const { id } = this.selectedVote
+				this.selectedVote = this.voteList.find(v => {
+					return v.id === id
+				})
+				if (this.myEcharts) {
+          this.myEcharts.dispose()
+        }
+        if(this.selectedVote) {
+          this.charts(this.convert(this.selectedVote))
+        }
 			},
 		},
 	},
@@ -210,14 +274,11 @@ export default {
 	background-color: #41414192;
 	border-radius: 10%;
 	margin: 5px 5px;
-
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	color: white;
 	font-size: 10px;
-	/* padding: 0 2px 0 2px; */
-
 	overflow: scroll;
 }
 
@@ -226,5 +287,46 @@ export default {
 	top: 10%;
 	width: 90%;
 	height: 80%;
+}
+
+.__select {
+	background-color: #41414192;
+	position: absolute;
+	top: 20%;
+	left: 0;
+	width: 100%;
+	height: 80%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	overflow: scroll;
+}
+
+.__select .__question {
+	color: white;
+	width: 90%;
+	height: 30%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.__select .__selectOptions {
+	width: 90%;
+	height: 100%;
+	overflow: scroll;
+}
+
+.__select .__selectOptions .__option {
+	color: white;
+	background-color: #25252592;
+	width: 80%;
+	height: 30%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 10px;
+	margin-bottom: 5%;
+	margin-left: 10%;
 }
 </style>

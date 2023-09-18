@@ -4,8 +4,8 @@ const protocol = window.location.protocol
 const host = window.location.host
 const baseUrl = `${protocol}://${host}`
 const _axios = axios.create({
-  // baseURL: 'http://10.62.247.107:3000',
-  baseUrl,
+  baseURL: 'http://10.62.247.107:3000',
+  // baseUrl,
   timeout: 10000
 })
 
