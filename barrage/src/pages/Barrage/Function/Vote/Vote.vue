@@ -205,7 +205,9 @@ export default {
 				if (this.myEcharts) {
           this.myEcharts.dispose()
         }
-				this.charts(this.convert(this.selectedVote))
+        if(this.selectedVote) {
+          this.charts(this.convert(this.selectedVote))
+        }
 			},
 		},
 	},
