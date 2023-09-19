@@ -35,7 +35,7 @@ const router = new VueRouter({
     },
     {
       name: 'barrage',
-      path: '/barrage/:roomCode/:classRoomCode',
+      path: '/barrage/:roomCode/:classRoomId',
       component: Barrage,
 
     },
