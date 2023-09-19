@@ -242,7 +242,6 @@ export default {
 		async onSubmitComment({ comment }) {
 			try {
 				const result = await _createOne(endpoint.comment, comment)
-				if (result) console.log(result)
 			} catch (error) {
 				console.log(error)
 			}
@@ -250,7 +249,6 @@ export default {
 		async onSubmitScore({ score }) {
 			try {
 				const result = await _createOne(endpoint.score, score)
-				if (result) console.log(result)
 			} catch (error) {
 				console.log(error)
 			}
