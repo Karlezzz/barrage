@@ -16,14 +16,21 @@ class Vote {
     return now <= this.endTime ? true : false
   }
 
-  hasVoted(user, vote) {
+  hasVoted(user) {
     const { id } = user
-    const { voteOptions } = vote
-    const userId = voteOptions.reduce((acc, o) => {
+    const userId = this.voteOptions.reduce((acc, o) => {
       return acc = acc.concat(o.selectMembersId)
     }, [])
     if (userId.find(u => u === id)) return false
     return true
+  }
+
+  remainingTime() {
+    const remainingTime = this.endTime - new Date().valueOf()
+    if (remainingTime < 0) return `Complete`
+    const min = new Date(remainingTime).getMinutes() < 10 ? `0${new Date(remainingTime).getMinutes()}` : new Date(remainingTime).getMinutes()
+    const second = new Date(remainingTime).getSeconds() < 10 ? `0${new Date(remainingTime).getSeconds()}` : new Date(remainingTime).getSeconds()
+    return `00 : ${min} : ${second}`
   }
 
   get isValid() {
