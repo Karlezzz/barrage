@@ -44,8 +44,11 @@ export default {
     user() {
       return this.$store.state.enter.userLogin
     },
+    userId() {
+      return this.user ? this.user.id : ''
+    },
     classRoomCode() {
-      return this.$store.state.enter.classRoomCode || sessionStorage.getItem('classRoomCode') || ''
+      return this.$store.state.enter.classRoomId || sessionStorage.getItem('classRoomId') || ''
     }
   },
 	methods: {
@@ -55,9 +58,9 @@ export default {
 		onSubmitComment() {
 			this.closeAdvice()
       const comment = Comment.init({
-        creator:this.user,
+        creator:this.userId,
         value:this.advice,
-        classRoomCode: this.classRoomCode
+        classRoomId: this.classRoomId
       })
 			this.$emit('onSubmitComment', {comment})
 		},
