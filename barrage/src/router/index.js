@@ -35,7 +35,7 @@ const router = new VueRouter({
     },
     {
       name: 'barrage',
-      path: '/barrage/:roomCode/:classRoomCode',
+      path: '/barrage/:roomCode/:classRoomId',
       component: Barrage,
 
     },
@@ -43,26 +43,18 @@ const router = new VueRouter({
   ]
 })
 router.beforeEach((to, from, next) => {
-  // if (to.path.indexOf('/barrage') !== -1) {
-  //   // if (localStorage.getItem('TOKEN')) next()
-  //   // else next('/enter')
-  //   next('/enter')
-  // }
-  // else if (to.path == '/enter') next()
-
   if (to.path === '/enter' || sessionStorage.getItem('BARRAGEFLAG')) {
     next()
   } else {
-    const { name, params: { roomCode, classRoomCode } } = to
+    const { name, params: { roomCode, classRoomId } } = to
     if (name === 'barrage') {
       store.commit('enter/SETROOMCODE', roomCode)
-      store.commit('enter/SETCLASSROOMCODE', classRoomCode)
+      store.commit('enter/SETCLASSROOMID', classRoomId)
       sessionStorage.setItem('roomCode',roomCode)
-      sessionStorage.setItem('classRoomCode',classRoomCode)
+      sessionStorage.setItem('classRoomId',classRoomId)
     }
     next('/enter')
   }
-
 })
 
 
