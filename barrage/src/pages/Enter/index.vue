@@ -26,7 +26,7 @@
 					/>
 				</div>
 				<div class="button">
-          <button @click.prevent="reset">Reset</button>
+					<button @click.prevent="reset">Reset</button>
 					<button @click.prevent="addRoom">Enter</button>
 				</div>
 			</form>
@@ -40,6 +40,7 @@ import Clouds from 'vanta/src/vanta.clouds'
 import { nanoid } from 'nanoid'
 import { _createOne } from '@/api/index'
 import { getUserName } from '../../../lib/helper/userName'
+import { User } from '../../../lib/models'
 export default {
 	name: 'Enter',
 	data() {
@@ -51,35 +52,52 @@ export default {
 			isCleanBG: this.global.getIsCleanBG(),
 		}
 	},
-  computed:{
-    $roomCode() {
-      return this.$store.state.enter.roomCode || sessionStorage.getItem('roomCode') || 'RoomCode'
-    },
-    classRoomCode() {
-      return this.$store.state.enter.classRoomCode || sessionStorage.getItem('classRoomCode') || '111'
-    }
-  },
+	computed: {
+		$roomCode() {
+			return (
+				this.$store.state.enter.roomCode ||
+				sessionStorage.getItem('roomCode') ||
+				'RoomCode'
+			)
+		},
+		classRoomId() {
+			return (
+				this.$store.state.enter.classRoomId ||
+				sessionStorage.getItem('classRoomId') ||
+				'111'
+			)
+		},
+	},
 	methods: {
 		reset() {
 			this.username = ''
 			this.password = ''
 		},
+		getIpAddress() {
+			return 'ipAddress'
+		},
+		initUser({ name, id, ipAddress }) {
+			return User.init({ name, id, ipAddress })
+		},
 		async addRoom() {
 			try {
 				const result = await _createOne('/user', {
-					name: this.username,
-          roomCode: this.roomCode,
+					roomCode: this.roomCode,
 					password: this.password,
-					id: localStorage.getItem('ID')
-						? localStorage.getItem('ID')
-						: nanoid(),
-					token: localStorage.getItem('TOKEN') || '',
+					classRoomId: this.classRoomId,
+          user:this.initUser({
+						name: this.username,
+						id: localStorage.getItem('ID')
+							? localStorage.getItem('ID')
+							: nanoid(),
+						ipAddress: this.getIpAddress(),
+					}),
 				})
 				if (result) {
 					this.$store.commit('enter/USERLOGIN', result)
-          this.$router.push({
-            path: `/barrage/${this.roomCode}/${this.classRoomCode}`
-          })
+					this.$router.push({
+						path: `/barrage/${this.roomCode}/${this.classRoomCode}`,
+					})
 				}
 			} catch (error) {
 				console.log(error)
@@ -123,7 +141,7 @@ export default {
 			}
 		}
 
-    this.roomCode = this.$roomCode
+		this.roomCode = this.$roomCode
 	},
 
 	beforeDestroy() {
@@ -175,16 +193,16 @@ export default {
 	border-radius: 10px;
 	box-shadow: 0 20px 20px 0 rgb(0, 0, 0, 0.3);
 	background: rgba(140, 127, 127, 0.1);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
 }
 
 .login form .title {
 	position: relative;
 	/* margin: 20px 0 20px 30px; */
-  margin-left: -65%;
+	margin-left: -65%;
 	font-size: 20px;
 	font-weight: 600;
 	color: #ffffff;
@@ -202,8 +220,8 @@ export default {
 
 .login form .input {
 	/* margin: 10px 0 0 20px; */
-  /* margin-left: -5%; */
-  margin-top: 5%;
+	/* margin-left: -5%; */
+	margin-top: 5%;
 	height: 170px;
 	width: 90%;
 }
@@ -219,7 +237,7 @@ export default {
 	box-shadow: 0 10px 5px 0 rgb(0, 0, 0, 0.2);
 	background: rgba(255, 255, 255, 0.168);
 	color: rgba(255, 255, 255, 0.947);
-  font-size: 85%;
+	font-size: 85%;
 }
 
 .login form .input input:focus {
@@ -241,11 +259,11 @@ export default {
 	color: rgba(255, 255, 255, 0.781);
 }
 
-.button{
-  width: 80%;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
+.button {
+	width: 80%;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
 }
 .login form button {
 	/* margin: 0px 0 0 20px; */
