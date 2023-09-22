@@ -283,10 +283,10 @@ export default {
 			return item.content
 		},
 		getUserId(item) {
-			return item.id
+			return item.userId
 		},
 		getUserName(item) {
-			return item.name
+			return item.userName
 		},
 		changeBG() {
 			this.global.setIsSun()
