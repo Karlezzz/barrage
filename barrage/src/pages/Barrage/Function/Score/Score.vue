@@ -45,14 +45,21 @@ export default {
 			choseStar: null,
 		}
 	},
-  computed: {
-    user() {
-      return this.$store.state.enter.userLogin
-    },
-    classRoomCode() {
-      return this.$store.state.enter.classRoomCode || sessionStorage.getItem('classRoomCode') || ''
-    }
-  },
+	computed: {
+		user() {
+			return this.$store.state.enter.userLogin
+		},
+		userId() {
+			return this.user ? this.user.id : ''
+		},
+		classRoomId() {
+			return (
+				this.$store.state.enter.classRoomId ||
+				sessionStorage.getItem('classRoomId') ||
+				''
+			)
+		},
+	},
 	methods: {
 		closeScore() {
 			this.$emit('getCloseScore', false)
@@ -63,12 +70,12 @@ export default {
 		},
 		onSubmitScore() {
 			this.closeScore()
-      const score = Score.init({
-        value:this.score,
-        creator:this.user,
-        classRoomCode:this.classRoomCode
-      })
-			this.$emit('onSubmitScore', {score})
+			const score = Score.init({
+				value: this.score,
+				creator: this.userId,
+				classRoomId: this.classRoomId,
+			})
+			this.$emit('onSubmitScore', { score })
 		},
 	},
 }
@@ -114,10 +121,10 @@ export default {
 	border: none;
 	color: white;
 	font-size: 100%;
-  font-weight: 700;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+	font-weight: 700;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .box_son .foot button:nth-child(1) {

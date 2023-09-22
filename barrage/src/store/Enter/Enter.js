@@ -2,7 +2,7 @@ import requests from '@/api'
 const state = {
   userLogin: null,
   roomCode: null,
-  classRoomCode: null
+  classRoomId: null
 }
 const mutations = {
   USERLOGIN(state, data) {
@@ -15,8 +15,8 @@ const mutations = {
   SETROOMCODE(state, data) {
     state.roomCode = data
   },
-  SETCLASSROOMCODE(state, data) {
-    state.classRoomCode = data
+  SETCLASSROOMID(state, data) {
+    state.classRoomId = data
   }
 }
 const actions = {
@@ -32,10 +32,6 @@ const actions = {
       console.log('1')
     })
   },
-
-  test() {
-    console.log(2);
-  }
 }
 
 export default {

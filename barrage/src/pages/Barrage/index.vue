@@ -198,7 +198,7 @@ import Clouds from 'vanta/src/vanta.clouds'
 
 import { io } from 'socket.io-client'
 import { Message, User } from '../../../lib/models'
-import { _findOne, _updateOne } from '@/api/index'
+import { _findOne, _updateOne, _createOne } from '@/api/index'
 import { endpoint } from '../../api/ednpoint.js'
 
 export default {
@@ -241,16 +241,14 @@ export default {
 		},
 		async onSubmitComment({ comment }) {
 			try {
-				const result = await _updateOne(endpoint.comment, comment)
-				if (result) console.log(result)
+				const result = await _createOne(endpoint.comment, comment)
 			} catch (error) {
 				console.log(error)
 			}
 		},
 		async onSubmitScore({ score }) {
 			try {
-				const result = await _updateOne(endpoint.score, score)
-				if (result) console.log(result)
+				const result = await _createOne(endpoint.score, score)
 			} catch (error) {
 				console.log(error)
 			}
