@@ -73,9 +73,6 @@ export default {
 			this.username = ''
 			this.password = ''
 		},
-		getIpAddress() {
-			return 'ipAddress'
-		},
 		initUser({ name, id, ipAddress }) {
 			return User.init({ name, id, ipAddress })
 		},
@@ -90,13 +87,12 @@ export default {
 						id: localStorage.getItem('ID')
 							? localStorage.getItem('ID')
 							: nanoid(),
-						ipAddress: this.getIpAddress(),
 					}),
 				})
 				if (result) {
 					this.$store.commit('enter/USERLOGIN', result)
 					this.$router.push({
-						path: `/barrage/${this.roomCode}/${this.classRoomCode}`,
+						path: `/barrage/${this.roomCode}/${this.classRoomId}`,
 					})
 				}
 			} catch (error) {
