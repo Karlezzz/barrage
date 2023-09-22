@@ -61,6 +61,9 @@
 						v-if="isShowSelect"
 					>
 						<div class="__question">{{ selectQuestion }}</div>
+						<div class="__time">
+							Remaining: <span>{{ remainingTime }}</span>
+						</div>
 						<div class="__selectOptions">
 							<div
 								class="__option"
@@ -79,7 +82,6 @@
 </template>
 
 <script>
-import { Vote } from '../../../../../lib/models'
 import { mapGetters } from 'vuex'
 export default {
 	name: 'Vote',
@@ -89,6 +91,8 @@ export default {
 			isShowSelect: false,
 			myEcharts: null,
 			selectedVote: null,
+			timer: null,
+			remainingTime: '',
 		}
 	},
 	props: ['isShowVote'],
@@ -122,12 +126,17 @@ export default {
 			this.$emit('onSubmitVote', { voteResult })
 		},
 		showDetail(vote) {
-			if (vote.isInValidTime() && vote.hasVoted(this.user,vote)) {
+			if (vote.isInValidTime() && vote.hasVoted(this.user)) {
 				this.isShowSelect = true
 				this.selectedVote = vote
+				this.remainingTime = this.selectedVote.remainingTime()
+				this.timer = setInterval(() => {
+					this.remainingTime = this.selectedVote.remainingTime()
+				}, 1000)
 			} else {
 				this.isShowDetail = true
-				this.charts(this.convert(vote))
+				this.selectedVote = vote
+				this.charts(this.convert(this.selectedVote))
 			}
 		},
 		charts(option) {
@@ -145,6 +154,7 @@ export default {
 			} else if (this.isShowDetail) {
 				this.myEcharts.dispose()
 				this.isShowDetail = !this.isShowDetail
+        this.timer = null
 			} else if (!this.isShowDetail && !this.isShowSelect) {
 				this.$emit('getCloseVote', false)
 			}
@@ -203,11 +213,11 @@ export default {
 					return v.id === id
 				})
 				if (this.myEcharts) {
-          this.myEcharts.dispose()
-        }
-        if(this.selectedVote) {
-          this.charts(this.convert(this.selectedVote))
-        }
+					this.myEcharts.dispose()
+				}
+				if (this.selectedVote) {
+					this.charts(this.convert(this.selectedVote))
+				}
 			},
 		},
 	},
@@ -290,9 +300,9 @@ export default {
 }
 
 .__select {
-	background-color: #41414192;
+	/* background-color: #41414192; */
 	position: absolute;
-	top: 20%;
+	top: 10%;
 	left: 0;
 	width: 100%;
 	height: 80%;
@@ -310,11 +320,22 @@ export default {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	font-size: 120%;
+	font-weight: 600;
+}
+
+.__select .__time {
+	color: white;
+}
+.__select .__time span {
+	font-size: 90%;
+  padding-left: 20px;
 }
 .__select .__selectOptions {
 	width: 90%;
 	height: 100%;
 	overflow: scroll;
+	margin-top: 5%;
 }
 
 .__select .__selectOptions .__option {
