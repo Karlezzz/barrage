@@ -279,17 +279,14 @@ export default {
 				console.log(error)
 			}
 		},
-		getUser(item) {
-			return item.user
-		},
 		getContent(item) {
 			return item.content
 		},
 		getUserId(item) {
-			return this.getUser(item).id
+			return item.id
 		},
 		getUserName(item) {
-			return this.getUser(item).name
+			return item.name
 		},
 		changeBG() {
 			this.global.setIsSun()
@@ -364,7 +361,8 @@ export default {
 		},
 		sendNewContent() {
 			const newMsg = Message.init({
-				user: this.user,
+				userId: this.userId,
+				userName: this.userName,
 				content: this.inputContent,
 				type: 'chat',
 			})
@@ -378,10 +376,11 @@ export default {
 		isSameUser(item, index) {
 			if (index == 0) return true
 			const lastMessage = this.messageContent[index - 1]
-			const {
-				user: { id, name },
-			} = lastMessage
-			if (this.getUserId(item) === id && this.getUserName(item) === name)
+			const { userId, userName } = lastMessage
+			if (
+				this.getUserId(item) === userId &&
+				this.getUserName(item) === userName
+			)
 				return false
 			return true
 		},
