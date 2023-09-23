@@ -360,6 +360,11 @@ export default {
 			this.$router.push('/enter')
 		},
 		sendNewContent() {
+			if (
+				this.inputContent.length === 0 ||
+				this.inputContent.trim().length === 0
+			)
+				return
 			const newMsg = Message.init({
 				userId: this.userId,
 				userName: this.userName,
