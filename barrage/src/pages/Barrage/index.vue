@@ -343,6 +343,17 @@ export default {
 						el: this.$refs.vantaRef,
 						THREE: THREE,
 						speed: 0.8,
+						mouseControls: true,
+						touchControls: true,
+						gyroControls: false,
+						minHeight: 200.0,
+						minWidth: 200.0,
+						skyColor: 0x5ba2bd,
+						cloudColor: 0xbbaf91,
+						cloudShadowColor: 0xb3051,
+						sunColor: 0xb1680c,
+						sunGlareColor: 0xc03a0d,
+						sunlightColor: 0xbb6610,
 					})
 				}
 				//黑天
@@ -419,18 +430,18 @@ export default {
 		},
 		setSunBG() {
 			this.vantaEffect.setOptions({
+				speed: 0.8,
 				mouseControls: true,
 				touchControls: true,
 				gyroControls: false,
 				minHeight: 200.0,
 				minWidth: 200.0,
-				skyColor: 0x59a6c8,
-				cloudColor: 0x9fb2d2,
-				cloudShadowColor: 0xa2b4a,
-				sunColor: 0xf09f45,
-				sunGlareColor: 0xffc230,
-				sunlightColor: 0xffc230,
-				speed: 0.5,
+				skyColor: 0x5ba2bd,
+				cloudColor: 0xbbaf91,
+				cloudShadowColor: 0xb3051,
+				sunColor: 0xb1680c,
+				sunGlareColor: 0xc03a0d,
+				sunlightColor: 0xbb6610,
 			})
 		},
 		setBlackBG() {
@@ -491,6 +502,17 @@ export default {
 					el: this.$refs.vantaRef,
 					THREE: THREE,
 					speed: 0.8,
+					mouseControls: true,
+					touchControls: true,
+					gyroControls: false,
+					minHeight: 200.0,
+					minWidth: 200.0,
+					skyColor: 0x5ba2bd,
+					cloudColor: 0xbbaf91,
+					cloudShadowColor: 0xb3051,
+					sunColor: 0xb1680c,
+					sunGlareColor: 0xc03a0d,
+					sunlightColor: 0xbb6610,
 				})
 				if (this.isSun == false) {
 					this.setBlackBG()
