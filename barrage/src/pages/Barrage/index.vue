@@ -732,7 +732,7 @@ export default {
 
 .bar .body .leftMessage .content {
 	margin-top: 5px;
-	background-color: rgba(252, 252, 252, 0.368);
+	background-color: rgba(59, 232, 244, 0.368);
 	border-radius: 20px;
 	padding: 10px 15px 10px 15px;
 	color: rgb(255, 255, 255);
