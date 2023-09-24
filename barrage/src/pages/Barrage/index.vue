@@ -261,6 +261,7 @@ export default {
 					alert('Fail')
 					return
 				}
+        this.$store.commit('enter/USERLOGIN', result)
 				alert('Successful')
 			} catch (error) {
 				console.log(error)
