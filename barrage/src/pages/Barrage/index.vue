@@ -242,6 +242,11 @@ export default {
 		async onSubmitComment({ comment }) {
 			try {
 				const result = await _createOne(endpoint.comment, comment)
+				if (result) {
+					alert('Submit comment successfully!')
+				} else {
+					alert('Failed!')
+				}
 			} catch (error) {
 				console.log(error)
 			}
@@ -261,7 +266,7 @@ export default {
 					alert('Fail')
 					return
 				}
-        this.$store.commit('enter/USERLOGIN', result)
+				this.$store.commit('enter/USERLOGIN', result)
 				alert('Successful')
 			} catch (error) {
 				console.log(error)
@@ -475,6 +480,7 @@ export default {
 					this.socket = io(socketUrl, {
 						transports: ['websocket'],
 					})
+					this.socket.emit('userLogin', { user: this.user })
 					this.socket.removeAllListeners()
 
 					this.socket.on('broadcast', data => {
