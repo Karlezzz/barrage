@@ -491,6 +491,11 @@ export default {
 					this.socket.on('updateVote', data => {
 						this.$store.commit('vote/UPDATEVOTE', data)
 					})
+
+					this.socket.on('closeSocket', data => {
+						this.socket.disconnect()
+            alert('Class end! ')
+					})
 				}
 			} catch (error) {
 				console.log(error)
