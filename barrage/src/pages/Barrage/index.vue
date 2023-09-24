@@ -240,10 +240,11 @@ export default {
 			await this.$store.dispatch('vote/getAllVotes')
 		},
 		async onSubmitComment({ comment }) {
+      console.log(comment);
 			try {
 				const result = await _createOne(endpoint.comment, comment)
 				if (result) {
-					alert('Submit comment successfully!')
+					alert('Submit advice successfully!')
 				} else {
 					alert('Failed!')
 				}

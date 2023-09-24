@@ -48,7 +48,7 @@ export default {
     userId() {
       return this.user ? this.user.id : ''
     },
-    classRoomCode() {
+    classRoomId() {
       return this.$store.state.enter.classRoomId || sessionStorage.getItem('classRoomId') || ''
     }
   },
@@ -64,6 +64,7 @@ export default {
         classRoomId: this.classRoomId
       })
 			this.$emit('onSubmitComment', {comment})
+      this.advice = ''
 		},
 	},
 }
