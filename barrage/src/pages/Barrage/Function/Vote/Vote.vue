@@ -116,6 +116,13 @@ export default {
 	},
 	methods: {
 		selectVoteOption(option) {
+			if (!this.selectedVote.isInValidTime()) {
+				alert('Time out')
+        this.isShowDetail = true
+        this.isShowSelect = false
+        this.charts(this.convert(this.selectedVote))
+				return
+			}
 			const voteResult = {
 				vote: this.selectedVote,
 				user: this.user,
@@ -154,7 +161,7 @@ export default {
 			} else if (this.isShowDetail) {
 				this.myEcharts.dispose()
 				this.isShowDetail = !this.isShowDetail
-        this.timer = null
+				this.timer = null
 			} else if (!this.isShowDetail && !this.isShowSelect) {
 				this.$emit('getCloseVote', false)
 			}
@@ -329,7 +336,7 @@ export default {
 }
 .__select .__time span {
 	font-size: 90%;
-  padding-left: 20px;
+	padding-left: 20px;
 }
 .__select .__selectOptions {
 	width: 90%;

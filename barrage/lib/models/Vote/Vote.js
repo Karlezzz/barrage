@@ -27,7 +27,7 @@ class Vote {
 
   remainingTime() {
     const remainingTime = this.endTime - new Date().valueOf()
-    if (remainingTime < 0) return `Complete`
+    if (remainingTime < 0) return `Completed`
     const min = new Date(remainingTime).getMinutes() < 10 ? `0${new Date(remainingTime).getMinutes()}` : new Date(remainingTime).getMinutes()
     const second = new Date(remainingTime).getSeconds() < 10 ? `0${new Date(remainingTime).getSeconds()}` : new Date(remainingTime).getSeconds()
     return `00 : ${min} : ${second}`
