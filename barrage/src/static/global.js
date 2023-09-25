@@ -1,5 +1,5 @@
 let historyBG = String(localStorage.getItem("BG"))
-let historyIsSun = localStorage.getItem('ISSUN') === 'true' ? true : false
+let historyIsSun = localStorage.getItem('ISSUN') === 'true' ? false : true
 let historyIsCleanBG = localStorage.getItem('ISCLEANBG') === 'true' ? true : false
 
 
