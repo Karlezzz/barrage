@@ -2,9 +2,9 @@ const axios = require('axios')
 
 const protocol = window.location.protocol
 const host = window.location.host
-const baseURL = `${protocol}://${host}`
+const baseUrl = `${protocol}://${host}`
 const _axios = axios.create({
-  baseURL,
+  baseUrl,
   timeout: 10000
 })
 
