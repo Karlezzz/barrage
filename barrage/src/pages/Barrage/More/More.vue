@@ -98,18 +98,24 @@ export default {
 			isShowAddMoreChat: false,
 		}
 	},
-  computed:{
-    showChat() {
+	computed: {
+		showChat() {
 			if (this.isShowChat == true) {
 				if (this.isShowAddMoreChat == false) return true
 				else if (this.isShowAddMoreChat == true) return false
 			}
-      return false
+			return false
 		},
-    user() {
-      return this.$store.state.enter.userLogin
-    },
-  },
+		user() {
+			return this.$store.state.enter.userLogin
+		},
+		userId() {
+			return this.user ? this.user.id : ''
+		},
+		userName() {
+			return this.user ? this.user.name : ''
+		},
+	},
 	methods: {
 		closeIsShowChat() {
 			this.$emit('closeIsShowChat', false)
@@ -117,10 +123,11 @@ export default {
 		},
 		onSubmitMoreMessage(item) {
 			const newMessage = Message.init({
-				user: this.user,
+				userId: this.userId,
+				userName: this.userName,
 				content: item.content,
 			})
-			this.$emit('onSubmitMoreMessage', {newMessage})
+			this.$emit('onSubmitMoreMessage', { newMessage })
 		},
 		addMoreChat() {
 			this.isShowAddMoreChat = true
