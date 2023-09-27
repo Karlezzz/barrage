@@ -7,8 +7,7 @@ const state = {
 const mutations = {
   USERLOGIN(state, data) {
     state.userLogin = data
-    const { id, token } = data
-    localStorage.setItem("TOKEN", token)
+    const { id } = data
     localStorage.setItem('ID', id)
     sessionStorage.setItem('BARRAGEFLAG', true)
   },

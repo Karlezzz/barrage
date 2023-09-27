@@ -240,8 +240,14 @@ export default {
 			await this.$store.dispatch('vote/getAllVotes')
 		},
 		async onSubmitComment({ comment }) {
+      console.log(comment);
 			try {
 				const result = await _createOne(endpoint.comment, comment)
+				if (result) {
+					alert('Submit advice successfully!')
+				} else {
+					alert('Failed!')
+				}
 			} catch (error) {
 				console.log(error)
 			}
@@ -261,6 +267,7 @@ export default {
 					alert('Fail')
 					return
 				}
+				this.$store.commit('enter/USERLOGIN', result)
 				alert('Successful')
 			} catch (error) {
 				console.log(error)
@@ -279,17 +286,14 @@ export default {
 				console.log(error)
 			}
 		},
-		getUser(item) {
-			return item.user
-		},
 		getContent(item) {
 			return item.content
 		},
 		getUserId(item) {
-			return this.getUser(item).id
+			return item.userId
 		},
 		getUserName(item) {
-			return this.getUser(item).name
+			return item.userName
 		},
 		changeBG() {
 			this.global.setIsSun()
@@ -346,6 +350,17 @@ export default {
 						el: this.$refs.vantaRef,
 						THREE: THREE,
 						speed: 0.8,
+						mouseControls: true,
+						touchControls: true,
+						gyroControls: false,
+						minHeight: 200.0,
+						minWidth: 200.0,
+						skyColor: 0x5ba2bd,
+						cloudColor: 0xbbaf91,
+						cloudShadowColor: 0xb3051,
+						sunColor: 0xb1680c,
+						sunGlareColor: 0xc03a0d,
+						sunlightColor: 0xbb6610,
 					})
 				}
 				//黑天
@@ -363,8 +378,14 @@ export default {
 			this.$router.push('/enter')
 		},
 		sendNewContent() {
+			if (
+				this.inputContent.length === 0 ||
+				this.inputContent.trim().length === 0
+			)
+				return
 			const newMsg = Message.init({
-				user: this.user,
+				userId: this.userId,
+				userName: this.userName,
 				content: this.inputContent,
 				type: 'chat',
 			})
@@ -378,10 +399,11 @@ export default {
 		isSameUser(item, index) {
 			if (index == 0) return true
 			const lastMessage = this.messageContent[index - 1]
-			const {
-				user: { id, name },
-			} = lastMessage
-			if (this.getUserId(item) === id && this.getUserName(item) === name)
+			const { userId, userName } = lastMessage
+			if (
+				this.getUserId(item) === userId &&
+				this.getUserName(item) === userName
+			)
 				return false
 			return true
 		},
@@ -415,18 +437,18 @@ export default {
 		},
 		setSunBG() {
 			this.vantaEffect.setOptions({
+				speed: 0.8,
 				mouseControls: true,
 				touchControls: true,
 				gyroControls: false,
 				minHeight: 200.0,
 				minWidth: 200.0,
-				skyColor: 0x59a6c8,
-				cloudColor: 0x9fb2d2,
-				cloudShadowColor: 0xa2b4a,
-				sunColor: 0xf09f45,
-				sunGlareColor: 0xffc230,
-				sunlightColor: 0xffc230,
-				speed: 0.5,
+				skyColor: 0x5ba2bd,
+				cloudColor: 0xbbaf91,
+				cloudShadowColor: 0xb3051,
+				sunColor: 0xb1680c,
+				sunGlareColor: 0xc03a0d,
+				sunlightColor: 0xbb6610,
 			})
 		},
 		setBlackBG() {
@@ -459,6 +481,7 @@ export default {
 					this.socket = io(socketUrl, {
 						transports: ['websocket'],
 					})
+					this.socket.emit('userLogin', { user: this.user })
 					this.socket.removeAllListeners()
 
 					this.socket.on('broadcast', data => {
@@ -468,6 +491,11 @@ export default {
 
 					this.socket.on('updateVote', data => {
 						this.$store.commit('vote/UPDATEVOTE', data)
+					})
+
+					this.socket.on('closeSocket', data => {
+						this.socket.disconnect()
+            alert('Class end! ')
 					})
 				}
 			} catch (error) {
@@ -487,6 +515,17 @@ export default {
 					el: this.$refs.vantaRef,
 					THREE: THREE,
 					speed: 0.8,
+					mouseControls: true,
+					touchControls: true,
+					gyroControls: false,
+					minHeight: 200.0,
+					minWidth: 200.0,
+					skyColor: 0x5ba2bd,
+					cloudColor: 0xbbaf91,
+					cloudShadowColor: 0xb3051,
+					sunColor: 0xb1680c,
+					sunGlareColor: 0xc03a0d,
+					sunlightColor: 0xbb6610,
 				})
 				if (this.isSun == false) {
 					this.setBlackBG()
@@ -706,7 +745,7 @@ export default {
 
 .bar .body .leftMessage .content {
 	margin-top: 5px;
-	background-color: rgba(252, 252, 252, 0.368);
+	background-color: rgba(59, 232, 244, 0.368);
 	border-radius: 20px;
 	padding: 10px 15px 10px 15px;
 	color: rgb(255, 255, 255);

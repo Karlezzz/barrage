@@ -32,6 +32,7 @@
 
 <script>
 import {Comment} from '../../../../../lib/models'
+import { User } from '../../../../../lib/models'
 export default {
 	name: 'Advice',
 	props: ['isShowAdvice'],
@@ -42,12 +43,12 @@ export default {
 	},
   computed:{
     user() {
-      return this.$store.state.enter.userLogin
+      return User.init(this.$store.state.enter.userLogin)
     },
     userId() {
       return this.user ? this.user.id : ''
     },
-    classRoomCode() {
+    classRoomId() {
       return this.$store.state.enter.classRoomId || sessionStorage.getItem('classRoomId') || ''
     }
   },
@@ -63,6 +64,7 @@ export default {
         classRoomId: this.classRoomId
       })
 			this.$emit('onSubmitComment', {comment})
+      this.advice = ''
 		},
 	},
 }
