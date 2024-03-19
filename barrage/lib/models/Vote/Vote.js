@@ -8,6 +8,7 @@ class Vote {
     this.duration = options.duration
     this.endTime = this.created + options.duration
     this.question = options.question
+    this.classRoomId = options.classRoomId
     this.voteOptions = VoteOption.initFromArray(options.voteOptions) || []
   }
 
@@ -39,6 +40,7 @@ class Vote {
       && this.voteOptions.length >= 2
       && this.created
       && this.duration
+      && this.classRoomId
   }
 
   static init(options = {}) {
