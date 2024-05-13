@@ -117,10 +117,9 @@ export default {
 	methods: {
 		selectVoteOption(option) {
 			if (!this.selectedVote.isInValidTime()) {
-				alert('Time out')
-        this.isShowDetail = true
-        this.isShowSelect = false
-        this.charts(this.convert(this.selectedVote))
+				this.isShowDetail = true
+				this.isShowSelect = false
+				this.charts(this.convert(this.selectedVote))
 				return
 			}
 			const voteResult = {
