@@ -240,14 +240,9 @@ export default {
 			await this.$store.dispatch('vote/getAllVotes')
 		},
 		async onSubmitComment({ comment }) {
-      console.log(comment);
+			console.log(comment)
 			try {
 				const result = await _createOne(endpoint.comment, comment)
-				if (result) {
-					alert('Submit advice successfully!')
-				} else {
-					alert('Failed!')
-				}
 			} catch (error) {
 				console.log(error)
 			}
@@ -264,11 +259,9 @@ export default {
 				this.user.setUserName(name)
 				const result = await _updateOne(endpoint.user, this.user)
 				if (!result) {
-					alert('Fail')
 					return
 				}
 				this.$store.commit('enter/USERLOGIN', result)
-				alert('Successful')
 			} catch (error) {
 				console.log(error)
 			}
@@ -495,7 +488,6 @@ export default {
 
 					this.socket.on('closeSocket', data => {
 						this.socket.disconnect()
-            alert('Class end! ')
 					})
 				}
 			} catch (error) {
